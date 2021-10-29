@@ -6,6 +6,8 @@ import {
 import Signin from "./Signin";
 import Signup from "./Signup";
 import Home from "./Home";
+import Navbar from "../components/Navbar";
+import Tool from "./Tool";
 
 import './App.css';
 
@@ -14,9 +16,13 @@ const App = () => {
 
   return (
     <Router>
+      <Navbar />
       <Switch>
         <Route exact path='/'>
           <Home />
+        </Route>
+        <Route path='/tool'>
+          <Tool />
         </Route>
         <Route path='/signin'>
           <Signin />

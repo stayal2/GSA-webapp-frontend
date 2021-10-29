@@ -33,11 +33,9 @@ const Signin = () => {
   }
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
-    console.log(email)
   }
   const handlePasswordChange = (e) => {
     setPassword(e.target.value);
-    console.log(password);
   }
   const handleFirstnameChange = (e) => {
     setFirstname(e.target.value);
