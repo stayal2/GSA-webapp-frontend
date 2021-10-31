@@ -80,31 +80,32 @@ const Tool = () => {
       queryString += `st=${thIneq}${thickness}`
     }
     if (diameter) {
-      queryString += `st=${dmIneq}${diameter}`
+      queryString += `sd=${dmIneq}${diameter}`
     }
     if (length) {
-      queryString += `st=${lenIneq}${length}`
+      queryString += `sl=${lenIneq}${length}`
     }
     if (surfaceArea) {
-      queryString += `st=${saIneq}${surfaceArea}`
+      queryString += `ssa=${saIneq}${surfaceArea}`
     }
     if (tubeDiameter) {
-      queryString += `st=${tdIneq}${tubeDiameter}`
+      queryString += `ftd=${tdIneq}${tubeDiameter}`
     }
     if (crossSectionalArea) {
-      queryString += `st=${csaIneq}${crossSectionalArea}`
+      queryString += `fcsa=${csaIneq}${crossSectionalArea}`
     }
     if (tubeLength) {
-      queryString += `st=${tlIneq}${tubeLength}`
+      queryString += `ftl=${tlIneq}${tubeLength}`
     }
     if (lengthOfHeatedRegion) {
-      queryString += `st=${lhrIneq}${lengthOfHeatedRegion}`
+      queryString += `flhr=${lhrIneq}${lengthOfHeatedRegion}`
     }
+
+    setLoading(false);
     const response = await axios.get(host + '/experiments/data' + queryString);
     const data = response.data;
     researchData = data;
-
-    setLoading(!loading);
+    setLoading(true);
   }
 
   return (
