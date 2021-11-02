@@ -20,7 +20,6 @@ const Signin = () => {
       last_name: lastname,
       institution
     }
-    console.log(data);
     axios.post(host + '/auth/signup', data)
       .then(res => {
         if (res.status >= 200 && res.status < 300) {

@@ -4,9 +4,8 @@ import React, { useState } from 'react';
 import ExperimentRow from '../components/ExperimentRow';
 import { host } from '../settings';
 
-let researchData = [];
-
 const Tool = () => {
+  const [rd, setRd] = useState([]);
   const [carbonSource, setCarbonSource] = useState(null);
   const [basePressure, setBasePressure] = useState(null);
   const [bpIneq, setBpIneq] = useState(null);
@@ -65,49 +64,52 @@ const Tool = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    let queryString = '?';
+    
+    let queryStrings = [];
     if (carbonSource) {
-      queryString += `rcs=${carbonSource}`;
+      queryStrings.push(`rcs=${carbonSource}`);
     }
     if (basePressure) {
-      queryString += `rbp=${bpIneq}${basePressure}`;
+      queryStrings.push(`rbp=${bpIneq}${basePressure}`);
     }
     if (catalyst) {
-      queryString += `sc=${catalyst}`
+      queryStrings.push(`sc=${catalyst}`);
     }
     if (thickness) {
-      queryString += `st=${thIneq}${thickness}`
+      queryStrings.push(`st=${thIneq}${thickness}`);
     }
     if (diameter) {
-      queryString += `sd=${dmIneq}${diameter}`
+      queryStrings.push(`sd=${dmIneq}${diameter}`);
     }
     if (length) {
-      queryString += `sl=${lenIneq}${length}`
+      queryStrings.push(`sl=${lenIneq}${length}`);
     }
     if (surfaceArea) {
-      queryString += `ssa=${saIneq}${surfaceArea}`
+      queryStrings.push(`ssa=${saIneq}${surfaceArea}`);
     }
     if (tubeDiameter) {
-      queryString += `ftd=${tdIneq}${tubeDiameter}`
+      queryStrings.push(`ftd=${tdIneq}${tubeDiameter}`);
     }
     if (crossSectionalArea) {
-      queryString += `fcsa=${csaIneq}${crossSectionalArea}`
+      queryStrings.push(`fcsa=${csaIneq}${crossSectionalArea}`);
     }
     if (tubeLength) {
-      queryString += `ftl=${tlIneq}${tubeLength}`
+      queryStrings.push(`ftl=${tlIneq}${tubeLength}`);
     }
     if (lengthOfHeatedRegion) {
-      queryString += `flhr=${lhrIneq}${lengthOfHeatedRegion}`
+      queryStrings.push(`flhr=${lhrIneq}${lengthOfHeatedRegion}`);
     }
 
-    setLoading(false);
-    const response = await axios.get(host + '/experiments/data' + queryString);
-    const data = response.data;
-    researchData = data;
+    const queryString = queryStrings.join('&');
     setLoading(true);
+    const response = await axios.get(host + '/experiments/data?' + queryString);
+    const data = response.data;
+    setRd(data);
+    setLoading(false);
   }
-
+  if (loading) {
+    return <p>loading</p>
+  }
   return (
     <div className="w-full flex">
       <form className="w-1/3 max-w-sm" onSubmit={e => handleSubmit(e)}>
@@ -385,8 +387,7 @@ const Tool = () => {
             </tr>
           </thead>
           <tbody>
-            {researchData.map((data, i) => {
-              console.log(data)
+            {rd.map((data, i) => {
               return <ExperimentRow
                 key={i}
                 ambientTemperature={data.amient_temperature}

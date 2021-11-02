@@ -15,7 +15,6 @@ const Signin = () => {
 
     axios.post(host + '/auth/signin', data)
       .then(res => {
-        console.log(res)
         if (res.status >= 200 && res.status < 300) {
           setSignedIn(true);
         }
