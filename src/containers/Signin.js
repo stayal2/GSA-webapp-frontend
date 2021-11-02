@@ -1,24 +1,28 @@
 import axios from 'axios';
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Redirect } from 'react-router';
 import { host } from '../settings';
+import { GlobalContext } from './App';
 
 const Signin = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [signedIn, setSignedIn] = useState(false);
+  const g = useContext(GlobalContext);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const data = { email, password }
+    const response = await axios.post(host + '/auth/signin', data);
 
-    axios.post(host + '/auth/signin', data)
-      .then(res => {
-        if (res.status >= 200 && res.status < 300) {
-          setSignedIn(true);
-        }
-      })
+    if (response.status >= 200 && response.status < 300) {
+      const data = response.data;
+      console.log(data);
+      // window.sessionStorage.setItem('token', data.token.toString());
+      g.setSignedIn(true);
+    } else {
+      g.setSignedIn(false);
+    }
   }
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
@@ -26,9 +30,9 @@ const Signin = () => {
   const handlePasswordChange = (e) => {
     setPassword(e.target.value);
   }
-  
-  if (signedIn) {
-    return <Redirect to="/"/>
+
+  if (g.signedIn) {
+    return <Redirect to="/" />
   }
   return (
     <div className="w-full max-w-xs">
