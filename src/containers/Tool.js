@@ -1,75 +1,23 @@
 import axios from 'axios';
-import React, { useState } from 'react';
+import React, { useState, useReducer } from 'react';
 
 import ExperimentRow from '../components/ExperimentRow';
 import { host } from '../settings';
+import toolReducer, { defaultState } from '../reducers/toolReducer';
 
 const Tool = () => {
-  const [rd, setRd] = useState([]);
-  const [carbonSource, setCarbonSource] = useState(null);
-  const [basePressure, setBasePressure] = useState(null);
-  const [bpIneq, setBpIneq] = useState(null);
-  const [catalyst, setCatalyst] = useState(null);
-  const [thickness, setThickness] = useState(null);
-  const [thIneq, setThIneq] = useState(null);
-  const [diameter, setDiameter] = useState(null);
-  const [dmIneq, setDmIneq] = useState(null);
-  const [length, setLength] = useState(null);
-  const [lenIneq, setLengIneq] = useState(null);
-  const [surfaceArea, setSurfaceArea] = useState(null);
-  const [saIneq, setSaIneq] = useState(null);
-  const [tubeDiameter, setTubeDiameter] = useState(null);
-  const [tdIneq, setTdIneq] = useState(null);
-  const [crossSectionalArea, setCrossSectionalArea] = useState(null);
-  const [csaIneq, setCsaIneq] = useState(null);
-  const [tubeLength, setTubeLength] = useState(null);
-  const [tlIneq, setTlIneq] = useState(null);
-  const [lengthOfHeatedRegion, setLengthOfHeatedRegion] = useState(null);
-  const [lhrIneq, setLhrIneq] = useState(null);
+  const [state, dispatch] = useReducer(toolReducer, defaultState);
+  const [experiments, setExperiments] = useState([]);
   const [loading, setLoading] = useState(false);
-
-  const handleCarbonSourceChange = e => {
-    e.target.value ? setCarbonSource(e.target.value) : setCarbonSource(null);
-  }
-  const handleBasePressureChange = e => {
-    e.target.value ? setBasePressure(e.target.value) : setBasePressure(null);
-  }
-  const handleCatalystChange = e => {
-    e.target.value ? setCatalyst(e.target.value) : setCatalyst(null);
-  }
-  const handleThicknessChange = e => {
-    e.target.value ? setThickness(e.target.value) : setThickness(null);
-  }
-  const handleDiameterChange = e => {
-    e.target.value ? setDiameter(e.target.value) : setDiameter(null);
-  }
-  const handleLengthChange = e => {
-    e.target.value ? setLength(e.target.value) : setLength(null);
-  }
-  const handleSurfaceAreaChange = e => {
-    e.target.value ? setSurfaceArea(e.target.value) : setSurfaceArea(null);
-  }
-  const handleTubeDiameterChange = e => {
-    e.target.value ? setTubeDiameter(e.target.value) : setTubeDiameter(null);
-  }
-  const handleCrossSectionalAreaChange = e => {
-    e.target.value ? setCrossSectionalArea(e.target.value) : setCrossSectionalArea(null);
-  }
-  const handleTubeLengthChange = e => {
-    e.target.value ? setTubeLength(e.target.value) : setTubeLength(null);
-  }
-  const handleLengthOfHeatedRegionChange = e => {
-    e.target.value ? setLengthOfHeatedRegion(e.target.value) : setLengthOfHeatedRegion(null);
-  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     let queryStrings = [];
-    if (carbonSource) {
+    if (state.carbonSource) {
       queryStrings.push(`rcs=${carbonSource}`);
     }
-    if (basePressure) {
+    if (state.basePressure) {
       queryStrings.push(`rbp=${bpIneq}${basePressure}`);
     }
     if (catalyst) {
@@ -104,7 +52,7 @@ const Tool = () => {
     setLoading(true);
     const response = await axios.get(host + '/experiments/data?' + queryString);
     const data = response.data;
-    setRd(data);
+    setExperiments(data);
     setLoading(false);
   }
   if (loading) {
@@ -119,7 +67,7 @@ const Tool = () => {
           </div>
           <div className="md:w-1/2">
             <input className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
-              id="carbonsource" type="text" onChange={e => handleCarbonSourceChange(e)} />
+              id="carbonsource" type="text" onChange={e => dispatch({ type: "CARBON_SOURCE_CHANGE", payload: e.target.value })} />
           </div>
         </div>
 
@@ -130,7 +78,7 @@ const Tool = () => {
           <div className="md:w-1/2">
             <div class="inline-block relative md:w-1/2">
               <select class="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
-                onChange={e => setBpIneq(e.target.value)}>
+                onChange={e => dispatch({ type: "BASE_PRESSURE_INEQ_CHANGE", payload: e.target.value })}>
                 <option value="eq">=</option>
                 <option value="ne">&#8800;</option>
                 <option value="lt">&#60;</option>
@@ -143,7 +91,7 @@ const Tool = () => {
               </div>
             </div>
             <input className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500 md:w-1/2"
-              id="basepressure" type="number" step="0.01" onChange={e => handleBasePressureChange(e)} />
+              id="basepressure" type="number" step="0.01" onChange={e => dispatch({ type: "BASE_PRESSURE_CHANGE", payload: e.target.value })} />
           </div>
         </div>
 
@@ -153,7 +101,7 @@ const Tool = () => {
           </div>
           <div className="md:w-1/2">
             <input className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
-              id="catalyst" type="text" onChange={e => handleCatalystChange(e)} />
+              id="catalyst" type="text" onChange={e => dispatch({ type: "CATALYST_CHANGE", payload: e.target.value })} />
           </div>
         </div>
 
@@ -164,7 +112,7 @@ const Tool = () => {
           <div className="md:w-1/2">
             <div class="inline-block relative md:w-1/2">
               <select class="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
-                onChange={e => setThIneq(e.target.value)}>
+                onChange={e => dispatch({ type: "THICKNESS_INEQ_CHANGE", payload: e.target.value })}>
                 <option value="eq">=</option>
                 <option value="ne">&#8800;</option>
                 <option value="lt">&#60;</option>
@@ -177,7 +125,7 @@ const Tool = () => {
               </div>
             </div>
             <input className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500 md:w-1/2"
-              id="thickness" type="number" step="0.01" onChange={e => handleThicknessChange(e)} />
+              id="thickness" type="number" step="0.01" onChange={e => dispatch({ type: "THICKNESS_CHANGE", payload: e.target.value })} />
           </div>
         </div>
 
@@ -188,7 +136,7 @@ const Tool = () => {
           <div className="md:w-1/2">
             <div class="inline-block relative md:w-1/2">
               <select class="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
-                onChange={e => setDmIneq(e.target.value)}>
+                onChange={e => dispatch({ type: "DIAMETER_INEQ_CHANGE", payload: e.target.value })}>
                 <option value="eq">=</option>
                 <option value="ne">&#8800;</option>
                 <option value="lt">&#60;</option>
@@ -201,7 +149,7 @@ const Tool = () => {
               </div>
             </div>
             <input className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500 md:w-1/2"
-              id="diameter" type="number" step="0.01" onChange={e => handleDiameterChange(e)} />
+              id="diameter" type="number" step="0.01" onChange={e => dispatch({ type: "DIAMETER_CHANGE", payload: e.target.value })} />
           </div>
         </div>
 
@@ -212,7 +160,7 @@ const Tool = () => {
           <div className="md:w-1/2">
             <div class="inline-block relative md:w-1/2">
               <select class="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
-                onChange={e => setLengIneq(e.target.value)}>
+                onChange={e => dispatch({ type: "LENGTH_INEQ_CHANGE", payload: e.target.value })}>
                 <option value="eq">=</option>
                 <option value="ne">&#8800;</option>
                 <option value="lt">&#60;</option>
@@ -225,7 +173,7 @@ const Tool = () => {
               </div>
             </div>
             <input className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500 md:w-1/2"
-              id="length" type="number" step="0.01" onChange={e => handleLengthChange(e)} />
+              id="length" type="number" step="0.01" onChange={e => dispatch({ type: "LENGTH_CHANGE", payload: e.target.value })} />
           </div>
         </div>
 
@@ -236,7 +184,7 @@ const Tool = () => {
           <div className="md:w-1/2">
             <div class="inline-block relative md:w-1/2">
               <select class="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
-                onChange={e => setSaIneq(e.target.value)}>
+                onChange={e => dispatch({ type: "SURFACE_AREA_INEQ_CHANGE", payload: e.target.value })}>
                 <option value="eq">=</option>
                 <option value="ne">&#8800;</option>
                 <option value="lt">&#60;</option>
@@ -249,7 +197,7 @@ const Tool = () => {
               </div>
             </div>
             <input className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500 md:w-1/2"
-              id="surfacearea" type="number" step="0.01" onChange={e => handleSurfaceAreaChange(e)} />
+              id="surfacearea" type="number" step="0.01" onChange={e => dispatch({ type: "SURFACE_AREA_CHANGE", payload: e.target.value })} />
           </div>
         </div>
 
@@ -260,7 +208,7 @@ const Tool = () => {
           <div className="md:w-1/2">
             <div class="inline-block relative md:w-1/2">
               <select class="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
-                onChange={e => setTdIneq(e.target.value)}>
+                onChange={e => dispatch({ type: "TUBE_DIAMETER_INEQ_CHANGE", payload: e.target.value })}>
                 <option value="eq">=</option>
                 <option value="ne">&#8800;</option>
                 <option value="lt">&#60;</option>
@@ -273,7 +221,7 @@ const Tool = () => {
               </div>
             </div>
             <input className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500 md:w-1/2"
-              id="tubediameter" type="number" step="0.01" onChange={e => handleTubeDiameterChange(e)} />
+              id="tubediameter" type="number" step="0.01" onChange={e => dispatch({ type: "TUBE_DIAMETER_CHANGE", payload: e.target.value })} />
           </div>
         </div>
 
@@ -284,7 +232,7 @@ const Tool = () => {
           <div className="md:w-1/2">
             <div class="inline-block relative md:w-1/2">
               <select class="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
-                onChange={e => setCsaIneq(e.target.value)}>
+                onChange={e => dispatch({ type: "CROSS_SECTIONAL_AREA_INEQ_CHANGE", payload: e.target.value })}>
                 <option value="eq">=</option>
                 <option value="ne">&#8800;</option>
                 <option value="lt">&#60;</option>
@@ -297,7 +245,7 @@ const Tool = () => {
               </div>
             </div>
             <input className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500 md:w-1/2"
-              id="crosssectionalarea" type="number" step="0.01" onChange={e => handleCrossSectionalAreaChange(e)} />
+              onChange={e => dispatch({ type: "CROSS_SECTIONAL_AREA_CHANGE", payload: e.target.value })} />
           </div>
         </div>
 
@@ -308,7 +256,7 @@ const Tool = () => {
           <div className="md:w-1/2">
             <div class="inline-block relative md:w-1/2">
               <select class="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
-                onChange={e => setTlIneq(e.target.value)}>
+                onChange={e => dispatch({ type: "TUBE_LENGTH_INEQ_CHANGE", payload: e.target.value })}>
                 <option value="eq">=</option>
                 <option value="ne">&#8800;</option>
                 <option value="lt">&#60;</option>
@@ -321,7 +269,7 @@ const Tool = () => {
               </div>
             </div>
             <input className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500 md:w-1/2"
-              id="tubelength" type="number" step="0.01" onChange={e => handleTubeLengthChange(e)} />
+              id="tubelength" type="number" step="0.01" onChange={e => dispatch({ type: "TUBE_LENGTH_CHANGE", payload: e.target.value })} />
           </div>
         </div>
 
@@ -332,7 +280,7 @@ const Tool = () => {
           <div className="md:w-1/2">
             <div class="inline-block relative md:w-1/2">
               <select class="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
-                onChange={e => setLhrIneq(e.target.value)}>
+                onChange={e => dispatch({ type: "LENGTH_OF_HEATED_REGION_INEQ_CHANGE", payload: e.target.value })}>
                 <option value="eq">=</option>
                 <option value="ne">&#8800;</option>
                 <option value="lt">&#60;</option>
@@ -345,7 +293,7 @@ const Tool = () => {
               </div>
             </div>
             <input className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500 md:w-1/2"
-              id="lohr" type="number" step="0.01" onChange={e => handleLengthOfHeatedRegionChange(e)} />
+              id="lohr" type="number" step="0.01" onChange={e => dispatch({ type: "LENGTH_OF_HEATED_REGION_CHANGE", payload: e.target.value })} />
           </div>
         </div>
 
@@ -387,7 +335,7 @@ const Tool = () => {
             </tr>
           </thead>
           <tbody>
-            {rd.map((data, i) => {
+            {experiments.map((data, i) => {
               return <ExperimentRow
                 key={i}
                 ambientTemperature={data.amient_temperature}

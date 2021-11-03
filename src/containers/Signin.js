@@ -18,12 +18,12 @@ const Signin = () => {
     if (response.status >= 200 && response.status < 300) {
       const data = response.data;
       console.log(data);
-      // window.sessionStorage.setItem('token', data.token.toString());
       g.setSignedIn(true);
     } else {
       g.setSignedIn(false);
     }
   }
+
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
   }
