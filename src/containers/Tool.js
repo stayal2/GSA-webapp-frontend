@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useState, useReducer } from 'react';
 
 import ExperimentRow from '../components/ExperimentRow';
+import FieldInput from '../components/FieldInput';
 import { host } from '../settings';
 import toolReducer, { defaultState } from '../reducers/toolReducer';
 import { buildExperimentQueryStr } from '../utils/query';
@@ -37,6 +38,13 @@ const Tool = () => {
               id="carbonsource" type="text" onChange={e => dispatch({ type: "CARBON_SOURCE_CHANGE", payload: e.target.value })} />
           </div>
         </div>
+        <FieldInput
+          type="select"
+          label="Carbon Source"
+          id="carbonsource1"
+          dispatch={dispatch}
+          valueType="CARBON_SOURCE_CHANGE"
+        />
 
         <div className="md:flex md:items-center mb-6">
           <div className="md:w-1/2">
