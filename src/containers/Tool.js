@@ -4,6 +4,7 @@ import React, { useState, useReducer } from 'react';
 import ExperimentRow from '../components/ExperimentRow';
 import { host } from '../settings';
 import toolReducer, { defaultState } from '../reducers/toolReducer';
+import { buildExperimentQueryStr } from '../utils/query';
 
 const Tool = () => {
   const [state, dispatch] = useReducer(toolReducer, defaultState);
@@ -13,42 +14,8 @@ const Tool = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    let queryStrings = [];
-    if (state.carbonSource) {
-      queryStrings.push(`rcs=${carbonSource}`);
-    }
-    if (state.basePressure) {
-      queryStrings.push(`rbp=${bpIneq}${basePressure}`);
-    }
-    if (catalyst) {
-      queryStrings.push(`sc=${catalyst}`);
-    }
-    if (thickness) {
-      queryStrings.push(`st=${thIneq}${thickness}`);
-    }
-    if (diameter) {
-      queryStrings.push(`sd=${dmIneq}${diameter}`);
-    }
-    if (length) {
-      queryStrings.push(`sl=${lenIneq}${length}`);
-    }
-    if (surfaceArea) {
-      queryStrings.push(`ssa=${saIneq}${surfaceArea}`);
-    }
-    if (tubeDiameter) {
-      queryStrings.push(`ftd=${tdIneq}${tubeDiameter}`);
-    }
-    if (crossSectionalArea) {
-      queryStrings.push(`fcsa=${csaIneq}${crossSectionalArea}`);
-    }
-    if (tubeLength) {
-      queryStrings.push(`ftl=${tlIneq}${tubeLength}`);
-    }
-    if (lengthOfHeatedRegion) {
-      queryStrings.push(`flhr=${lhrIneq}${lengthOfHeatedRegion}`);
-    }
+    const queryString = buildExperimentQueryStr(state);
 
-    const queryString = queryStrings.join('&');
     setLoading(true);
     const response = await axios.get(host + '/experiments/data?' + queryString);
     const data = response.data;
@@ -59,8 +26,8 @@ const Tool = () => {
     return <p>loading</p>
   }
   return (
-    <div className="w-full flex">
-      <form className="w-1/3 max-w-sm" onSubmit={e => handleSubmit(e)}>
+    <div className="w-full flex flex-col">
+      <form className="max-w-sm" onSubmit={e => handleSubmit(e)}>
         <div className="md:flex md:items-center mb-6">
           <div className="md:w-1/2">
             <label className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" htmlFor="carbonsource">Carbon Source</label>
@@ -307,7 +274,7 @@ const Tool = () => {
         </div>
       </form>
 
-      <div className="w-2/3">
+      <div>
         <table className="table-fixed">
           <thead>
             <tr>
