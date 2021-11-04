@@ -7,11 +7,24 @@ import { host } from '../settings';
 import toolReducer, { defaultState } from '../reducers/toolReducer';
 import { buildExperimentQueryStr } from '../utils/query';
 
+const catalystOptions = ['Copper', 'Platinum', 'Nickel', 'Palladium', 'Palladium Thin F'].sort()
+const prepNameOptions = ['Annealing', 'Growing', 'Cooling']
+const carbonSourceOptions = ['CH4']
+
 const Tool = () => {
   const [state, dispatch] = useReducer(toolReducer, defaultState);
   const [experiments, setExperiments] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [filters, setFilters] = useState([]);
 
+  const onAddExperimentalConditionsFilters = (e) => {
+    e.preventDefault();
+    dispatch({ type: 'ADD_EXPERIMENTAL_CONDITIONS_FILTERS' });
+  }
+  const onPreparationFilters = (e) => {
+    e.preventDefault();
+    dispatch({ type: 'ADD_PREPARATION_FILTERS' });
+  }
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -26,262 +39,66 @@ const Tool = () => {
   if (loading) {
     return <p>loading</p>
   }
+
   return (
-    <div className="w-full flex flex-col">
-      <form className="max-w-sm" onSubmit={e => handleSubmit(e)}>
-        <div className="md:flex md:items-center mb-6">
-          <div className="md:w-1/2">
-            <label className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" htmlFor="carbonsource">Carbon Source</label>
-          </div>
-          <div className="md:w-1/2">
-            <input className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
-              id="carbonsource" type="text" onChange={e => dispatch({ type: "CARBON_SOURCE_CHANGE", payload: e.target.value })} />
-          </div>
-        </div>
-        <FieldInput
-          type="select"
-          label="Carbon Source"
-          id="carbonsource1"
-          dispatch={dispatch}
-          valueType="CARBON_SOURCE_CHANGE"
-        />
-
-        <div className="md:flex md:items-center mb-6">
-          <div className="md:w-1/2">
-            <label className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" htmlFor="basepressure">Base Pressure</label>
-          </div>
-          <div className="md:w-1/2">
-            <div class="inline-block relative md:w-1/2">
-              <select class="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
-                onChange={e => dispatch({ type: "BASE_PRESSURE_INEQ_CHANGE", payload: e.target.value })}>
-                <option value="eq">=</option>
-                <option value="ne">&#8800;</option>
-                <option value="lt">&#60;</option>
-                <option value="le">&#8804;</option>
-                <option value="gt">&#62;</option>
-                <option value="ge">&#8805;</option>
-              </select>
-              <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" /></svg>
-              </div>
-            </div>
-            <input className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500 md:w-1/2"
-              id="basepressure" type="number" step="0.01" onChange={e => dispatch({ type: "BASE_PRESSURE_CHANGE", payload: e.target.value })} />
-          </div>
-        </div>
-
-        <div className="md:flex md:items-center mb-6">
-          <div className="md:w-1/2">
-            <label className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" htmlFor="catalyst">Catalyst</label>
-          </div>
-          <div className="md:w-1/2">
-            <input className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
-              id="catalyst" type="text" onChange={e => dispatch({ type: "CATALYST_CHANGE", payload: e.target.value })} />
-          </div>
-        </div>
-
-        <div className="md:flex md:items-center mb-6">
-          <div className="md:w-1/2">
-            <label className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" htmlFor="thickness">Thickness</label>
-          </div>
-          <div className="md:w-1/2">
-            <div class="inline-block relative md:w-1/2">
-              <select class="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
-                onChange={e => dispatch({ type: "THICKNESS_INEQ_CHANGE", payload: e.target.value })}>
-                <option value="eq">=</option>
-                <option value="ne">&#8800;</option>
-                <option value="lt">&#60;</option>
-                <option value="le">&#8804;</option>
-                <option value="gt">&#62;</option>
-                <option value="ge">&#8805;</option>
-              </select>
-              <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" /></svg>
-              </div>
-            </div>
-            <input className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500 md:w-1/2"
-              id="thickness" type="number" step="0.01" onChange={e => dispatch({ type: "THICKNESS_CHANGE", payload: e.target.value })} />
-          </div>
-        </div>
-
-        <div className="md:flex md:items-center mb-6">
-          <div className="md:w-1/2">
-            <label className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" htmlFor="diameter">Diameter</label>
-          </div>
-          <div className="md:w-1/2">
-            <div class="inline-block relative md:w-1/2">
-              <select class="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
-                onChange={e => dispatch({ type: "DIAMETER_INEQ_CHANGE", payload: e.target.value })}>
-                <option value="eq">=</option>
-                <option value="ne">&#8800;</option>
-                <option value="lt">&#60;</option>
-                <option value="le">&#8804;</option>
-                <option value="gt">&#62;</option>
-                <option value="ge">&#8805;</option>
-              </select>
-              <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" /></svg>
-              </div>
-            </div>
-            <input className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500 md:w-1/2"
-              id="diameter" type="number" step="0.01" onChange={e => dispatch({ type: "DIAMETER_CHANGE", payload: e.target.value })} />
-          </div>
-        </div>
-
-        <div className="md:flex md:items-center mb-6">
-          <div className="md:w-1/2">
-            <label className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" htmlFor="length">Length</label>
-          </div>
-          <div className="md:w-1/2">
-            <div class="inline-block relative md:w-1/2">
-              <select class="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
-                onChange={e => dispatch({ type: "LENGTH_INEQ_CHANGE", payload: e.target.value })}>
-                <option value="eq">=</option>
-                <option value="ne">&#8800;</option>
-                <option value="lt">&#60;</option>
-                <option value="le">&#8804;</option>
-                <option value="gt">&#62;</option>
-                <option value="ge">&#8805;</option>
-              </select>
-              <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" /></svg>
-              </div>
-            </div>
-            <input className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500 md:w-1/2"
-              id="length" type="number" step="0.01" onChange={e => dispatch({ type: "LENGTH_CHANGE", payload: e.target.value })} />
-          </div>
-        </div>
-
-        <div className="md:flex md:items-center mb-6">
-          <div className="md:w-1/2">
-            <label className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" htmlFor="surfacearea">Surface Area</label>
-          </div>
-          <div className="md:w-1/2">
-            <div class="inline-block relative md:w-1/2">
-              <select class="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
-                onChange={e => dispatch({ type: "SURFACE_AREA_INEQ_CHANGE", payload: e.target.value })}>
-                <option value="eq">=</option>
-                <option value="ne">&#8800;</option>
-                <option value="lt">&#60;</option>
-                <option value="le">&#8804;</option>
-                <option value="gt">&#62;</option>
-                <option value="ge">&#8805;</option>
-              </select>
-              <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" /></svg>
-              </div>
-            </div>
-            <input className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500 md:w-1/2"
-              id="surfacearea" type="number" step="0.01" onChange={e => dispatch({ type: "SURFACE_AREA_CHANGE", payload: e.target.value })} />
-          </div>
-        </div>
-
-        <div className="md:flex md:items-center mb-6">
-          <div className="md:w-1/2">
-            <label className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" htmlFor="tubediameter">Tube Diameter</label>
-          </div>
-          <div className="md:w-1/2">
-            <div class="inline-block relative md:w-1/2">
-              <select class="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
-                onChange={e => dispatch({ type: "TUBE_DIAMETER_INEQ_CHANGE", payload: e.target.value })}>
-                <option value="eq">=</option>
-                <option value="ne">&#8800;</option>
-                <option value="lt">&#60;</option>
-                <option value="le">&#8804;</option>
-                <option value="gt">&#62;</option>
-                <option value="ge">&#8805;</option>
-              </select>
-              <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" /></svg>
-              </div>
-            </div>
-            <input className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500 md:w-1/2"
-              id="tubediameter" type="number" step="0.01" onChange={e => dispatch({ type: "TUBE_DIAMETER_CHANGE", payload: e.target.value })} />
-          </div>
-        </div>
-
-        <div className="md:flex md:items-center mb-6">
-          <div className="md:w-1/2">
-            <label className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" htmlFor="crosssectionalarea">Cross Sectional Area</label>
-          </div>
-          <div className="md:w-1/2">
-            <div class="inline-block relative md:w-1/2">
-              <select class="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
-                onChange={e => dispatch({ type: "CROSS_SECTIONAL_AREA_INEQ_CHANGE", payload: e.target.value })}>
-                <option value="eq">=</option>
-                <option value="ne">&#8800;</option>
-                <option value="lt">&#60;</option>
-                <option value="le">&#8804;</option>
-                <option value="gt">&#62;</option>
-                <option value="ge">&#8805;</option>
-              </select>
-              <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" /></svg>
-              </div>
-            </div>
-            <input className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500 md:w-1/2"
-              onChange={e => dispatch({ type: "CROSS_SECTIONAL_AREA_CHANGE", payload: e.target.value })} />
-          </div>
-        </div>
-
-        <div className="md:flex md:items-center mb-6">
-          <div className="md:w-1/2">
-            <label className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" htmlFor="tubelength">Tube Length</label>
-          </div>
-          <div className="md:w-1/2">
-            <div class="inline-block relative md:w-1/2">
-              <select class="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
-                onChange={e => dispatch({ type: "TUBE_LENGTH_INEQ_CHANGE", payload: e.target.value })}>
-                <option value="eq">=</option>
-                <option value="ne">&#8800;</option>
-                <option value="lt">&#60;</option>
-                <option value="le">&#8804;</option>
-                <option value="gt">&#62;</option>
-                <option value="ge">&#8805;</option>
-              </select>
-              <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" /></svg>
-              </div>
-            </div>
-            <input className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500 md:w-1/2"
-              id="tubelength" type="number" step="0.01" onChange={e => dispatch({ type: "TUBE_LENGTH_CHANGE", payload: e.target.value })} />
-          </div>
-        </div>
-
-        <div className="md:flex md:items-center mb-6">
-          <div className="md:w-1/2">
-            <label className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" htmlFor="lohr">Length of Heated Region</label>
-          </div>
-          <div className="md:w-1/2">
-            <div class="inline-block relative md:w-1/2">
-              <select class="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
-                onChange={e => dispatch({ type: "LENGTH_OF_HEATED_REGION_INEQ_CHANGE", payload: e.target.value })}>
-                <option value="eq">=</option>
-                <option value="ne">&#8800;</option>
-                <option value="lt">&#60;</option>
-                <option value="le">&#8804;</option>
-                <option value="gt">&#62;</option>
-                <option value="ge">&#8805;</option>
-              </select>
-              <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" /></svg>
-              </div>
-            </div>
-            <input className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500 md:w-1/2"
-              id="lohr" type="number" step="0.01" onChange={e => dispatch({ type: "LENGTH_OF_HEATED_REGION_CHANGE", payload: e.target.value })} />
-          </div>
-        </div>
-
-        <div className="md:flex md:items-center">
-          <div className="md:w-1/3"></div>
-          <div className="md:w-2/3">
-            <button className="shadow bg-purple-500 hover:bg-purple-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded" type="submit">
-              Search
+    <React.Fragment>
+      <div className="w-full flex flex-row md:container md:mx-auto">
+        <div className="w-1/2">
+          <form className="w-full flex flex-col mt-10" onSubmit={e => onAddExperimentalConditionsFilters(e)}>
+            <h2 className="text-center text-3xl font-bold underline mb-4">Experimental Conditions</h2>
+            <FieldInput type="select" options={catalystOptions} label="Catalyst" id="catalyst"
+              dispatch={dispatch} valueType="CATALYST_CHANGE" />
+            <FieldInput type="number" label="Tube Diameter" unit="mm" step={0.001} id="tube-diameter"
+              dispatch={dispatch} valueType="TUBE_DIAMETER_CHANGE" ineqType="TUBE_DIAMETER_INEQ_CHANGE" />
+            <FieldInput type="number" label="Cross Sectional Area" unit="mm&sup2;" id="cross-sectional-area"
+              dispatch={dispatch} valueType="CROSS_SECTIONAL_AREA_CHANGE" ineqType="CROSS_SECTIONAL_AREA_INEQ_CHANGE" />
+            <FieldInput type="number" label="Tube Length" unit="mm" id="tube-length"
+              dispatch={dispatch} valueType="TUBE_LENGTH_CHANGE" ineqType="TUBE_LENGTH_INEQ_CHANGE" />
+            <FieldInput type="number" label="Base Pressure" unit="Torr" id="base-pressure"
+              dispatch={dispatch} valueType="BASE_PRESSURE_CHANGE" ineqType="BASE_PRESSURE_INEQ_CHANGE" />
+            <FieldInput type="number" label="Thickness" unit="um" id="thickness"
+              dispatch={dispatch} valueType="THICKNESS_CHANGE" ineqType="THICKNESS_INEQ_CHANGE" />
+            <FieldInput type="number" label="Diameter" unit="um" id="diameter"
+              dispatch={dispatch} valueType="DIAMTER_CHANGE" ineqType="DIAMTER_INEQ_CHANGE" />
+            <FieldInput type="number" label="Length" unit="um" id="length"
+              dispatch={dispatch} valueType="LENGTH_CHANGE" ineqType="LENGTH_INEQ_CHANGE" />
+            <button className="self-center w-1/3 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
+              Add filters
             </button>
-          </div>
-        </div>
-      </form>
+          </form>
 
+          <form className="w-full flex flex-col mt-10">
+            <h2 className="text-center text-3xl font-bold underline mb-4">Preparation</h2>
+            <FieldInput type="select" options={[]} label="Name" id="name"
+              dispatch={dispatch} valueType="PREP_NAME_CHANGE" />
+            <FieldInput type="number" label="Duration" unit="min" step={0.001} id="duration"
+              dispatch={dispatch} valueType="DURATION_CHANGE" ineqType="DURATION_INEQ_CHANGE" />
+            <FieldInput type="number" label="Furnace Temperature" unit="&deg;C" step={0.001} id="furnace-temperature"
+              dispatch={dispatch} valueType="FURNACE_TEMPERATURE_CHANGE" ineqType="FURNACE_TEMPERATURE_INEQ_CHANGE" />
+            <FieldInput type="number" label="Furnace Pressure" unit="Torr" step={0.001} id="furnace-pressure"
+              dispatch={dispatch} valueType="FURNACE_PRESSURE_CHANGE" ineqType="FURNACE_PRESSURE_INEQ_CHANGE" />
+            <FieldInput type="number" label="Sample Location" unit="mm" step={0.001} id="sample-location"
+              dispatch={dispatch} valueType="SAMPLE_LOCATION_CHANGE" ineqType="SAMPLE_LOCATION_INEQ_CHANGE" />
+            <FieldInput type="number" label="Helium Flow Rate" unit="sccm" step={0.001} id="helium-flow-rate"
+              dispatch={dispatch} valueType="HELIUM_FLOW_RATE_CHANGE" ineqType="HELIUM_FLOW_RATE_INEQ_CHANGE" />
+            <FieldInput type="number" label="Hydrogen Flow Rate" unit="sccm" step={0.001} id="hydrogen-flow-rate"
+              dispatch={dispatch} valueType="HYDROGEN_FLOW_RATE_CHANGE" ineqType="HYDROGEN_FLOW_RATE_INEQ_CHANGE" />
+            <FieldInput type="select" label="Carbon Source" options={carbonSourceOptions} id="carbon-source"
+              dispatch={dispatch} valueType="CARBON_SOURCE_CHANGE" />
+            <FieldInput type="number" label="Carbon Source Flow Rate" unit="sccm" step={0.001} id="carbon-source-flow-rate"
+              dispatch={dispatch} valueType="CARBON_SOURCE_FLOW_RATE_CHANGE" ineqType="CARBON_SOURCE_FLOW_RATE_INEQ_CHANGE" />
+            <FieldInput type="number" label="Argon Flow Rate" unit="sccm" step={0.001} id="argon-flow-rate"
+              dispatch={dispatch} valueType="ARGON_FLOW_RATE_CHANGE" ineqType="ARGON_FLOW_RATE_INEQ_CHANGE" />
+            <FieldInput type="number" label="Cooling Rate" unit="&deg;C/min" step={0.001} id="cooling-rate"
+              dispatch={dispatch} valueType="COOLING_RATE_CHANGE" ineqType="COOLING_RATE_INEQ_CHANGE" />
+            <button className="self-center w-1/3 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
+              Add filters
+            </button>
+          </form>
+        </div>
+        <div className="w-1/2">
+        </div>
+      </div>
       <div>
         <table className="table-fixed">
           <thead>
@@ -339,7 +156,7 @@ const Tool = () => {
           </tbody>
         </table>
       </div>
-    </div>
+    </React.Fragment>
   )
 }
 
