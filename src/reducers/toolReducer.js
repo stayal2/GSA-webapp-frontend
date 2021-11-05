@@ -17,6 +17,8 @@ export const defaultState = {
   lengthIneq: 'eq',
   surfaceArea: null,
   surfaceAreaIneq: 'eq',
+  dewPoint: null,
+  dewPointIneq: null,
   lengthOfHeatedRegion: null,
   lengthOfHeatedRegionIneq: 'eq',
   prepName: null,
@@ -62,12 +64,14 @@ const toolReducer = (state, action) => {
       if (state.catalyst) {
         newFilters.push({
           field: 'Catalyst',
+          code: 'sc',
           value: state.catalyst,
         })
       }
       if (state.tubeDiameter) {
         newFilters.push({
           field: 'Tube Diameter',
+          code: 'ftd',
           value: state.tubeDiameter,
           ineq: state.tubeDiameterIneq,
           unit: 'mm',
@@ -76,6 +80,7 @@ const toolReducer = (state, action) => {
       if (state.crossSectionalArea) {
         newFilters.push({
           field: 'Cross Sectional Area',
+          code: 'fcsa',
           value: state.crossSectionalArea,
           ineq: state.crossSectionalAreaIneq,
           unit: 'mm&sup2;',
@@ -84,6 +89,7 @@ const toolReducer = (state, action) => {
       if (state.tubeLength) {
         newFilters.push({
           field: 'Tube Length',
+          code: 'ftl',
           value: state.tubeLength,
           ineq: state.tubeLengthIneq,
           unit: 'mm',
@@ -92,6 +98,7 @@ const toolReducer = (state, action) => {
       if (state.basePressure) {
         newFilters.push({
           field: 'Base Pressure',
+          code: 'rbp',
           value: state.basePressure,
           ineq: state.basePressureIneq,
           unit: 'Torr',
@@ -100,6 +107,7 @@ const toolReducer = (state, action) => {
       if (state.thickness) {
         newFilters.push({
           field: 'Thickness',
+          code: 'st',
           value: state.thickness,
           ineq: state.thicknessIneq,
           unit: 'um',
@@ -108,6 +116,7 @@ const toolReducer = (state, action) => {
       if (state.diameter) {
         newFilters.push({
           field: 'Diameter',
+          code: 'sd',
           value: state.diameter,
           ineq: state.diameterIneq,
           unit: 'um',
@@ -116,8 +125,27 @@ const toolReducer = (state, action) => {
       if (state.length) {
         newFilters.push({
           field: 'Length',
+          code: 'sl',
           value: state.length,
           ineq: state.lengthIneq,
+          unit: 'mm&sup2;',
+        })
+      }
+      if (state.surfaceArea) {
+        newFilters.push({
+          field: 'Sample Surface Area',
+          code: 'ssa',
+          value: state.surfaceArea,
+          ineq: state.surfaceAreaIneq,
+          unit: 'mm&sup2;',
+        })
+      }
+      if (state.dewPoint) {
+        newFilters.push({
+          field: 'Dew Point',
+          code: 'edp',
+          value: state.dewPoint,
+          ineq: state.dewPointIneq,
           unit: 'mm&sup2;',
         })
       }
@@ -138,6 +166,10 @@ const toolReducer = (state, action) => {
         diameterIneq: 'eq',
         length: null,
         lengthIneq: 'eq',
+        surfaceArea: null,
+        surfaceAreaIneq: 'eq',
+        dewPoint: null,
+        dewPointIneq: 'eq',
         filters: [...state.filters, ...newFilters]
       };
     } case 'ADD_PREPARATION_FILTERS': {
@@ -145,12 +177,14 @@ const toolReducer = (state, action) => {
       if (state.prepName) {
         newFilters.push({
           field: 'Name',
+          code: 'psn',
           value: state.prepName,
         })
       }
       if (state.duration) {
         newFilters.push({
           field: 'Duration',
+          code: 'psd',
           value: state.duration,
           ineq: state.durationIneq,
           unit: 'min',
@@ -159,6 +193,7 @@ const toolReducer = (state, action) => {
       if (state.furnaceTemperature) {
         newFilters.push({
           field: 'Furnace Temperature',
+          code: 'psft',
           value: state.furnaceTemperature,
           ineq: state.furnaceTemperatureIneq,
           unit: '&degC',
@@ -167,6 +202,7 @@ const toolReducer = (state, action) => {
       if (state.furnacePressure) {
         newFilters.push({
           field: 'Furnace Pressure',
+          code: 'psfp',
           value: state.furnacePressure,
           ineq: state.furnacePressureIneq,
           unit: 'Torr',
@@ -175,6 +211,7 @@ const toolReducer = (state, action) => {
       if (state.sampleLocation) {
         newFilters.push({
           field: 'Sample Location',
+          code: 'pssl',
           value: state.sampleLocation,
           ineq: state.sampleLocationIneq,
           unit: 'mm',
@@ -183,6 +220,7 @@ const toolReducer = (state, action) => {
       if (state.heliumFlowRate) {
         newFilters.push({
           field: 'Helium Flow Rate',
+          code: 'pshelfr',
           value: state.heliumFlowRate,
           ineq: state.heliumFlowRateIneq,
           unit: 'sccm',
@@ -191,6 +229,7 @@ const toolReducer = (state, action) => {
       if (state.hydrogenFlowRate) {
         newFilters.push({
           field: 'Hydrogen Flow Rate',
+          code: 'pshydfr',
           value: state.hydrogenFlowRate,
           ineq: state.hydrogenFlowRateIneq,
           unit: 'sccm',
@@ -199,12 +238,14 @@ const toolReducer = (state, action) => {
       if (state.carbonSource) {
         newFilters.push({
           field: 'Carbon Source',
+          code: 'rcs',
           value: state.carbonSource,
         })
       }
       if (state.carbonSourceFlowRate) {
         newFilters.push({
           field: 'Carbon Source Flow Rate',
+          code: 'pscsfr',
           value: state.carbonSourceFlowRate,
           ineq: state.carbonSourceFlowRateIneq,
           unit: 'sccm',
@@ -213,6 +254,7 @@ const toolReducer = (state, action) => {
       if (state.argonFlowRate) {
         newFilters.push({
           field: 'Argon Flow Rate',
+          code: 'psafr',
           value: state.argonFlowRate,
           ineq: state.argonFlowRateIneq,
           unit: 'sccm',
@@ -221,6 +263,7 @@ const toolReducer = (state, action) => {
       if (state.coolingRate) {
         newFilters.push({
           field: 'Cooling Rate',
+          code: 'pscr',
           value: state.coolingRate,
           ineq: state.coolingRateIneq,
           unit: '&deg;/min',
@@ -255,6 +298,7 @@ const toolReducer = (state, action) => {
       if (state.growthCoverage) {
         newFilters.push({
           field: 'Growth Coverage',
+          code: 'pgc',
           value: state.growthCoverage,
           ineq: state.growthCoverageIneq,
           unit: '%',
@@ -263,12 +307,14 @@ const toolReducer = (state, action) => {
       if (state.shape) {
         newFilters.push({
           field: 'Shape',
+          code: 'ps',
           value: state.duration,
         })
       }
       if (state.averageThicknessOfGrowth) {
         newFilters.push({
           field: 'Average Thickness of Growth',
+          code: 'patog',
           value: state.averageThicknessOfGrowth,
           ineq: state.averageThicknessOfGrowthIneq
         })
@@ -276,6 +322,7 @@ const toolReducer = (state, action) => {
       if (state.stdDevOfGrowth) {
         newFilters.push({
           field: 'Std. Dev. of Growth',
+          code: 'psdog',
           value: state.stdDevOfGrowth,
           ineq: state.stdDevOfGrowthIneq
         })
@@ -283,6 +330,7 @@ const toolReducer = (state, action) => {
       if (state.numberOfLayers) {
         newFilters.push({
           field: 'Number of Layers',
+          code: 'pnol',
           value: state.numberOfLayers,
           ineq: state.numberOfLayersIneq
         })
@@ -290,6 +338,7 @@ const toolReducer = (state, action) => {
       if (state.domainSize) {
         newFilters.push({
           field: 'Domain Size',
+          code: 'pds',
           value: state.domainSize,
           ineq: state.domainSizeIneq
         })
@@ -314,18 +363,21 @@ const toolReducer = (state, action) => {
       if (state.lastname) {
         newFilters.push({
           field: 'Last Name',
+          code: 'aln',
           value: state.lastname,
         })
       }
       if (state.firstname) {
         newFilters.push({
           field: 'First Name',
+          code: 'afn',
           value: state.firstname,
         })
       }
       if (state.institution) {
         newFilters.push({
           field: 'Institution',
+          code: 'ainst',
           value: state.institution,
         })
       }
@@ -390,6 +442,16 @@ const toolReducer = (state, action) => {
       return {
         ...state,
         surfaceAreaIneq: action.payload
+      }
+    } case 'DEW_POINT_CHANGE': {
+      return {
+        ...state,
+        dewPoint: action.payload ? action.payload : null
+      }
+    } case 'DEW_POINT_INEQ_CHANGE': {
+      return {
+        ...state,
+        dewPointIneq: action.payload
       }
     } case 'TUBE_DIAMETER_CHANGE': {
       return {
@@ -604,7 +666,7 @@ const toolReducer = (state, action) => {
     } case 'REMOVE_FILTER': {
       const filters = state.filters;
       const remove_idx = action.payload
-      const newFilters = filters.filter((el, i) => i != remove_idx)
+      const newFilters = filters.filter((el, i) => i !== remove_idx)
       return {
         ...state,
         filters: newFilters

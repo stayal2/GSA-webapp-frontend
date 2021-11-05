@@ -2,7 +2,7 @@ import React from 'react';
 
 import Filter from '../components/Filter';
 
-const Filters = ({ filters }) => {
+const Filters = ({ filters, fetchData }) => {
   const showFilters = filters.length > 0;
 
   return (
@@ -24,6 +24,10 @@ const Filters = ({ filters }) => {
             unit={filter.unit}
           />)
       }
+      <button className="self-center w-1/4 bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-5"
+        type="button" onClick={() => fetchData(filters)}>
+        Fetch Data
+      </button>
     </div>
   )
 }

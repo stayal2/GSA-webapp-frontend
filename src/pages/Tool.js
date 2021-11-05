@@ -63,6 +63,12 @@ const Tool = () => {
       } else if (filter.field === 'Length' && state.length) {
         alert('Length is already included in the filters.');
         return;
+      } else if (filter.field === 'Sample Surface Area' && state.surfaceArea) {
+        alert('Sample Surface Area is already included in the filters.');
+        return;
+      } else if (filter.field === 'Dew Point' && state.dewPoint) {
+        alert('Dew Point is already included in the filters.');
+        return;
       }
     }
     dispatch({ type: 'ADD_EXPERIMENTAL_CONDITIONS_FILTERS' });
@@ -174,16 +180,14 @@ const Tool = () => {
     document.getElementById('provenance-information-btn').innerHTML = showProvenanceInformation ? '+' : '&#8211';
   }
   const fetchData = async (e) => {
-    const queryString = buildExperimentQueryStr(state);
+    const queryString = buildExperimentQueryStr(state.filters);
+    console.log(queryString);
 
     setLoading(true);
     const response = await axios.get(host + '/experiments/data?' + queryString);
     const data = response.data;
     setExperiments(data);
     setLoading(false);
-  }
-  if (loading) {
-    return <p>loading</p>
   }
   return (
     <ToolContext.Provider value={{ dispatch: dispatch }}>
@@ -220,6 +224,10 @@ const Tool = () => {
                   valueType="DIAMETER_CHANGE" ineqType="DIAMETER_INEQ_CHANGE" />
                 <FieldInput type="number" label="Length" unit="um" step={defaultPrecision} id="length"
                   valueType="LENGTH_CHANGE" ineqType="LENGTH_INEQ_CHANGE" />
+                <FieldInput type="number" label="Sample Surface Area" unit="mm&sup2;" step={defaultPrecision} id="sample-surface-area"
+                  valueType="SURFACE_AREA_CHANGE" ineqType="SURFACE_AREA_INEQ_CHANGE" />
+                <FieldInput type="number" label="Dew Point" unit="&deg;C" step={defaultPrecision} id="dew-point"
+                  valueType="DEW_POINT_CHANGE" ineqType="DEW_POINT_INEQ_CHANGE" />
                 <button className="self-center w-1/3 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
                   Add Filters
                 </button>
@@ -314,7 +322,7 @@ const Tool = () => {
           </form>
         </div>
         <div className="w-1/2 px-10">
-          <Filters filters={state.filters} dispatch={dispatch} />
+          <Filters filters={state.filters} fetchData={fetchData} />
         </div>
       </div>
       <div>
