@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { ToolContext } from '../pages/Tool';
 
+const FieldInput = ({ type, label, id, step, valueType, ineqType, unit, options }) => {
+  const { dispatch } = useContext(ToolContext);
 
-const FieldInput = ({ type, label, id, step, ineqType, valueType, unit, options, dispatch }) => {
   if (type === "number") {
     return (
       <div className="md:flex md:items-center mb-6">
@@ -13,11 +15,11 @@ const FieldInput = ({ type, label, id, step, ineqType, valueType, unit, options,
             <select className="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
               onChange={e => dispatch({ type: ineqType, payload: e.target.value })}>
               <option className="text-center" value="eq">=</option>
-              <option value="ne">&#8800;</option>
-              <option value="lt">&#60;</option>
-              <option value="le">&#8804;</option>
-              <option value="gt">&#62;</option>
-              <option value="ge">&#8805;</option>
+              <option className="text-center" value="ne">&#8800;</option>
+              <option className="text-center" value="lt">&#60;</option>
+              <option className="text-center" value="le">&#8804;</option>
+              <option className="text-center" value="gt">&#62;</option>
+              <option className="text-center" value="ge">&#8805;</option>
             </select>
             <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
               <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" /></svg>

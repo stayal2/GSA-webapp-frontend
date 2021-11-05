@@ -18,7 +18,6 @@ const App = () => {
 
   useEffect(async () => {
     const token = window.sessionStorage.getItem('token');
-    console.log(token);
     if (token) {
       console.log('here')
       const signInResult = await signInWithToken(token);
