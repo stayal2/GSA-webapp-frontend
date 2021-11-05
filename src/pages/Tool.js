@@ -173,8 +173,7 @@ const Tool = () => {
     setShowProvenanceInformation(!showProvenanceInformation);
     document.getElementById('provenance-information-btn').innerHTML = showProvenanceInformation ? '+' : '&#8211';
   }
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const fetchData = async (e) => {
     const queryString = buildExperimentQueryStr(state);
 
     setLoading(true);
