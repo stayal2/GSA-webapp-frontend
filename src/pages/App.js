@@ -16,13 +16,16 @@ export const GlobalContext = React.createContext();
 const App = () => {
   const [signedIn, setSignedIn] = useState(false);
 
-  useEffect(async () => {
-    const token = window.sessionStorage.getItem('token');
-    if (token) {
-      console.log('here')
-      const signInResult = await signInWithToken(token);
-      setSignedIn(signInResult);
+  useEffect(() => {
+    const trySignIn = async () => {
+      const token = window.sessionStorage.getItem('token');
+      if (token) {
+        console.log('here')
+        const signInResult = await signInWithToken(token);
+        setSignedIn(signInResult);
+      }
     }
+    trySignIn();
   }, [])
 
   return (
