@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 
 const InputField = (id, label) => {
   return (
@@ -22,6 +22,6 @@ const InputField = (id, label) => {
       </div>
     </div>
   )
-};
+}
 
-export default InputField;
+export default InputField

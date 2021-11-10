@@ -22,7 +22,7 @@ const Navbar = () => {
             <div className='hidden sm:block sm:ml-6'>
               <div className='flex space-x-4'>
                 <Link to='#' className='bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium' aria-current='page'>highlighted</Link>
-                <Link to='tool' className='text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium'>Tool</Link>
+                <Link to='/tool' className='text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium'>Tool</Link>
               </div>
             </div>
           </div>

@@ -87,15 +87,16 @@ const toolReducer = (state, action) => {
     case 'ADD_ENVIRONMENTAL_CONDITION_FILTER': {
       const idx = action.payload.idx
       const newFilter = state.environmentalConditions[idx]
+      newFilter.isAddedToFilter = true
       return {
         ...state,
         environmentalConditionFilters: [...state.environmentalConditionFilters, newFilter]
       }
     }
     case 'DEL_ENVIRONMENTAL_CONDITION_FILTER': {
-      console.log('del')
       const newFilters = [...state.environmentalConditionFilters]
       const idx = action.payload.idx
+      state.environmentalConditionFilters[idx].isAddedToFilter = false
       newFilters.splice(idx, 1)
       return {
         ...state,

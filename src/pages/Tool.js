@@ -35,7 +35,7 @@ const Tool = () => {
   const [showSubstrates, setShowSubstrates] = useState(false)
   const [showRecipes, setShowRecipes] = useState(false)
 
-  const [showExperimentalConditions, setShowExperimentalConditions] = useState(true)
+  const [showExperimentalConditions, setShowExperimentalConditions] = useState(false)
   const [showPreparation, setShowPreparation] = useState(false)
   const [showProperties, setShowProperties] = useState(false)
   const [showProvenanceInformation, setShowProvenanceInformation] = useState(false)
@@ -223,12 +223,15 @@ const Tool = () => {
     setShowProvenanceInformation(!showProvenanceInformation)
     document.getElementById('provenance-information-btn').innerHTML = showProvenanceInformation ? '+' : '&#8211'
   }
-  const fetchData = async (e) => {
-    const queryString = buildExperimentQueryStr(state.filters)
-    console.log(queryString)
-
+  const fetchExperiments = async (e) => {
     setLoading(true)
-    const response = await axios.get(host + '/experiments/data?' + queryString)
+    const body = {
+      environmentalConditionFilters: state.environmentalConditionFilters,
+      furnaceFilters: state.furnaceFilters,
+      substrateFilters: state.substrateFilters,
+      recipefilters: state.recipeFilters
+    }
+    const response = await axios.post(host + '/experiments/filtered/webapp', body)
     const data = response.data
     setExperiments(data)
     setLoading(false)
@@ -253,7 +256,7 @@ const Tool = () => {
                 className='w-9 h-9 self-center text-center bg-gray-400 hover:bg-blue-700 text-white text-3xl font-bold rounded focus:outline-none focus:shadow-outline'
                 type='button' id='environmental-conditions-btn' onClick={() => setShowEnvironmentalConditions(!showEnvironmentalConditions)}
               >
-                &#8211;
+                +
               </button>
             </div>
             {showEnvironmentalConditions &&
@@ -522,72 +525,13 @@ const Tool = () => {
               isFilter
             />
             <button
-              className='self-center w-1/4 bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-5'
-              type='button' onClick={() => { }}
+              className='self-center w-1/2 bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-5'
+              type='button' onClick={() => { fetchExperiments() }}
             >
-              Fetch Data
+              Fetch Associated Experiments
             </button>
           </div>
         </div>
-      </div>
-      <div>
-        <table className='table-fixed'>
-          <thead>
-            <tr>
-              <th>Ambient Temperature</th>
-              <th>Average Thickness of Growth</th>
-              <th>Base Pressure</th>
-              <th>Carbon Source</th>
-              <th>Catalyst</th>
-              <th>Cross Sectional Area</th>
-              <th>Date</th>
-              <th>Dew Point</th>
-              <th>Diameter</th>
-              <th>Domain Size</th>
-              <th>Growth Coverage</th>
-              <th>Length</th>
-              <th>Length of Heated Region</th>
-              <th>Material</th>
-              <th>Number of Layers</th>
-              <th>Shape</th>
-              <th>Standard Deviation of Growth</th>
-              <th>Surface Area</th>
-              <th>Thickness</th>
-              <th>Tube Diameter</th>
-              <th>Tube Length</th>
-            </tr>
-          </thead>
-          <tbody>
-            {experiments.map((data, i) => {
-              return (
-                <ExperimentRow
-                  key={i}
-                  ambientTemperature={data.amient_temperature}
-                  avgThicknessOfGrowth={data.averabe_thickness_of_growth}
-                  basePressure={data.base_pressure}
-                  carbonSource={data.carbon_source}
-                  catalyst={data.catalyst}
-                  crossSectionalArea={data.cross_sectional_area}
-                  date={data.date}
-                  dewPoint={data.dew_point}
-                  diameter={data.diameter}
-                  domainSize={data.domain_size}
-                  growthCoverage={data.growth_coverage}
-                  len={data.length}
-                  lenHeatedRegion={data.length_of_heated_region}
-                  material={data.material}
-                  numLayers={data.number_of_layers}
-                  shape={data.shape}
-                  stddevGrowth={data.standared_deviation_of_growth}
-                  surfaceArea={data.surface_area}
-                  thichness={data.thickness}
-                  tubeDiameter={data.tube_diameter}
-                  tubeLen={data.tube_length}
-                />
-              )
-            })}
-          </tbody>
-        </table>
       </div>
     </ToolContext.Provider>
   )

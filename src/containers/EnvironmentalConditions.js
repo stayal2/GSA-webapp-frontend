@@ -14,6 +14,7 @@ const EnvironmentalConditions = ({ environmentalConditions, isFilter }) => {
         id={envCon.id}
         ambientTemperature={envCon.ambient_temperature.value}
         dewPoint={envCon.dew_point.value}
+        isAddedToFilter={envCon.isAddedToFilter}
         isFilter={isFilter}
       />)
   )

@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
 import { ToolContext } from '../pages/Tool'
 
-const EnvironmentalCondition = ({ idx, id, ambientTemperature, dewPoint, isFilter }) => {
+const EnvironmentalCondition = ({ idx, id, ambientTemperature, dewPoint, isAddedToFilter, isFilter }) => {
   const { dispatch } = useContext(ToolContext)
 
   const displayAmbientTemperature =
@@ -25,6 +25,15 @@ const EnvironmentalCondition = ({ idx, id, ambientTemperature, dewPoint, isFilte
         }}
       >
         -
+      </button>
+    )
+  } else if (isAddedToFilter) {
+    btn = (
+      <button
+        disabled
+        className='cursor-default px-2 h-9 text-center bg-purple-500 text-white text-xl font-bold rounded focus:outline-none focus:shadow-outline'
+      >
+        Added
       </button>
     )
   } else {
