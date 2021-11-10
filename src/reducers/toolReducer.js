@@ -1,11 +1,18 @@
 export const defaultState = {
   filters: [],
   environmentalConditions: [],
+  environmentalConditionFilters: [],
   furnaces: [],
-  preparationSteps: [],
+  furnaceFilters: [],
+  preparationStep: [],
+  preparationStepFilters: [],
   properties: [],
+  propertyFilters: [],
   recipes: [],
-  substrate: [],
+  recipeFilters: [],
+  substrates: [],
+  substrateFilters: [],
+
   catalyst: null,
   tubeDiameter: null,
   tubeDiameterIneq: 'eq',
@@ -64,7 +71,6 @@ export const defaultState = {
 }
 
 const toolReducer = (state, action) => {
-  console.log(action.payload)
   switch (action.type) {
     case 'INIT': {
       const data = action.payload
@@ -76,6 +82,75 @@ const toolReducer = (state, action) => {
         properties: data.properties,
         recipes: data.recipes,
         substrates: data.substrates
+      }
+    }
+    case 'ADD_ENVIRONMENTAL_CONDITION_FILTER': {
+      const idx = action.payload.idx
+      const newFilter = state.environmentalConditions[idx]
+      return {
+        ...state,
+        environmentalConditionFilters: [...state.environmentalConditionFilters, newFilter]
+      }
+    }
+    case 'DEL_ENVIRONMENTAL_CONDITION_FILTER': {
+      console.log('del')
+      const newFilters = [...state.environmentalConditionFilters]
+      const idx = action.payload.idx
+      newFilters.splice(idx, 1)
+      return {
+        ...state,
+        environmentalConditionFilters: newFilters
+      }
+    }
+    case 'ADD_FURNACE_FILTER': {
+      const idx = action.payload.idx
+      const newFilter = state.furnaces[idx]
+      return {
+        ...state,
+        furnaceFilters: [...state.furnaceFilters, newFilter]
+      }
+    }
+    case 'DEL_FURNACE_FILTER': {
+      const newFilters = [...state.furnaceFilters]
+      const idx = action.payload.idx
+      newFilters.splice(idx, 1)
+      return {
+        ...state,
+        furnaceFilters: newFilters
+      }
+    }
+    case 'ADD_SUBSTRATE_FILTER': {
+      const idx = action.payload.idx
+      const newFilter = state.substrates[idx]
+      return {
+        ...state,
+        substrateFilters: [...state.substrateFilters, newFilter]
+      }
+    }
+    case 'DEL_SUBSTRATE_FILTER': {
+      const newFilters = [...state.substrateFilters]
+      const idx = action.payload.idx
+      newFilters.splice(idx, 1)
+      return {
+        ...state,
+        substrateFilters: newFilters
+      }
+    }
+    case 'ADD_RECIPE_FILTER': {
+      const idx = action.payload.idx
+      const newFilter = state.recipes[idx]
+      return {
+        ...state,
+        recipeFilters: [...state.recipeFilters, newFilter]
+      }
+    }
+    case 'DEL_RECIPE_FILTER': {
+      const newFilters = [...state.recipeFilters]
+      const idx = action.payload.idx
+      newFilters.splice(idx, 1)
+      return {
+        ...state,
+        recipeFilters: newFilters
       }
     }
     case 'ADD_EXPERIMENTAL_CONDITIONS_FILTERS': {

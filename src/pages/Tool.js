@@ -1,13 +1,15 @@
 import axios from 'axios'
 import React, { useState, useReducer, useEffect } from 'react'
 
+import { host } from '../settings'
+import { buildExperimentQueryStr } from '../utils/query'
+import toolReducer, { defaultState } from '../reducers/toolReducer'
 import ExperimentRow from '../components/ExperimentRow'
 import FieldInput from '../components/FieldInput'
-import EnvironmentalCondition from '../components/EnvironmentalCondition'
-import { host } from '../settings'
-import toolReducer, { defaultState } from '../reducers/toolReducer'
-import { buildExperimentQueryStr } from '../utils/query'
-import Filters from '../containers/Filters'
+import EnvironmentalConditions from '../containers/EnvironmentalConditions'
+import Furnaces from '../containers/Furnaces'
+import Substrates from '../containers/SubstrateFilters'
+import Recipes from '../containers/Recipes'
 
 const catalystOptions = ['Copper', 'Platinum', 'Nickel', 'Palladium', 'Palladium Thin F'].sort()
 const prepNameOptions = ['Annealing', 'Growing', 'Cooling']
@@ -28,19 +30,25 @@ const Tool = () => {
   const [loading, setLoading] = useState(false)
   const [showAddSuccess, setShowAddSuccess] = useState(false)
 
-  const [showEnvironmentalConditions, setShowEnvironmentalConditions] = useState(true)
+  const [showEnvironmentalConditions, setShowEnvironmentalConditions] = useState(false)
+  const [showFurnaces, setShowFurnaces] = useState(false)
+  const [showSubstrates, setShowSubstrates] = useState(false)
+  const [showRecipes, setShowRecipes] = useState(false)
+
   const [showExperimentalConditions, setShowExperimentalConditions] = useState(true)
   const [showPreparation, setShowPreparation] = useState(false)
   const [showProperties, setShowProperties] = useState(false)
   const [showProvenanceInformation, setShowProvenanceInformation] = useState(false)
 
   const init = async () => {
+    setLoading(true)
     const response = await axios.get(host + '/db/tables/all')
     const data = response.data
 
     if (response.status === 200) {
       dispatch({ type: 'INIT', payload: data })
     }
+    setLoading(false)
   }
 
   useEffect(() => {
@@ -53,6 +61,24 @@ const Tool = () => {
       setShowAddSuccess(false)
     }, 5000)
   }
+
+  useEffect(() => {
+    document.getElementById('environmental-conditions-btn').innerHTML =
+      showEnvironmentalConditions ? '&#8211;' : '+'
+  }, [showEnvironmentalConditions])
+  useEffect(() => {
+    document.getElementById('furnace-btn').innerHTML =
+      showFurnaces ? '&#8211;' : '+'
+  }, [showFurnaces])
+  useEffect(() => {
+    document.getElementById('substrate-btn').innerHTML =
+      showSubstrates ? '&#8211;' : '+'
+  }, [showSubstrates])
+  useEffect(() => {
+    document.getElementById('recipe-btn').innerHTML =
+      showRecipes ? '&#8211;' : '+'
+  }, [showRecipes])
+
   const onAddExperimentalConditionsFilters = (e) => {
     e.preventDefault()
     for (let i = 0; i < state.filters.length; i++) {
@@ -208,6 +234,9 @@ const Tool = () => {
     setLoading(false)
   }
 
+  if (loading) {
+    return <h1>LOADING...</h1>
+  }
   return (
     <ToolContext.Provider value={{ dispatch: dispatch }}>
       <div className='w-full md:flex flex-row md:container md:mx-auto mt-10'>
@@ -217,35 +246,71 @@ const Tool = () => {
               Filters have been added.
             </div>}
 
-          <section className='w-full flex flex-col '>
+          <section className='w-full flex flex-col mb-5'>
             <div className='flex justify-center align-middle mb-4'>
               <h2 className='text-center text-3xl font-bold mr-2'>Environmental Conditions</h2>
               <button
                 className='w-9 h-9 self-center text-center bg-gray-400 hover:bg-blue-700 text-white text-3xl font-bold rounded focus:outline-none focus:shadow-outline'
-                type='button' id='environmental-conditions-btn' onClick={() => { setShowEnvironmentalConditions(!showEnvironmentalConditions) }}
+                type='button' id='environmental-conditions-btn' onClick={() => setShowEnvironmentalConditions(!showEnvironmentalConditions)}
               >
                 &#8211;
               </button>
             </div>
             {showEnvironmentalConditions &&
-              <>
-                {state.environmentalConditions.map((envCon, i) =>
-                  <EnvironmentalCondition
-                    key={envCon.id}
-                    id={envCon.id}
-                    ambientTemperature={envCon.ambient_temperature.value}
-                    ambientTemperatureUnit={envCon.ambient_temperature.unit}
-                    dewPoint={envCon.dew_point.value}
-                    dewPointUnit={envCon.dew_point.unit}
-                  />
-                )}
-                <button className='self-center w-1/3 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline' type='button'>
-                  Add Filters
-                </button>
-              </>}
+              <EnvironmentalConditions
+                environmentalConditions={state.environmentalConditions}
+              />}
           </section>
 
-          *** Below here is from V1 ***
+          <section className='w-full flex flex-col mb-5'>
+            <div className='flex justify-center align-middle mb-4'>
+              <h2 className='text-center text-3xl font-bold mr-2'>Furnace</h2>
+              <button
+                className='w-9 h-9 self-center text-center bg-gray-400 hover:bg-blue-700 text-white text-3xl font-bold rounded focus:outline-none focus:shadow-outline'
+                type='button' id='furnace-btn' onClick={() => setShowFurnaces(!showFurnaces)}
+              >
+                +
+              </button>
+            </div>
+            {showFurnaces &&
+              <Furnaces
+                furnaces={state.furnaces}
+              />}
+          </section>
+
+          <section className='w-full flex flex-col mb-5'>
+            <div className='flex justify-center align-middle mb-4'>
+              <h2 className='text-center text-3xl font-bold mr-2'>Substrate</h2>
+              <button
+                className='w-9 h-9 self-center text-center bg-gray-400 hover:bg-blue-700 text-white text-3xl font-bold rounded focus:outline-none focus:shadow-outline'
+                type='button' id='substrate-btn' onClick={() => setShowSubstrates(!showSubstrates)}
+              >
+                +
+              </button>
+            </div>
+            {showSubstrates &&
+              <Substrates
+                substrates={state.substrates}
+              />}
+          </section>
+
+          <section className='w-full flex flex-col mb-5'>
+            <div className='flex justify-center align-middle mb-4'>
+              <h2 className='text-center text-3xl font-bold mr-2'>Recipe</h2>
+              <button
+                className='w-9 h-9 self-center text-center bg-gray-400 hover:bg-blue-700 text-white text-3xl font-bold rounded focus:outline-none focus:shadow-outline'
+                type='button' id='recipe-btn' onClick={() => setShowRecipes(!showRecipes)}
+              >
+                +
+              </button>
+            </div>
+            {showRecipes &&
+              <Recipes
+                recipes={state.recipes}
+              />}
+          </section>
+
+          *** Below here is from V1 (to be disabled) ***
           <form className='w-full flex flex-col ' onSubmit={e => onAddExperimentalConditionsFilters(e)}>
             <div className='flex justify-center align-middle mb-4'>
               <h2 className='text-center text-3xl font-bold mr-2'>Experimental Conditions</h2>
@@ -438,7 +503,31 @@ const Tool = () => {
           </form>
         </div>
         <div className='w-1/2 px-10'>
-          <Filters filters={state.filters} fetchData={fetchData} />
+          <div className='md:w-full flex flex-col'>
+            <h2 className='text-center text-3xl font-bold mr-2 md:mb-4'>Current Filters</h2>
+            <EnvironmentalConditions
+              environmentalConditions={state.environmentalConditionFilters}
+              isFilter
+            />
+            <Furnaces
+              furnaces={state.furnaceFilters}
+              isFilter
+            />
+            <Substrates
+              substrates={state.substrateFilters}
+              isFilter
+            />
+            <Recipes
+              substrates={state.recipeFilters}
+              isFilter
+            />
+            <button
+              className='self-center w-1/4 bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-5'
+              type='button' onClick={() => { }}
+            >
+              Fetch Data
+            </button>
+          </div>
         </div>
       </div>
       <div>
