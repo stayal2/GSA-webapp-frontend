@@ -1,7 +1,7 @@
 import React from 'react'
 import Substrate from '../components/Substrate'
 
-const Substrates = ({ substrates, isFilter }) => {
+const Substrates = ({substrates, isFilter}) => {
   if (!substrates) {
     return null
   }

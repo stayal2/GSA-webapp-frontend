@@ -1,7 +1,7 @@
 import React from 'react'
 import PreparationStep from '../components/PreparationStep'
 
-const PreparationSteps = ({ preparationSteps }) => {
+const PreparationSteps = ({preparationSteps}) => {
   if (!preparationSteps) {
     return null
   }

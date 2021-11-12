@@ -2,7 +2,7 @@ import React from 'react'
 
 import EnvironmentalCondition from '../components/EnvironmentalCondition'
 
-const EnvironmentalConditions = ({ environmentalConditions, isFilter }) => {
+const EnvironmentalConditions = ({environmentalConditions, isFilter}) => {
   if (!environmentalConditions) {
     return null
   }

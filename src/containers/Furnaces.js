@@ -2,7 +2,7 @@ import React from 'react'
 
 import Furnace from '../components/Furnace'
 
-const Furnaces = ({ furnaces, isFilter }) => {
+const Furnaces = ({furnaces, isFilter}) => {
   if (!furnaces) {
     return null
   }

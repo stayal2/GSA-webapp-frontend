@@ -1,9 +1,9 @@
 import axios from 'axios'
-import React, { useState, useReducer, useEffect } from 'react'
+import React, {useState, useReducer, useEffect} from 'react'
 
-import { host } from '../settings'
-import { buildExperimentQueryStr } from '../utils/query'
-import toolReducer, { defaultState } from '../reducers/toolReducer'
+import {host} from '../settings'
+import {buildExperimentQueryStr} from '../utils/query'
+import toolReducer, {defaultState} from '../reducers/toolReducer'
 import ExperimentRow from '../components/ExperimentRow'
 import FieldInput from '../components/FieldInput'
 import EnvironmentalConditions from '../containers/EnvironmentalConditions'
@@ -28,7 +28,8 @@ const Tool = () => {
   const [experiments, setExperiments] = useState([])
 
   const [loading, setLoading] = useState(false)
-  const [showAddSuccess, setShowAddSuccess] = useState(false)
+  const [showSuccess, setShowSuccess] = useState(false)
+  const [showError, setShowError] = useState(false)
 
   const [showEnvironmentalConditions, setShowEnvironmentalConditions] = useState(false)
   const [showFurnaces, setShowFurnaces] = useState(false)
@@ -46,7 +47,7 @@ const Tool = () => {
     const data = response.data
 
     if (response.status === 200) {
-      dispatch({ type: 'INIT', payload: data })
+      dispatch({type: 'INIT', payload: data})
     }
     setLoading(false)
   }
@@ -56,9 +57,15 @@ const Tool = () => {
   }, [])
 
   const flashSuccess = () => {
-    setShowAddSuccess(true)
+    setShowSuccess(true)
     setTimeout(() => {
-      setShowAddSuccess(false)
+      setShowSuccess(false)
+    }, 5000)
+  }
+  const flashError = () => {
+    setShowError(true)
+    setTimeout(() => {
+      setShowError(false)
     }, 5000)
   }
 
@@ -115,7 +122,7 @@ const Tool = () => {
         return
       }
     }
-    dispatch({ type: 'ADD_EXPERIMENTAL_CONDITIONS_FILTERS' })
+    dispatch({type: 'ADD_EXPERIMENTAL_CONDITIONS_FILTERS'})
     setShowExperimentalConditions(false)
     document.getElementById('experimental-conditions-btn').innerHTML = '+'
     flashSuccess()
@@ -160,7 +167,7 @@ const Tool = () => {
         return
       }
     }
-    dispatch({ type: 'ADD_PREPARATION_FILTERS' })
+    dispatch({type: 'ADD_PREPARATION_FILTERS'})
     setShowPreparation(false)
     document.getElementById('preparation-btn').innerHTML = '+'
     flashSuccess()
@@ -190,7 +197,7 @@ const Tool = () => {
         return
       }
     }
-    dispatch({ type: 'ADD_PROPERTIES_FILTERS' })
+    dispatch({type: 'ADD_PROPERTIES_FILTERS'})
     setShowProperties(false)
     document.getElementById('properties-btn').innerHTML = '+'
     flashSuccess()
@@ -214,7 +221,7 @@ const Tool = () => {
         return
       }
     }
-    dispatch({ type: 'ADD_PROVENANCE_INFORMATION_FILTERS' })
+    dispatch({type: 'ADD_PROVENANCE_INFORMATION_FILTERS'})
     setShowProvenanceInformation(false)
     document.getElementById('provenance-information-btn').innerHTML = '+'
     flashSuccess()
@@ -231,38 +238,51 @@ const Tool = () => {
       substrateFilters: state.substrateFilters,
       recipefilters: state.recipeFilters
     }
-    const response = await axios.post(host + '/experiments/filtered/webapp', body)
-    const data = response.data
-    setExperiments(data)
-    setLoading(false)
+    try {
+      const response = await axios.post(host + '/experiments/filtered/webapp', body)
+      const data = response.data
+      console.log(data)
+      setExperiments(data)
+      setLoading(false)
+    } catch {
+      flashError()
+      setLoading(false)
+    }
   }
 
   if (loading) {
     return <h1>LOADING...</h1>
   }
   return (
-    <ToolContext.Provider value={{ dispatch: dispatch }}>
-      <div className='w-full md:flex flex-row md:container md:mx-auto mt-10'>
+    <ToolContext.Provider value={{dispatch: dispatch}}>
+      <div className='w-full md:flex flex-row md:container md:mx-auto mt-10 border rounded p-5'>
         <div className='md:w-1/2 px-10'>
-          {showAddSuccess &&
-            <div className='w-full bg-green-400 rounded text-center text-green-100 font-bold text-2xl py-2 mb-4'>
-              Filters have been added.
-            </div>}
+          {showSuccess &&
+          <div className='w-full bg-green-400 rounded text-center text-green-100 font-bold text-2xl py-2 mb-4'>
+            Filters have been added.
+          </div>
+          }
+          {showError &&
+          <div className='w-full bg-red-600 rounded text-center text-green-100 font-bold text-2xl py-2 mb-4'>
+            Oops... Something went wrong.
+          </div>}
 
           <section className='w-full flex flex-col mb-5'>
             <div className='flex justify-center align-middle mb-4'>
               <h2 className='text-center text-3xl font-bold mr-2'>Environmental Conditions</h2>
               <button
                 className='w-9 h-9 self-center text-center bg-gray-400 hover:bg-blue-700 text-white text-3xl font-bold rounded focus:outline-none focus:shadow-outline'
-                type='button' id='environmental-conditions-btn' onClick={() => setShowEnvironmentalConditions(!showEnvironmentalConditions)}
+                type='button' id='environmental-conditions-btn'
+                onClick={() => setShowEnvironmentalConditions(!showEnvironmentalConditions)}
               >
                 +
               </button>
             </div>
+            {showEnvironmentalConditions || <hr/>}
             {showEnvironmentalConditions &&
-              <EnvironmentalConditions
-                environmentalConditions={state.environmentalConditions}
-              />}
+            <EnvironmentalConditions
+              environmentalConditions={state.environmentalConditions}
+            />}
           </section>
 
           <section className='w-full flex flex-col mb-5'>
@@ -275,10 +295,11 @@ const Tool = () => {
                 +
               </button>
             </div>
+            {showFurnaces || <hr/>}
             {showFurnaces &&
-              <Furnaces
-                furnaces={state.furnaces}
-              />}
+            <Furnaces
+              furnaces={state.furnaces}
+            />}
           </section>
 
           <section className='w-full flex flex-col mb-5'>
@@ -291,15 +312,17 @@ const Tool = () => {
                 +
               </button>
             </div>
+            {showSubstrates || <hr/>}
             {showSubstrates &&
-              <Substrates
-                substrates={state.substrates}
-              />}
+            <Substrates
+              substrates={state.substrates}
+            />}
           </section>
 
           <section className='w-full flex flex-col mb-5'>
             <div className='flex justify-center align-middle mb-4'>
               <h2 className='text-center text-3xl font-bold mr-2'>Recipe</h2>
+              <hr/>
               <button
                 className='w-9 h-9 self-center text-center bg-gray-400 hover:bg-blue-700 text-white text-3xl font-bold rounded focus:outline-none focus:shadow-outline'
                 type='button' id='recipe-btn' onClick={() => setShowRecipes(!showRecipes)}
@@ -307,10 +330,11 @@ const Tool = () => {
                 +
               </button>
             </div>
+            {showRecipes || <hr/>}
             {showRecipes &&
-              <Recipes
-                recipes={state.recipes}
-              />}
+            <Recipes
+              recipes={state.recipes}
+            />}
           </section>
 
           *** Below here is from V1 (to be disabled) ***
@@ -325,51 +349,55 @@ const Tool = () => {
               </button>
             </div>
             {showExperimentalConditions &&
-              <>
-                <FieldInput
-                  type='select' options={catalystOptions} label='Catalyst' id='catalyst'
-                  valueType='CATALYST_CHANGE'
-                />
-                <FieldInput
-                  type='number' label='Tube Diameter' unit='mm' step={defaultPrecision} id='tube-diameter'
-                  valueType='TUBE_DIAMETER_CHANGE' ineqType='TUBE_DIAMETER_INEQ_CHANGE'
-                />
-                <FieldInput
-                  type='number' label='Cross Sectional Area' step={defaultPrecision} unit='mm&sup2;' id='cross-sectional-area'
-                  valueType='CROSS_SECTIONAL_AREA_CHANGE' ineqType='CROSS_SECTIONAL_AREA_INEQ_CHANGE'
-                />
-                <FieldInput
-                  type='number' label='Tube Length' unit='mm' step={defaultPrecision} id='tube-length'
-                  valueType='TUBE_LENGTH_CHANGE' ineqType='TUBE_LENGTH_INEQ_CHANGE'
-                />
-                <FieldInput
-                  type='number' label='Base Pressure' unit='Torr' step={defaultPrecision} id='base-pressure'
-                  valueType='BASE_PRESSURE_CHANGE' ineqType='BASE_PRESSURE_INEQ_CHANGE'
-                />
-                <FieldInput
-                  type='number' label='Thickness' unit='um' step={defaultPrecision} id='thickness'
-                  valueType='THICKNESS_CHANGE' ineqType='THICKNESS_INEQ_CHANGE'
-                />
-                <FieldInput
-                  type='number' label='Diameter' unit='um' step={defaultPrecision} id='diameter'
-                  valueType='DIAMETER_CHANGE' ineqType='DIAMETER_INEQ_CHANGE'
-                />
-                <FieldInput
-                  type='number' label='Length' unit='um' step={defaultPrecision} id='length'
-                  valueType='LENGTH_CHANGE' ineqType='LENGTH_INEQ_CHANGE'
-                />
-                <FieldInput
-                  type='number' label='Sample Surface Area' unit='mm&sup2;' step={defaultPrecision} id='sample-surface-area'
-                  valueType='SURFACE_AREA_CHANGE' ineqType='SURFACE_AREA_INEQ_CHANGE'
-                />
-                <FieldInput
-                  type='number' label='Dew Point' unit='&deg;C' step={defaultPrecision} id='dew-point'
-                  valueType='DEW_POINT_CHANGE' ineqType='DEW_POINT_INEQ_CHANGE'
-                />
-                <button className='self-center w-1/3 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline' type='submit'>
-                  Add Filters
-                </button>
-              </>}
+            <>
+              <FieldInput
+                type='select' options={catalystOptions} label='Catalyst' id='catalyst'
+                valueType='CATALYST_CHANGE'
+              />
+              <FieldInput
+                type='number' label='Tube Diameter' unit='mm' step={defaultPrecision} id='tube-diameter'
+                valueType='TUBE_DIAMETER_CHANGE' ineqType='TUBE_DIAMETER_INEQ_CHANGE'
+              />
+              <FieldInput
+                type='number' label='Cross Sectional Area' step={defaultPrecision} unit='mm&sup2;'
+                id='cross-sectional-area'
+                valueType='CROSS_SECTIONAL_AREA_CHANGE' ineqType='CROSS_SECTIONAL_AREA_INEQ_CHANGE'
+              />
+              <FieldInput
+                type='number' label='Tube Length' unit='mm' step={defaultPrecision} id='tube-length'
+                valueType='TUBE_LENGTH_CHANGE' ineqType='TUBE_LENGTH_INEQ_CHANGE'
+              />
+              <FieldInput
+                type='number' label='Base Pressure' unit='Torr' step={defaultPrecision} id='base-pressure'
+                valueType='BASE_PRESSURE_CHANGE' ineqType='BASE_PRESSURE_INEQ_CHANGE'
+              />
+              <FieldInput
+                type='number' label='Thickness' unit='um' step={defaultPrecision} id='thickness'
+                valueType='THICKNESS_CHANGE' ineqType='THICKNESS_INEQ_CHANGE'
+              />
+              <FieldInput
+                type='number' label='Diameter' unit='um' step={defaultPrecision} id='diameter'
+                valueType='DIAMETER_CHANGE' ineqType='DIAMETER_INEQ_CHANGE'
+              />
+              <FieldInput
+                type='number' label='Length' unit='um' step={defaultPrecision} id='length'
+                valueType='LENGTH_CHANGE' ineqType='LENGTH_INEQ_CHANGE'
+              />
+              <FieldInput
+                type='number' label='Sample Surface Area' unit='mm&sup2;' step={defaultPrecision}
+                id='sample-surface-area'
+                valueType='SURFACE_AREA_CHANGE' ineqType='SURFACE_AREA_INEQ_CHANGE'
+              />
+              <FieldInput
+                type='number' label='Dew Point' unit='&deg;C' step={defaultPrecision} id='dew-point'
+                valueType='DEW_POINT_CHANGE' ineqType='DEW_POINT_INEQ_CHANGE'
+              />
+              <button
+                className='self-center w-1/3 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline'
+                type='submit'>
+                Add Filters
+              </button>
+            </>}
           </form>
           <form className='w-full flex flex-col mt-10' onSubmit={e => onAddPreparationFilters(e)}>
             <div className='flex justify-center align-middle mb-4'>
@@ -382,55 +410,58 @@ const Tool = () => {
               </button>
             </div>
             {showPreparation &&
-              <>
-                <FieldInput
-                  type='select' options={prepNameOptions} label='Name' id='name'
-                  valueType='PREP_NAME_CHANGE'
-                />
-                <FieldInput
-                  type='number' label='Duration' unit='min' step={defaultPrecision} id='duration'
-                  valueType='DURATION_CHANGE' ineqType='DURATION_INEQ_CHANGE'
-                />
-                <FieldInput
-                  type='number' label='Furnace Temperature' unit='&deg;C' step={defaultPrecision} id='furnace-temperature'
-                  valueType='FURNACE_TEMPERATURE_CHANGE' ineqType='FURNACE_TEMPERATURE_INEQ_CHANGE'
-                />
-                <FieldInput
-                  type='number' label='Furnace Pressure' unit='Torr' step={defaultPrecision} id='furnace-pressure'
-                  valueType='FURNACE_PRESSURE_CHANGE' ineqType='FURNACE_PRESSURE_INEQ_CHANGE'
-                />
-                <FieldInput
-                  type='number' label='Sample Location' unit='mm' step={defaultPrecision} id='sample-location'
-                  valueType='SAMPLE_LOCATION_CHANGE' ineqType='SAMPLE_LOCATION_INEQ_CHANGE'
-                />
-                <FieldInput
-                  type='number' label='Helium Flow Rate' unit='sccm' step={defaultPrecision} id='helium-flow-rate'
-                  valueType='HELIUM_FLOW_RATE_CHANGE' ineqType='HELIUM_FLOW_RATE_INEQ_CHANGE'
-                />
-                <FieldInput
-                  type='number' label='Hydrogen Flow Rate' unit='sccm' step={defaultPrecision} id='hydrogen-flow-rate'
-                  valueType='HYDROGEN_FLOW_RATE_CHANGE' ineqType='HYDROGEN_FLOW_RATE_INEQ_CHANGE'
-                />
-                <FieldInput
-                  type='select' label='Carbon Source' options={carbonSourceOptions} id='carbon-source'
-                  valueType='CARBON_SOURCE_CHANGE'
-                />
-                <FieldInput
-                  type='number' label='Carbon Source Flow Rate' unit='sccm' step={defaultPrecision} id='carbon-source-flow-rate'
-                  valueType='CARBON_SOURCE_FLOW_RATE_CHANGE' ineqType='CARBON_SOURCE_FLOW_RATE_INEQ_CHANGE'
-                />
-                <FieldInput
-                  type='number' label='Argon Flow Rate' unit='sccm' step={defaultPrecision} id='argon-flow-rate'
-                  valueType='ARGON_FLOW_RATE_CHANGE' ineqType='ARGON_FLOW_RATE_INEQ_CHANGE'
-                />
-                <FieldInput
-                  type='number' label='Cooling Rate' unit='&deg;C/min' step={defaultPrecision} id='cooling-rate'
-                  valueType='COOLING_RATE_CHANGE' ineqType='COOLING_RATE_INEQ_CHANGE'
-                />
-                <button className='self-center w-1/3 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline' type='submit'>
-                  Add Filters
-                </button>
-              </>}
+            <>
+              <FieldInput
+                type='select' options={prepNameOptions} label='Name' id='name'
+                valueType='PREP_NAME_CHANGE'
+              />
+              <FieldInput
+                type='number' label='Duration' unit='min' step={defaultPrecision} id='duration'
+                valueType='DURATION_CHANGE' ineqType='DURATION_INEQ_CHANGE'
+              />
+              <FieldInput
+                type='number' label='Furnace Temperature' unit='&deg;C' step={defaultPrecision} id='furnace-temperature'
+                valueType='FURNACE_TEMPERATURE_CHANGE' ineqType='FURNACE_TEMPERATURE_INEQ_CHANGE'
+              />
+              <FieldInput
+                type='number' label='Furnace Pressure' unit='Torr' step={defaultPrecision} id='furnace-pressure'
+                valueType='FURNACE_PRESSURE_CHANGE' ineqType='FURNACE_PRESSURE_INEQ_CHANGE'
+              />
+              <FieldInput
+                type='number' label='Sample Location' unit='mm' step={defaultPrecision} id='sample-location'
+                valueType='SAMPLE_LOCATION_CHANGE' ineqType='SAMPLE_LOCATION_INEQ_CHANGE'
+              />
+              <FieldInput
+                type='number' label='Helium Flow Rate' unit='sccm' step={defaultPrecision} id='helium-flow-rate'
+                valueType='HELIUM_FLOW_RATE_CHANGE' ineqType='HELIUM_FLOW_RATE_INEQ_CHANGE'
+              />
+              <FieldInput
+                type='number' label='Hydrogen Flow Rate' unit='sccm' step={defaultPrecision} id='hydrogen-flow-rate'
+                valueType='HYDROGEN_FLOW_RATE_CHANGE' ineqType='HYDROGEN_FLOW_RATE_INEQ_CHANGE'
+              />
+              <FieldInput
+                type='select' label='Carbon Source' options={carbonSourceOptions} id='carbon-source'
+                valueType='CARBON_SOURCE_CHANGE'
+              />
+              <FieldInput
+                type='number' label='Carbon Source Flow Rate' unit='sccm' step={defaultPrecision}
+                id='carbon-source-flow-rate'
+                valueType='CARBON_SOURCE_FLOW_RATE_CHANGE' ineqType='CARBON_SOURCE_FLOW_RATE_INEQ_CHANGE'
+              />
+              <FieldInput
+                type='number' label='Argon Flow Rate' unit='sccm' step={defaultPrecision} id='argon-flow-rate'
+                valueType='ARGON_FLOW_RATE_CHANGE' ineqType='ARGON_FLOW_RATE_INEQ_CHANGE'
+              />
+              <FieldInput
+                type='number' label='Cooling Rate' unit='&deg;C/min' step={defaultPrecision} id='cooling-rate'
+                valueType='COOLING_RATE_CHANGE' ineqType='COOLING_RATE_INEQ_CHANGE'
+              />
+              <button
+                className='self-center w-1/3 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline'
+                type='submit'>
+                Add Filters
+              </button>
+            </>}
           </form>
 
           <form className='w-full flex flex-col mt-10' onSubmit={e => onAddPropertiesFilters(e)}>
@@ -444,35 +475,38 @@ const Tool = () => {
               </button>
             </div>
             {showProperties &&
-              <>
-                <FieldInput
-                  type='number' label='Growth Coverage' unit='%' step={defaultPrecision} id='growth-coverage'
-                  valueType='GROWTH_COVERAGE_CHAGNE' ineqType='GROWTH_COVERAGE_INEQ_CHANGE'
-                />
-                <FieldInput
-                  type='select' label='Shape' options={shapeOptions} id='shape'
-                  valueType='SHAPE_CHANGE'
-                />
-                <FieldInput
-                  type='number' label='Average Thickness of Growth' unit='nm' step={defaultPrecision} id='average-thicknes-of-growth'
-                  valueType='AVERAGE_THICKNESS_OF_GROWTH_CHANGE' ineqType='AVERAGE_THICKNESS_OF_GROWTH_INEQ_CHANGE'
-                />
-                <FieldInput
-                  type='number' label='Std. Dev. of Growth' unit='nm' step={defaultPrecision} id='std-dev-of-growth'
-                  valueType='STD_DEV_OF_GROWTH_CHANGE' ineqType='STD_DEV_OF_GROWTH_INEQ_CHANGE'
-                />
-                <FieldInput
-                  type='number' label='Number of Layers' unit='' step={1} id='number-of-layers'
-                  valueType='NUMBER_OF_LAYERS_CHANGE' ineqType='NUMBER_OF_LAYERS_INEQ_CHANGE'
-                />
-                <FieldInput
-                  type='number' label='Domain Size' unit='um&sup2;' step={defaultPrecision} id='domain-size'
-                  valueType='DOMAIN_SIZE_CHANGE' ineqType='DOMAIN_SIZE_INEQ_CHANGE'
-                />
-                <button className='self-center w-1/3 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline' type='submit'>
-                  Add Filters
-                </button>
-              </>}
+            <>
+              <FieldInput
+                type='number' label='Growth Coverage' unit='%' step={defaultPrecision} id='growth-coverage'
+                valueType='GROWTH_COVERAGE_CHAGNE' ineqType='GROWTH_COVERAGE_INEQ_CHANGE'
+              />
+              <FieldInput
+                type='select' label='Shape' options={shapeOptions} id='shape'
+                valueType='SHAPE_CHANGE'
+              />
+              <FieldInput
+                type='number' label='Average Thickness of Growth' unit='nm' step={defaultPrecision}
+                id='average-thicknes-of-growth'
+                valueType='AVERAGE_THICKNESS_OF_GROWTH_CHANGE' ineqType='AVERAGE_THICKNESS_OF_GROWTH_INEQ_CHANGE'
+              />
+              <FieldInput
+                type='number' label='Std. Dev. of Growth' unit='nm' step={defaultPrecision} id='std-dev-of-growth'
+                valueType='STD_DEV_OF_GROWTH_CHANGE' ineqType='STD_DEV_OF_GROWTH_INEQ_CHANGE'
+              />
+              <FieldInput
+                type='number' label='Number of Layers' unit='' step={1} id='number-of-layers'
+                valueType='NUMBER_OF_LAYERS_CHANGE' ineqType='NUMBER_OF_LAYERS_INEQ_CHANGE'
+              />
+              <FieldInput
+                type='number' label='Domain Size' unit='um&sup2;' step={defaultPrecision} id='domain-size'
+                valueType='DOMAIN_SIZE_CHANGE' ineqType='DOMAIN_SIZE_INEQ_CHANGE'
+              />
+              <button
+                className='self-center w-1/3 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline'
+                type='submit'>
+                Add Filters
+              </button>
+            </>}
           </form>
 
           <form className='w-full flex flex-col mt-10' onSubmit={e => onAddProvenanceInformationFilters(e)}>
@@ -486,23 +520,25 @@ const Tool = () => {
               </button>
             </div>
             {showProvenanceInformation &&
-              <>
-                <FieldInput
-                  type='select' label='Last Name' options={lastnames} id='lastname'
-                  valueType='LASTNAME_CHANGE'
-                />
-                <FieldInput
-                  type='select' label='First Name' options={firstnames} id='firstname'
-                  valueType='FIRSTNAME_CHANGE'
-                />
-                <FieldInput
-                  type='select' label='Institution' options={institutions} id='institution'
-                  valueType='INSTITUTION_CHANGE'
-                />
-                <button className='self-center w-1/3 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline' type='submit'>
-                  Add Filters
-                </button>
-              </>}
+            <>
+              <FieldInput
+                type='select' label='Last Name' options={lastnames} id='lastname'
+                valueType='LASTNAME_CHANGE'
+              />
+              <FieldInput
+                type='select' label='First Name' options={firstnames} id='firstname'
+                valueType='FIRSTNAME_CHANGE'
+              />
+              <FieldInput
+                type='select' label='Institution' options={institutions} id='institution'
+                valueType='INSTITUTION_CHANGE'
+              />
+              <button
+                className='self-center w-1/3 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline'
+                type='submit'>
+                Add Filters
+              </button>
+            </>}
           </form>
         </div>
         <div className='w-1/2 px-10'>
@@ -526,7 +562,9 @@ const Tool = () => {
             />
             <button
               className='self-center w-1/2 bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-5'
-              type='button' onClick={() => { fetchExperiments() }}
+              type='button' onClick={() => {
+              fetchExperiments()
+            }}
             >
               Fetch Associated Experiments
             </button>

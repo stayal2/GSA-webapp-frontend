@@ -2,7 +2,7 @@ import React from 'react'
 
 import Recipe from '../components/Recipe'
 
-const Recipes = ({ recipes, isFilter }) => {
+const Recipes = ({recipes, isFilter}) => {
   if (!recipes) {
     return null
   }
