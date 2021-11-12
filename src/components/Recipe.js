@@ -1,9 +1,9 @@
-import React, { useContext } from 'react'
+import React, {useContext} from 'react'
 import PreparationSteps from '../containers/PreparationSteps'
-import { ToolContext } from '../pages/Tool'
+import {ToolContext} from '../pages/Tool'
 
-const Recipe = ({ idx, id, carbonSource, basePressure, preparationSteps, isFilter }) => {
-  const { dispatch } = useContext(ToolContext)
+const Recipe = ({idx, id, carbonSource, basePressure, preparationSteps, isAddedToFilter, isFilter}) => {
+  const {dispatch} = useContext(ToolContext)
 
   const displayCarbonSource =
     carbonSource
@@ -22,10 +22,19 @@ const Recipe = ({ idx, id, carbonSource, basePressure, preparationSteps, isFilte
         className='w-9 h-9 text-center bg-red-500 hover:bg-red-700 text-white text-3xl font-bold rounded focus:outline-none focus:shadow-outline'
         type='button'
         onClick={() => {
-          dispatch({ type: 'DEL_RECIPE_FILTER', payload: { idx: idx } })
+          dispatch({type: 'DEL_RECIPE_FILTER', payload: {idx: idx}})
         }}
       >
         -
+      </button>
+    )
+  } else if (isAddedToFilter) {
+    btn = (
+      <button
+        disabled
+        className='cursor-default px-2 h-9 text-center bg-purple-500 text-white text-xl font-bold rounded focus:outline-none focus:shadow-outline'
+      >
+        Added
       </button>
     )
   } else {
@@ -34,7 +43,7 @@ const Recipe = ({ idx, id, carbonSource, basePressure, preparationSteps, isFilte
         className='w-9 h-9 text-center bg-green-500 hover:bg-green-700 text-white text-3xl font-bold rounded focus:outline-none focus:shadow-outline'
         type='button'
         onClick={() => {
-          dispatch({ type: 'ADD_RECIPE_FILTER', payload: { idx: idx } })
+          dispatch({type: 'ADD_RECIPE_FILTER', payload: {idx: idx}})
         }}
       >
         +
@@ -47,7 +56,7 @@ const Recipe = ({ idx, id, carbonSource, basePressure, preparationSteps, isFilte
         <h6 className='font-bold ml-3'> Recipe #{id}</h6>
         {btn}
       </div>
-      <hr className='my-1' />
+      <hr className='my-1'/>
       <div className='w-full md:flex md:items-center mb-1'>
         <span className='md:w-1/2 block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4'>Carbon Source :</span>
         {displayCarbonSource}
@@ -56,7 +65,7 @@ const Recipe = ({ idx, id, carbonSource, basePressure, preparationSteps, isFilte
         <span className='md:w-1/2 block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4'>Base Pressure :</span>
         {displayBasePressure}
       </div>
-      <hr className='my-1' />
+      <hr className='my-1'/>
       <PreparationSteps
         preparationSteps={preparationSteps}
       />

@@ -8,7 +8,7 @@ import ExperimentRow from '../components/ExperimentRow'
 import FieldInput from '../components/FieldInput'
 import EnvironmentalConditions from '../containers/EnvironmentalConditions'
 import Furnaces from '../containers/Furnaces'
-import Substrates from '../containers/SubstrateFilters'
+import Substrates from '../containers/Substrates'
 import Recipes from '../containers/Recipes'
 
 const catalystOptions = ['Copper', 'Platinum', 'Nickel', 'Palladium', 'Palladium Thin F'].sort()
@@ -236,7 +236,7 @@ const Tool = () => {
       environmentalConditionFilters: state.environmentalConditionFilters,
       furnaceFilters: state.furnaceFilters,
       substrateFilters: state.substrateFilters,
-      recipefilters: state.recipeFilters
+      recipeFilters: state.recipeFilters
     }
     try {
       const response = await axios.post(host + '/experiments/filtered/webapp', body)
@@ -544,22 +544,24 @@ const Tool = () => {
         <div className='w-1/2 px-10'>
           <div className='md:w-full flex flex-col'>
             <h2 className='text-center text-3xl font-bold mr-2 md:mb-4'>Current Filters</h2>
-            <EnvironmentalConditions
-              environmentalConditions={state.environmentalConditionFilters}
-              isFilter
-            />
-            <Furnaces
-              furnaces={state.furnaceFilters}
-              isFilter
-            />
-            <Substrates
-              substrates={state.substrateFilters}
-              isFilter
-            />
-            <Recipes
-              substrates={state.recipeFilters}
-              isFilter
-            />
+            <div className='h-screen-3/4 overflow-y-scroll border p-3'>
+              <EnvironmentalConditions
+                environmentalConditions={state.environmentalConditionFilters}
+                isFilter
+              />
+              <Furnaces
+                furnaces={state.furnaceFilters}
+                isFilter
+              />
+              <Substrates
+                substrates={state.substrateFilters}
+                isFilter
+              />
+              <Recipes
+                recipes={state.recipeFilters}
+                isFilter
+              />
+            </div>
             <button
               className='self-center w-1/2 bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-5'
               type='button' onClick={() => {

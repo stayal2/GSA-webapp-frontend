@@ -1,8 +1,8 @@
-import React, { useContext } from 'react'
-import { ToolContext } from '../pages/Tool'
+import React, {useContext} from 'react'
+import {ToolContext} from '../pages/Tool'
 
-const EnvironmentalCondition = ({ idx, id, ambientTemperature, dewPoint, isAddedToFilter, isFilter }) => {
-  const { dispatch } = useContext(ToolContext)
+const EnvironmentalCondition = ({idx, id, ambientTemperature, dewPoint, isAddedToFilter, isFilter}) => {
+  const {dispatch} = useContext(ToolContext)
 
   const displayAmbientTemperature =
     ambientTemperature
@@ -21,7 +21,7 @@ const EnvironmentalCondition = ({ idx, id, ambientTemperature, dewPoint, isAdded
         className='w-9 h-9 text-center bg-red-500 hover:bg-red-700 text-white text-3xl font-bold rounded focus:outline-none focus:shadow-outline'
         type='button'
         onClick={() => {
-          dispatch({ type: 'DEL_ENVIRONMENTAL_CONDITION_FILTER', payload: { idx: idx } })
+          dispatch({type: 'DEL_ENVIRONMENTAL_CONDITION_FILTER', payload: {idx: idx}})
         }}
       >
         -
@@ -42,7 +42,7 @@ const EnvironmentalCondition = ({ idx, id, ambientTemperature, dewPoint, isAdded
         className='w-9 h-9 text-center bg-green-500 hover:bg-green-700 text-white text-3xl font-bold rounded focus:outline-none focus:shadow-outline'
         type='button'
         onClick={() => {
-          dispatch({ type: 'ADD_ENVIRONMENTAL_CONDITION_FILTER', payload: { idx: idx } })
+          dispatch({type: 'ADD_ENVIRONMENTAL_CONDITION_FILTER', payload: {idx: idx}})
         }}
       >
         +
@@ -55,9 +55,10 @@ const EnvironmentalCondition = ({ idx, id, ambientTemperature, dewPoint, isAdded
         <h6 className='font-bold ml-3'> Environmental Condition #{id}</h6>
         {btn}
       </div>
-      <hr className='my-1' />
+      <hr className='my-1'/>
       <div className='w-full md:flex md:items-center mb-1'>
-        <span className='md:w-1/2 block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4'>Ambient Temperature :</span>
+        <span
+          className='md:w-1/2 block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4'>Ambient Temperature :</span>
         {displayAmbientTemperature}
       </div>
       <div className='w-full md:flex md:items-center mb-1'>

@@ -1,8 +1,8 @@
-import React, { useContext } from 'react'
-import { ToolContext } from '../pages/Tool'
+import React, {useContext} from 'react'
+import {ToolContext} from '../pages/Tool'
 
-const Substrate = ({ idx, id, catalyst, thickness, diameter, length, surfaceArea, isFilter }) => {
-  const { dispatch } = useContext(ToolContext)
+const Substrate = ({idx, id, catalyst, thickness, diameter, length, surfaceArea, isAddedToFilter, isFilter}) => {
+  const {dispatch} = useContext(ToolContext)
 
   const displayCatalyst =
     catalyst
@@ -36,10 +36,19 @@ const Substrate = ({ idx, id, catalyst, thickness, diameter, length, surfaceArea
         className='w-9 h-9 text-center bg-red-500 hover:bg-red-700 text-white text-3xl font-bold rounded focus:outline-none focus:shadow-outline'
         type='button'
         onClick={() => {
-          dispatch({ type: 'DEL_SUBSTRATE_FILTER', payload: { idx: idx } })
+          dispatch({type: 'DEL_SUBSTRATE_FILTER', payload: {idx: idx}})
         }}
       >
         -
+      </button>
+    )
+  } else if (isAddedToFilter) {
+    btn = (
+      <button
+        disabled
+        className='cursor-default px-2 h-9 text-center bg-purple-500 text-white text-xl font-bold rounded focus:outline-none focus:shadow-outline'
+      >
+        Added
       </button>
     )
   } else {
@@ -48,7 +57,7 @@ const Substrate = ({ idx, id, catalyst, thickness, diameter, length, surfaceArea
         className='w-9 h-9 text-center bg-green-500 hover:bg-green-700 text-white text-3xl font-bold rounded focus:outline-none focus:shadow-outline'
         type='button'
         onClick={() => {
-          dispatch({ type: 'ADD_SUBSTRATE_FILTER', payload: { idx: idx } })
+          dispatch({type: 'ADD_SUBSTRATE_FILTER', payload: {idx: idx}})
         }}
       >
         +
@@ -61,7 +70,7 @@ const Substrate = ({ idx, id, catalyst, thickness, diameter, length, surfaceArea
         <h6 className='font-bold ml-3'> Substrate #{id}</h6>
         {btn}
       </div>
-      <hr className='my-1' />
+      <hr className='my-1'/>
       <div className='w-full md:flex md:items-center mb-1'>
         <span className='md:w-1/2 block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4'>Catalyst :</span>
         {displayCatalyst}
