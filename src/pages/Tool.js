@@ -4,12 +4,12 @@ import React, {useState, useReducer, useEffect} from 'react'
 import {host} from '../settings'
 import {buildExperimentQueryStr} from '../utils/query'
 import toolReducer, {defaultState} from '../reducers/toolReducer'
-import ExperimentRow from '../components/ExperimentRow'
 import FieldInput from '../components/FieldInput'
 import EnvironmentalConditions from '../containers/EnvironmentalConditions'
 import Furnaces from '../containers/Furnaces'
 import Substrates from '../containers/Substrates'
 import Recipes from '../containers/Recipes'
+import Authors from "../containers/Authors";
 
 const catalystOptions = ['Copper', 'Platinum', 'Nickel', 'Palladium', 'Palladium Thin F'].sort()
 const prepNameOptions = ['Annealing', 'Growing', 'Cooling']
@@ -35,6 +35,7 @@ const Tool = () => {
   const [showFurnaces, setShowFurnaces] = useState(false)
   const [showSubstrates, setShowSubstrates] = useState(false)
   const [showRecipes, setShowRecipes] = useState(false)
+  const [showAuthors, setShowAuthors] = useState(false)
 
   const [showExperimentalConditions, setShowExperimentalConditions] = useState(false)
   const [showPreparation, setShowPreparation] = useState(false)
@@ -85,6 +86,10 @@ const Tool = () => {
     document.getElementById('recipe-btn').innerHTML =
       showRecipes ? '&#8211;' : '+'
   }, [showRecipes])
+  useEffect(() => {
+    document.getElementById('author-btn').innerHTML =
+      showRecipes ? '&#8211;' : '+'
+  }, [showAuthors])
 
   const onAddExperimentalConditionsFilters = (e) => {
     e.preventDefault()
@@ -236,7 +241,8 @@ const Tool = () => {
       environmentalConditionFilters: state.environmentalConditionFilters,
       furnaceFilters: state.furnaceFilters,
       substrateFilters: state.substrateFilters,
-      recipeFilters: state.recipeFilters
+      recipeFilters: state.recipeFilters,
+      authorFilters: state.authorFilters,
     }
     try {
       const response = await axios.post(host + '/experiments/filtered/webapp', body)
@@ -251,7 +257,7 @@ const Tool = () => {
   }
 
   if (loading) {
-    return <h1>LOADING...</h1>
+    return <h1 className='text-5xl'>LOADING...</h1>
   }
   return (
     <ToolContext.Provider value={{dispatch: dispatch}}>
@@ -334,6 +340,23 @@ const Tool = () => {
             {showRecipes &&
             <Recipes
               recipes={state.recipes}
+            />}
+          </section>
+
+          <section className='w-full flex flex-col mb-5'>
+            <div className='flex justify-center align-middle mb-4'>
+              <h2 className='text-center text-3xl font-bold mr-2'>Authors</h2>
+              <button
+                className='w-9 h-9 self-center text-center bg-gray-400 hover:bg-blue-700 text-white text-3xl font-bold rounded focus:outline-none focus:shadow-outline'
+                type='button' id='author-btn' onClick={() => setShowAuthors(!showAuthors)}
+              >
+                +
+              </button>
+            </div>
+            {showAuthors || <hr/>}
+            {showAuthors &&
+            <Authors
+              authors={state.authors}
             />}
           </section>
 
@@ -561,6 +584,10 @@ const Tool = () => {
                 recipes={state.recipeFilters}
                 isFilter
               />
+              <Authors
+                recipes={state.authorFilters}
+                isFilter
+              />
             </div>
             <button
               className='self-center w-1/2 bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-5'
@@ -568,7 +595,7 @@ const Tool = () => {
               fetchExperiments()
             }}
             >
-              Fetch Associated Experiments
+              Search Associated Experiments
             </button>
           </div>
         </div>

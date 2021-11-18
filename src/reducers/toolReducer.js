@@ -12,6 +12,8 @@ export const defaultState = {
   recipeFilters: [],
   substrates: [],
   substrateFilters: [],
+  authors: [],
+  authorFilters: [],
 
   catalyst: null,
   tubeDiameter: null,
@@ -74,14 +76,16 @@ const toolReducer = (state, action) => {
   switch (action.type) {
     case 'INIT': {
       const data = action.payload
+      console.log(data)
       return {
         ...state,
         environmentalConditions: data.environmental_conditions,
         furnaces: data.furnaces,
-        preparationSteps: data.preparations_stpes,
+        preparationSteps: data.preparations_steps,
         properties: data.properties,
         recipes: data.recipes,
-        substrates: data.substrates
+        substrates: data.substrates,
+        authors: data.authors,
       }
     }
     case 'ADD_ENVIRONMENTAL_CONDITION_FILTER': {
@@ -158,6 +162,25 @@ const toolReducer = (state, action) => {
       return {
         ...state,
         recipeFilters: newFilters
+      }
+    }
+    case 'ADD_AUTHOR_FILTER': {
+      const idx = action.payload.idx
+      const newFilter = state.authors[idx]
+      newFilter.isAddedToFilter = true
+      return {
+        ...state,
+        authorFilters: [...state.authorFilters, newFilter]
+      }
+    }
+    case 'DEL_AUTHOR_FILTER': {
+      const newFilters = [...state.authorFilters]
+      const idx = action.payload.idx
+      state.authorFilters[idx].isAddedToFilter = false
+      newFilters.splice(idx, 1)
+      return {
+        ...state,
+        authorFilters: newFilters
       }
     }
     case 'ADD_EXPERIMENTAL_CONDITIONS_FILTERS': {
@@ -273,7 +296,8 @@ const toolReducer = (state, action) => {
         dewPointIneq: 'eq',
         filters: [...state.filters, ...newFilters]
       }
-    } case 'ADD_PREPARATION_FILTERS': {
+    }
+    case 'ADD_PREPARATION_FILTERS': {
       const newFilters = []
       if (state.prepName) {
         newFilters.push({
@@ -394,7 +418,8 @@ const toolReducer = (state, action) => {
         coolingRateIneq: 'eq',
         filters: [...state.filters, ...newFilters]
       }
-    } case 'ADD_PROPERTIES_FILTERS': {
+    }
+    case 'ADD_PROPERTIES_FILTERS': {
       const newFilters = []
       if (state.growthCoverage) {
         newFilters.push({
@@ -459,7 +484,8 @@ const toolReducer = (state, action) => {
         domainSizeIneq: 'eq',
         filters: [...state.filters, ...newFilters]
       }
-    } case 'ADD_PROVENANCE_INFORMATION_FILTERS': {
+    }
+    case 'ADD_PROVENANCE_INFORMATION_FILTERS': {
       const newFilters = []
       if (state.lastname) {
         newFilters.push({
@@ -489,282 +515,338 @@ const toolReducer = (state, action) => {
         institution: null,
         filters: [...state.filters, ...newFilters]
       }
-    } case 'BASE_PRESSURE_CHANGE': {
+    }
+    case 'BASE_PRESSURE_CHANGE': {
       return {
         ...state,
         basePressure: action.payload ? action.payload : null
       }
-    } case 'BASE_PRESSURE_INEQ_CHANGE': {
+    }
+    case 'BASE_PRESSURE_INEQ_CHANGE': {
       return {
         ...state,
         basePressureIneq: action.payload
       }
-    } case 'CATALYST_CHANGE': {
+    }
+    case 'CATALYST_CHANGE': {
       return {
         ...state,
         catalyst: action.payload ? action.payload : null
       }
-    } case 'THICKNESS_CHANGE': {
+    }
+    case 'THICKNESS_CHANGE': {
       return {
         ...state,
         thickness: action.payload ? action.payload : null
       }
-    } case 'THICKNESS_INEQ_CHANGE': {
+    }
+    case 'THICKNESS_INEQ_CHANGE': {
       return {
         ...state,
         thicknessIneq: action.payload
       }
-    } case 'DIAMETER_CHANGE': {
+    }
+    case 'DIAMETER_CHANGE': {
       return {
         ...state,
         diameter: action.payload ? action.payload : null
       }
-    } case 'DIAMETER_INEQ_CHANGE': {
+    }
+    case 'DIAMETER_INEQ_CHANGE': {
       return {
         ...state,
         diameterIneq: action.payload
       }
-    } case 'LENGTH_CHANGE': {
+    }
+    case 'LENGTH_CHANGE': {
       return {
         ...state,
         length: action.payload ? action.payload : null
       }
-    } case 'LENGTH_INEQ_CHANGE': {
+    }
+    case 'LENGTH_INEQ_CHANGE': {
       return {
         ...state,
         lengthIneq: action.payload
       }
-    } case 'SURFACE_AREA_CHANGE': {
+    }
+    case 'SURFACE_AREA_CHANGE': {
       return {
         ...state,
         surfaceArea: action.payload ? action.payload : null
       }
-    } case 'SURFACE_AREA_INEQ_CHANGE': {
+    }
+    case 'SURFACE_AREA_INEQ_CHANGE': {
       return {
         ...state,
         surfaceAreaIneq: action.payload
       }
-    } case 'DEW_POINT_CHANGE': {
+    }
+    case 'DEW_POINT_CHANGE': {
       return {
         ...state,
         dewPoint: action.payload ? action.payload : null
       }
-    } case 'DEW_POINT_INEQ_CHANGE': {
+    }
+    case 'DEW_POINT_INEQ_CHANGE': {
       return {
         ...state,
         dewPointIneq: action.payload
       }
-    } case 'TUBE_DIAMETER_CHANGE': {
+    }
+    case 'TUBE_DIAMETER_CHANGE': {
       return {
         ...state,
         tubeDiameter: action.payload ? action.payload : null
       }
-    } case 'TUBE_DIAMETER_INEQ_CHANGE': {
+    }
+    case 'TUBE_DIAMETER_INEQ_CHANGE': {
       return {
         ...state,
         tubeDiameterIneq: action.payload
       }
-    } case 'CROSS_SECTIONAL_AREA_CHANGE': {
+    }
+    case 'CROSS_SECTIONAL_AREA_CHANGE': {
       return {
         ...state,
         crossSectionalArea: action.payload ? action.payload : null
       }
-    } case 'CROSS_SECTIONAL_AREA_INEQ_CHANGE': {
+    }
+    case 'CROSS_SECTIONAL_AREA_INEQ_CHANGE': {
       return {
         ...state,
         crossSectionalAreaIneq: action.payload
       }
-    } case 'TUBE_LENGTH_CHANGE': {
+    }
+    case 'TUBE_LENGTH_CHANGE': {
       return {
         ...state,
         tubeLength: action.payload ? action.payload : null
       }
-    } case 'TUBE_LENGTH_INEQ_CHANGE': {
+    }
+    case 'TUBE_LENGTH_INEQ_CHANGE': {
       return {
         ...state,
         tubeLengthIneq: action.payload
       }
-    } case 'LENGTH_OF_HEATED_REGION_CHANGE': {
+    }
+    case 'LENGTH_OF_HEATED_REGION_CHANGE': {
       return {
         ...state,
         lengthOfHeatedRegion: action.payload ? action.payload : null
       }
-    } case 'LENGTH_OF_HEATED_REGION_INEQ_CHANGE': {
+    }
+    case 'LENGTH_OF_HEATED_REGION_INEQ_CHANGE': {
       return {
         ...state,
         lengthOfHeatedRegionIneq: action.payload
       }
-    } case 'PREP_NAME_CHANGE': {
+    }
+    case 'PREP_NAME_CHANGE': {
       return {
         ...state,
         prepName: action.payload ? action.payload : null
       }
-    } case 'DURATION_CHANGE': {
+    }
+    case 'DURATION_CHANGE': {
       return {
         ...state,
         duration: action.payload ? action.payload : null
       }
-    } case 'DURATION_INEQ_CHANGE': {
+    }
+    case 'DURATION_INEQ_CHANGE': {
       return {
         ...state,
         durationIneq: action.payload
       }
-    } case 'FURNACE_TEMPERATURE_CHANGE': {
+    }
+    case 'FURNACE_TEMPERATURE_CHANGE': {
       return {
         ...state,
         furnaceTemperature: action.payload ? action.payload : null
       }
-    } case 'FURNACE_TEMPERATURE_INEQ_CHANGE': {
+    }
+    case 'FURNACE_TEMPERATURE_INEQ_CHANGE': {
       return {
         ...state,
         furnaceTemperatureIneq: action.payload
       }
-    } case 'FURNACE_PRESSURE_CHANGE': {
+    }
+    case 'FURNACE_PRESSURE_CHANGE': {
       return {
         ...state,
         furnacePressure: action.payload ? action.payload : null
       }
-    } case 'FURNACE_PRESSURE_INEQ_CHANGE': {
+    }
+    case 'FURNACE_PRESSURE_INEQ_CHANGE': {
       return {
         ...state,
         furnacePressureIneq: action.payload
       }
-    } case 'SAMPLE_LOCATION_CHANGE': {
+    }
+    case 'SAMPLE_LOCATION_CHANGE': {
       return {
         ...state,
         sampleLocation: action.payload ? action.payload : null
       }
-    } case 'SAMPLE_LOCATION_INEQ_CHANGE': {
+    }
+    case 'SAMPLE_LOCATION_INEQ_CHANGE': {
       return {
         ...state,
         sampleLocationIneq: action.payload
       }
-    } case 'HELIUM_FLOW_RATE_CHANGE': {
+    }
+    case 'HELIUM_FLOW_RATE_CHANGE': {
       return {
         ...state,
         heliumFlowRate: action.payload ? action.payload : null
       }
-    } case 'HELIUM_FLOW_RATE_INEQ_CHANGE': {
+    }
+    case 'HELIUM_FLOW_RATE_INEQ_CHANGE': {
       return {
         ...state,
         heliumFlowRateIneq: action.payload
       }
-    } case 'HYDROGEN_FLOW_RATE_CHANGE': {
+    }
+    case 'HYDROGEN_FLOW_RATE_CHANGE': {
       return {
         ...state,
         hydrogenFlowRate: action.payload ? action.payload : null
       }
-    } case 'HYDROGEN_FLOW_RATE_INEQ_CHANGE': {
+    }
+    case 'HYDROGEN_FLOW_RATE_INEQ_CHANGE': {
       return {
         ...state,
         hydrogenFlowRateIneq: action.payload
       }
-    } case 'CARBON_SOURCE_CHANGE': {
+    }
+    case 'CARBON_SOURCE_CHANGE': {
       return {
         ...state,
         carbonSource: action.payload ? action.payload : null
       }
-    } case 'CARBON_SOURCE_FLOW_RATE_CHANGE': {
+    }
+    case 'CARBON_SOURCE_FLOW_RATE_CHANGE': {
       return {
         ...state,
         carbonSourceFlowRate: action.payload ? action.payload : null
       }
-    } case 'CARBON_SOURCE_FLOW_RATE_INEQ_CHANGE': {
+    }
+    case 'CARBON_SOURCE_FLOW_RATE_INEQ_CHANGE': {
       return {
         ...state,
         carbonSourceFlowRateIneq: action.payload
       }
-    } case 'ARGON_FLOW_RATE_CHANGE': {
+    }
+    case 'ARGON_FLOW_RATE_CHANGE': {
       return {
         ...state,
         argonFlowRate: action.payload ? action.payload : null
       }
-    } case 'ARGON_FLOW_RATE_INEQ_CHANGE': {
+    }
+    case 'ARGON_FLOW_RATE_INEQ_CHANGE': {
       return {
         ...state,
         argonFlowRateIneq: action.payload
       }
-    } case 'COOLING_RATE_CHANGE': {
+    }
+    case 'COOLING_RATE_CHANGE': {
       return {
         ...state,
         coolingRate: action.payload ? action.payload : null
       }
-    } case 'COOLING_RATE_INEQ_CHANGE': {
+    }
+    case 'COOLING_RATE_INEQ_CHANGE': {
       return {
         ...state,
         coolingRateIneq: action.payload
       }
-    } case 'GROWTH_COVERAGE_CHAGNE': {
+    }
+    case 'GROWTH_COVERAGE_CHAGNE': {
       return {
         ...state,
         growthCoverage: action.payload
       }
-    } case 'GROWTH_COVERAGE_INEQ_CHANGE': {
+    }
+    case 'GROWTH_COVERAGE_INEQ_CHANGE': {
       return {
         ...state,
         growthCoverageIneq: action.payload
       }
-    } case 'SHAPE_CHANGE': {
+    }
+    case 'SHAPE_CHANGE': {
       return {
         ...state,
         shape: action.payload
       }
-    } case 'AVERAGE_THICKNESS_OF_GROWTH_CHANGE': {
+    }
+    case 'AVERAGE_THICKNESS_OF_GROWTH_CHANGE': {
       return {
         ...state,
         averageThicknessOfGrowth: action.payload
       }
-    } case 'AVERAGE_THICKNESS_OF_GROWTH_INEQ_CHANGE': {
+    }
+    case 'AVERAGE_THICKNESS_OF_GROWTH_INEQ_CHANGE': {
       return {
         ...state,
         averageThicknessOfGrowthIneq: action.payload
       }
-    } case 'STD_DEV_OF_GROWTH_CHANGE': {
+    }
+    case 'STD_DEV_OF_GROWTH_CHANGE': {
       return {
         ...state,
         stdDevOfGrowth: action.payload
       }
-    } case 'STD_DEV_OF_GROWTH_INEQ_CHANGE': {
+    }
+    case 'STD_DEV_OF_GROWTH_INEQ_CHANGE': {
       return {
         ...state,
         stdDevOfGrowthIneq: action.payload
       }
-    } case 'NUMBER_OF_LAYERS_CHANGE': {
+    }
+    case 'NUMBER_OF_LAYERS_CHANGE': {
       return {
         ...state,
         numberOfLayers: action.payload
       }
-    } case 'NUMBER_OF_LAYERS_INEQ_CHANGE': {
+    }
+    case 'NUMBER_OF_LAYERS_INEQ_CHANGE': {
       return {
         ...state,
         numberOfLayersIneq: action.payload
       }
-    } case 'DOMAIN_SIZE_CHANGE': {
+    }
+    case 'DOMAIN_SIZE_CHANGE': {
       return {
         ...state,
         domainSize: action.payload
       }
-    } case 'DOMAIN_SIZE_INEQ_CHANGE': {
+    }
+    case 'DOMAIN_SIZE_INEQ_CHANGE': {
       return {
         ...state,
         domainSizeIneq: action.payload
       }
-    } case 'LASTNAME_CHANGE': {
+    }
+    case 'LASTNAME_CHANGE': {
       return {
         ...state,
         lastname: action.payload
       }
-    } case 'FIRSTNAME_CHANGE': {
+    }
+    case 'FIRSTNAME_CHANGE': {
       return {
         ...state,
         firstname: action.payload
       }
-    } case 'INSTITUTION_CHANGE': {
+    }
+    case 'INSTITUTION_CHANGE': {
       return {
         ...state,
         institution: action.payload
       }
-    } case 'REMOVE_FILTER': {
+    }
+    case 'REMOVE_FILTER': {
       const filters = state.filters
       const removeIdx = action.payload
       const newFilters = filters.filter((el, i) => i !== removeIdx)

@@ -15,7 +15,7 @@ const Recipe = ({idx, id, carbonSource, basePressure, preparationSteps, isAddedT
       ? <span className='md:w-1/2'>{basePressure} Torr</span>
       : <span className='md:w-1/2'>-</span>
 
-  let btn = null
+  let btn
   if (isFilter) {
     btn = (
       <button

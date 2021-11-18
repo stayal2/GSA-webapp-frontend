@@ -1,15 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect} from "react";
 import {
   BrowserRouter as Router, Switch, Route, Link
 } from "react-router-dom";
-import { signInWithToken } from "../utils/auth";
+import './App.css';
+
+import {signInWithToken} from "../utils/auth";
 import Signin from "./Signin";
 import Signup from "./Signup";
 import Home from "./Home";
 import Navbar from "../components/Navbar";
 import Tool from "./Tool";
+import ExperimentView from "./ExperimentView";
 
-import './App.css';
 
 export const GlobalContext = React.createContext();
 
@@ -29,21 +31,24 @@ const App = () => {
   }, [])
 
   return (
-    <GlobalContext.Provider value={{ signedIn, setSignedIn }}>
+    <GlobalContext.Provider value={{signedIn, setSignedIn}}>
       <Router>
-        <Navbar />
+        <Navbar/>
         <Switch>
           <Route exact path='/'>
-            <Home />
+            <Home/>
           </Route>
-          <Route path='/tool'>
-            <Tool />
+          <Route exact path='/tool'>
+            <Tool/>
+          </Route>
+          <Route path='/tool/experiments'>
+            <ExperimentView/>
           </Route>
           <Route path='/signin'>
-            <Signin />
+            <Signin/>
           </Route>
           <Route path='/signup'>
-            <Signup />
+            <Signup/>
           </Route>
         </Switch>
       </Router>
