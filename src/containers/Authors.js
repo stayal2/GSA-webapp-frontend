@@ -11,9 +11,8 @@ const Authors = ({authors, isFilter}) => {
   }
   return (
     <div className={scrollbarClass}>
-      {authors.map((author, i) => {
-        console.log(author)
-        return <Author
+      {authors.map((author, i) =>
+        <Author
           key={i}
           idx={i}
           id={author.id}
@@ -23,8 +22,7 @@ const Authors = ({authors, isFilter}) => {
           isAddedToFilter={author.isAddedToFilter}
           isFilter={isFilter}
         />
-      })
-      }
+      )}
     </div>
   )
 }
