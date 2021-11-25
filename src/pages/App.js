@@ -17,23 +17,49 @@ export const GlobalContext = React.createContext();
 
 const App = () => {
   const [signedIn, setSignedIn] = useState(false);
+  const [successMsg, setSuccessMsg] = useState(null)
+  const [errorMsg, setErrorMsg] = useState(null)
 
+  const flashSuccess = (text) => {
+    let msg =
+      <div
+        className='w-full bg-green-400 rounded text-center text-green-100 font-bold text-2xl py-2 mb-4'>
+        {text}
+      </div>
+    setSuccessMsg(msg)
+    setTimeout(() => {
+      setSuccessMsg(null)
+    }, 5000)
+  }
+  const flashError = (text) => {
+    let msg =
+      <div
+        className='w-full bg-red-600 rounded text-center text-green-100 font-bold text-2xl py-2 mb-4'>
+        {text}
+      </div>
+    setErrorMsg(msg)
+    setTimeout(() => {
+      setErrorMsg(null)
+    }, 5000)
+  }
   useEffect(() => {
     const trySignIn = async () => {
-      const token = window.sessionStorage.getItem('token');
+      const token = window.localStorage.getItem('token');
       if (token) {
-        console.log('here')
         const signInResult = await signInWithToken(token);
         setSignedIn(signInResult);
       }
+      console.log(signedIn)
     }
     trySignIn();
   }, [])
 
   return (
-    <GlobalContext.Provider value={{signedIn, setSignedIn}}>
+    <GlobalContext.Provider value={{signedIn, setSignedIn, flashSuccess, flashError}}>
       <Router>
         <Navbar/>
+        {successMsg}
+        {errorMsg}
         <Switch>
           <Route exact path='/'>
             <Home/>
@@ -51,6 +77,7 @@ const App = () => {
             <Signup/>
           </Route>
         </Switch>
+        <div className='h-96'/>
       </Router>
     </GlobalContext.Provider>
   );

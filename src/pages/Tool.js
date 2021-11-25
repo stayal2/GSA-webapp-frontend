@@ -1,10 +1,9 @@
 import axios from 'axios'
-import React, {useState, useReducer, useEffect} from 'react'
+import React, {useState, useReducer, useEffect, useContext} from 'react'
 
 import {host} from '../settings'
 import {buildExperimentQueryStr} from '../utils/query'
 import toolReducer, {defaultState} from '../reducers/toolReducer'
-import FieldInput from '../components/FieldInput'
 import EnvironmentalConditions from '../containers/EnvironmentalConditions'
 import Furnaces from '../containers/Furnaces'
 import Substrates from '../containers/Substrates'
@@ -12,6 +11,7 @@ import Recipes from '../containers/Recipes'
 import Authors from "../containers/Authors";
 import Properties from "../containers/Properties";
 import ExperimentLink from "../components/ExperimentLink";
+import {GlobalContext} from "./App";
 
 const catalystOptions = ['Copper', 'Platinum', 'Nickel', 'Palladium', 'Palladium Thin F'].sort()
 const prepNameOptions = ['Annealing', 'Growing', 'Cooling']
@@ -26,11 +26,11 @@ export const ToolContext = React.createContext()
 
 const Tool = () => {
   const [state, dispatch] = useReducer(toolReducer, defaultState)
+  const g = useContext(GlobalContext)
   const [experimentIds, setExperimentIds] = useState([])
 
   const [loading, setLoading] = useState(false)
-  const [showSuccess, setShowSuccess] = useState(false)
-  const [showError, setShowError] = useState(false)
+
 
   const [showEnvironmentalConditions, setShowEnvironmentalConditions] = useState(false)
   const [showFurnaces, setShowFurnaces] = useState(false)
@@ -43,7 +43,6 @@ const Tool = () => {
     setLoading(true)
     const response = await axios.get(host + '/db/tables/all')
     const data = response.data
-    console.log(data)
     if (response.status === 200) {
       dispatch({type: 'INIT', payload: data})
     }
@@ -54,18 +53,6 @@ const Tool = () => {
     init()
   }, [])
 
-  const flashSuccess = () => {
-    setShowSuccess(true)
-    setTimeout(() => {
-      setShowSuccess(false)
-    }, 5000)
-  }
-  const flashError = () => {
-    setShowError(true)
-    setTimeout(() => {
-      setShowError(false)
-    }, 5000)
-  }
 
   useEffect(() => {
     document.getElementById('environmental-conditions-btn').innerHTML =
@@ -105,10 +92,9 @@ const Tool = () => {
     try {
       const response = await axios.post(host + '/experiments/filter', body)
       const data = response.data
-      console.log(data)
       setExperimentIds(data)
     } catch (e) {
-      flashError()
+      g.flashError('Oops. Something went wrong.')
     } finally {
       setLoading(false)
     }
@@ -121,16 +107,6 @@ const Tool = () => {
     <ToolContext.Provider value={{dispatch: dispatch}}>
       <div className='w-full md:flex flex-row md:container md:mx-auto mt-10 border rounded p-5'>
         <div className='md:w-1/2 px-10'>
-          {showSuccess &&
-          <div className='w-full bg-green-400 rounded text-center text-green-100 font-bold text-2xl py-2 mb-4'>
-            Filters have been added.
-          </div>
-          }
-          {showError &&
-          <div className='w-full bg-red-600 rounded text-center text-green-100 font-bold text-2xl py-2 mb-4'>
-            Oops... Something went wrong.
-          </div>}
-
           <h2 className='text-center text-4xl font-bold mr-2 md:mb-4'>Filters</h2>
           <div className='w-full border rounded p-5'>
             <section className='w-full flex flex-col mb-5'>

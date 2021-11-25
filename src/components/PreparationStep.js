@@ -3,7 +3,7 @@ import React from 'react'
 const PreparationStep = ({ idx, id, step, name, duration, furnaceTemperature, furnacePressure, sampleLocation, heliumFlowRate, hydrogenFlowRate, carbonSourceFlowRate, argonFlowRate, coolingRate }) => {
   const displayStep =
     step !== null
-      ? <span className='md:w-1/2'>{step}</span>
+      ? <span className='md:w-1/2'>{step + 1}</span>
       : <span className='md:w-1/2'>-</span>
 
   const displayName =

@@ -15,10 +15,11 @@ const Signin = () => {
     const data = { email, password }
     const response = await axios.post(host + '/auth/signin', data)
 
-    if (response.status >= 200 && response.status < 300) {
+    if (response.status === 200) {
       const data = response.data
-      console.log(data)
       g.setSignedIn(true)
+      window.localStorage.setItem('token', data.token)
+      g.flashSuccess('You are now signed in.')
     } else {
       g.setSignedIn(false)
     }

@@ -2,9 +2,10 @@ export const defaultState = {
   experiment: null
 }
 
-const toolReducer = (state, action) => {
+const experimentReducer = (state, action) => {
   switch (action.type) {
     case 'SET_EXPERIMENT': {
+      console.log(action.payload)
       return {
         ...state,
         experiment: action.payload
@@ -16,4 +17,4 @@ const toolReducer = (state, action) => {
   }
 }
 
-export default toolReducer
+export default experimentReducer

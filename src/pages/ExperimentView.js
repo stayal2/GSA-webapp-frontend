@@ -3,7 +3,8 @@ import experimentReducer, {defaultState} from "../reducers/experimentReducer";
 import {host} from "../settings";
 import axios from "axios";
 import {Redirect} from "react-router-dom";
-import Experiment from "../components/Experiment";
+
+import ExperimentDetails from "../containers/ExperimentDetails";
 
 export const ExperimentContext = React.createContext();
 
@@ -22,7 +23,6 @@ const ExperimentView = () => {
     } catch (e) {
       console.log(e)
     }
-    console.log(state)
   }
   useEffect(() => {
     const expId = parseInt(window.location.pathname.slice(1).split('/')[2])
@@ -45,8 +45,10 @@ const ExperimentView = () => {
   }
   return (
     <ExperimentContext.Provider value={{experiment: state.experiment}}>
-      <h1>{state.experiment.id}</h1>
-      <Experiment/>
+      <div className='w-full container mx-auto my-5'>
+        <h2 className='text-center text-4xl font-bold mr-2 mb-4'>Experiment {state.experiment.id}</h2>
+        <ExperimentDetails/>
+      </div>
     </ExperimentContext.Provider>
   )
 }
