@@ -1,10 +1,17 @@
-import React, {useContext} from 'react'
+import React, {useContext, useEffect} from 'react'
+import {Line} from "react-chartjs-2";
+import {Chart} from "chart.js/auto";
 
 import {ExperimentContext} from "../pages/ExperimentView";
 import PreparationSteps from "../containers/PreparationSteps";
 
 const Recipe = () => {
-  const {experiment} = useContext(ExperimentContext)
+  const {experiment, recipeGraphData, dispatch} = useContext(ExperimentContext)
+
+  useEffect(() => {
+    dispatch({type: 'INIT_GRAPH_DATA'})
+  }, [])
+
   const recipe = experiment.recipe
   if (!recipe) {
     return null
@@ -25,6 +32,7 @@ const Recipe = () => {
     basePressure
       ? <span className='md:w-1/2'>{basePressure} Torr</span>
       : <span className='md:w-1/2'>-</span>
+  console.log(recipeGraphData)
 
   return (
     <div className='flex flex-col py-2 px-4 mb-2 border'>
@@ -42,6 +50,21 @@ const Recipe = () => {
       </div>
       <hr className='my-1'/>
       {displayPrepSteps}
+      {recipeGraphData &&
+      <div className='w-full h-screen-3/4'>
+        <h4 className='text-center text-3xl font-bold my-3'>Recipe Graph</h4>
+        <p className='text-center my-3'>x axis: time (min), y axis: value (unit described in the ledger)</p>
+        <Line
+          data={recipeGraphData}
+          options={{
+            scales: {
+              x: {
+                type: 'linear',
+              }
+            }
+          }}
+        />
+      </div>}
     </div>
   )
 }

@@ -2,7 +2,6 @@ import axios from 'axios'
 import React, {useState, useReducer, useEffect, useContext} from 'react'
 
 import {host} from '../settings'
-import {buildExperimentQueryStr} from '../utils/query'
 import toolReducer, {defaultState} from '../reducers/toolReducer'
 import EnvironmentalConditions from '../containers/EnvironmentalConditions'
 import Furnaces from '../containers/Furnaces'

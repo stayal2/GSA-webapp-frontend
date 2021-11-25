@@ -18,7 +18,6 @@ const ExperimentView = () => {
     try {
       const response = await axios.get(url)
       const data = response.data
-      console.log(data)
       dispatch({type: 'SET_EXPERIMENT', payload: data})
     } catch (e) {
       console.log(e)
@@ -44,7 +43,7 @@ const ExperimentView = () => {
     return <></>
   }
   return (
-    <ExperimentContext.Provider value={{experiment: state.experiment}}>
+    <ExperimentContext.Provider value={{...state, dispatch: dispatch}}>
       <div className='w-full container mx-auto my-5'>
         <h2 className='text-center text-4xl font-bold mr-2 mb-4'>Experiment {state.experiment.id}</h2>
         <ExperimentDetails/>
