@@ -1,6 +1,6 @@
 import React, {useContext, useEffect} from 'react'
 import {Line} from "react-chartjs-2";
-import {Chart} from "chart.js/auto";
+import {Chart} from "chart.js/auto"; // Required for graph
 
 import {ExperimentContext} from "../pages/ExperimentView";
 import PreparationSteps from "../containers/PreparationSteps";
@@ -17,7 +17,7 @@ const Recipe = () => {
     return null
   }
   const preparationSteps = recipe.preparation_steps
-  const displayPrepSteps =
+  const prepStepDetails =
     preparationSteps
       ? <PreparationSteps preparationSteps={preparationSteps}/>
       : null
@@ -32,7 +32,6 @@ const Recipe = () => {
     basePressure
       ? <span className='md:w-1/2'>{basePressure} Torr</span>
       : <span className='md:w-1/2'>-</span>
-  console.log(recipeGraphData)
 
   return (
     <div className='flex flex-col py-2 px-4 mb-2 border'>
@@ -49,22 +48,27 @@ const Recipe = () => {
         {displayBasePressure}
       </div>
       <hr className='my-1'/>
-      {displayPrepSteps}
-      {recipeGraphData &&
-      <div className='w-full h-screen-3/4'>
-        <h4 className='text-center text-3xl font-bold my-3'>Recipe Graph</h4>
-        <p className='text-center my-3'>x axis: time (min), y axis: value (unit described in the ledger)</p>
-        <Line
-          data={recipeGraphData}
-          options={{
-            scales: {
-              x: {
-                type: 'linear',
+      {prepStepDetails}
+      {
+        recipeGraphData &&
+        <div className='w-full'>
+          <h4 className='text-center text-3xl font-bold my-3'>Recipe Graph</h4>
+          <p className='text-center my-3'>x axis: time (min), y axis: value (unit described in the ledger)</p>
+          <Line
+            data={recipeGraphData.data}
+            options={{
+              scales: {
+                x: {
+                  type: 'linear',
+                }
               }
-            }
-          }}
-        />
-      </div>}
+            }}
+          />
+          <p className='text-center my-3 mb-2 h-10'>Annealing: 0 - {recipeGraphData.annealingEndTime},
+            Growing: {recipeGraphData.annealingEndTime} - {recipeGraphData.growingEndTime},
+            Cooling: {recipeGraphData.growingEndTime} - {recipeGraphData.coolingEndTime}</p>
+        </div>
+      }
     </div>
   )
 }

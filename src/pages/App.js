@@ -12,7 +12,6 @@ import Navbar from "../components/Navbar";
 import Tool from "./Tool";
 import ExperimentView from "./ExperimentView";
 
-
 export const GlobalContext = React.createContext();
 
 const App = () => {
@@ -49,7 +48,6 @@ const App = () => {
         const signInResult = await signInWithToken(token);
         setSignedIn(signInResult);
       }
-      console.log(signedIn)
     }
     trySignIn();
   }, [])

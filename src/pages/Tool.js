@@ -12,15 +12,6 @@ import Properties from "../containers/Properties";
 import ExperimentLink from "../components/ExperimentLink";
 import {GlobalContext} from "./App";
 
-const catalystOptions = ['Copper', 'Platinum', 'Nickel', 'Palladium', 'Palladium Thin F'].sort()
-const prepNameOptions = ['Annealing', 'Growing', 'Cooling']
-const carbonSourceOptions = ['CH4']
-const shapeOptions = []
-const firstnames = []
-const lastnames = []
-const institutions = []
-const defaultPrecision = 0.0001
-
 export const ToolContext = React.createContext()
 
 const Tool = () => {
@@ -30,7 +21,6 @@ const Tool = () => {
 
   const [loading, setLoading] = useState(false)
 
-
   const [showEnvironmentalConditions, setShowEnvironmentalConditions] = useState(false)
   const [showFurnaces, setShowFurnaces] = useState(false)
   const [showSubstrates, setShowSubstrates] = useState(false)
@@ -38,21 +28,18 @@ const Tool = () => {
   const [showAuthors, setShowAuthors] = useState(false)
   const [showProperties, setShowProperties] = useState(false)
 
-  const init = async () => {
-    setLoading(true)
-    const response = await axios.get(host + '/db/tables/all')
-    const data = response.data
-    if (response.status === 200) {
-      dispatch({type: 'INIT', payload: data})
-    }
-    setLoading(false)
-  }
-
   useEffect(() => {
+    const init = async () => {
+      setLoading(true)
+      const response = await axios.get(host + '/db/tables/all')
+      const data = response.data
+      if (response.status === 200) {
+        dispatch({type: 'INIT', payload: data})
+      }
+      setLoading(false)
+    }
     init()
   }, [])
-
-
   useEffect(() => {
     document.getElementById('environmental-conditions-btn').innerHTML =
       showEnvironmentalConditions ? '&#8211;' : '+'
@@ -92,6 +79,7 @@ const Tool = () => {
       const response = await axios.post(host + '/experiments/filter', body)
       const data = response.data
       setExperimentIds(data)
+      g.flashSuccess('Experiments with selected filters were fetched. Scroll down to see the results.')
     } catch (e) {
       g.flashError('Oops. Something went wrong.')
     } finally {
@@ -100,7 +88,7 @@ const Tool = () => {
   }
 
   if (loading) {
-    return <h1 className='text-5xl'>LOADING...</h1>
+    return <h1 className='text-5xl block h-screen w-screen'>LOADING...</h1>
   }
   return (
     <ToolContext.Provider value={{dispatch: dispatch}}>
@@ -255,8 +243,12 @@ const Tool = () => {
         </div>
       </div>
       <div className='w-full md:flex flex-col md:container md:mx-auto mt-10 border rounded p-5'>
-        <h2 className='text-center text-4xl font-bold mr-2 mb-4'>Results</h2>
+        <h2 className='text-center text-4xl font-bold mb-4'>Results</h2>
         <hr className='mb-5'/>
+        {
+          experimentIds.length === 0 &&
+          <h4 className='text-center text-3xl font-bold'>No experiment was found.</h4>
+        }
         <div className='w-full md:flex flex-row flex-wrap'>
           {experimentIds.map((id) =>
             <ExperimentLink
