@@ -1,8 +1,8 @@
 import React, {useContext} from "react";
-import {ToolContext} from "../pages/Tool";
+import {GlobalContext} from "../pages/App";
 
 const Author = ({idx, id, firstName, lastName, institution, isAddedToFilter, isFilter}) => {
-  const {dispatch} = useContext(ToolContext)
+  const {dispatch} = useContext(GlobalContext)
 
   const displayName =
     <span className='md:w-1/2'>{firstName} {lastName}</span>

@@ -1,5 +1,5 @@
 import React, {useContext} from 'react'
-import {ToolContext} from '../pages/Tool'
+import {GlobalContext} from "../pages/App";
 
 const Furnace = ({
                    idx,
@@ -11,7 +11,7 @@ const Furnace = ({
                    isAddedToFilter,
                    isFilter
                  }) => {
-  const {dispatch} = useContext(ToolContext)
+  const {dispatch} = useContext(GlobalContext)
 
   const displayTubeDiameter =
     tubeDiameter

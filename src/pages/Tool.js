@@ -1,8 +1,7 @@
 import axios from 'axios'
 import React, {useState, useReducer, useEffect, useContext} from 'react'
-
+import {Link} from "react-router-dom";
 import {host} from '../settings'
-import toolReducer, {defaultState} from '../reducers/toolReducer'
 import EnvironmentalConditions from '../containers/EnvironmentalConditions'
 import Furnaces from '../containers/Furnaces'
 import Substrates from '../containers/Substrates'
@@ -12,10 +11,7 @@ import Properties from "../containers/Properties";
 import ExperimentLink from "../components/ExperimentLink";
 import {GlobalContext} from "./App";
 
-export const ToolContext = React.createContext()
-
 const Tool = () => {
-  const [state, dispatch] = useReducer(toolReducer, defaultState)
   const g = useContext(GlobalContext)
   const [experimentIds, setExperimentIds] = useState([])
 
@@ -31,15 +27,19 @@ const Tool = () => {
   useEffect(() => {
     const init = async () => {
       setLoading(true)
-      const response = await axios.get(host + '/db/tables/all')
-      const data = response.data
-      if (response.status === 200) {
-        dispatch({type: 'INIT', payload: data})
+      try {
+        const response = await axios.get(host + '/db/tables/all')
+        const data = response.data
+        if (response.status === 200) {
+          g.dispatch({type: 'INIT', payload: data})
+        }
+      } catch (e) {
+        g.flashError('Oops. Something went wrong.')
       }
       setLoading(false)
     }
     init()
-  }, [])
+  }, [g])
   useEffect(() => {
     document.getElementById('environmental-conditions-btn').innerHTML =
       showEnvironmentalConditions ? '&#8211;' : '+'
@@ -68,12 +68,12 @@ const Tool = () => {
   const fetchExperimentIds = async (e) => {
     setLoading(true)
     const body = {
-      environmentalConditionFilters: state.environmentalConditionFilters,
-      furnaceFilters: state.furnaceFilters,
-      substrateFilters: state.substrateFilters,
-      recipeFilters: state.recipeFilters,
-      propertyFilters: state.propertyFilters,
-      authorFilters: state.authorFilters,
+      environmentalConditionFilters: g.state.environmentalConditionFilters,
+      furnaceFilters: g.state.furnaceFilters,
+      substrateFilters: g.state.substrateFilters,
+      recipeFilters: g.state.recipeFilters,
+      propertyFilters: g.state.propertyFilters,
+      authorFilters: g.state.authorFilters,
     }
     try {
       const response = await axios.post(host + '/experiments/filter', body)
@@ -91,8 +91,13 @@ const Tool = () => {
     return <h1 className='text-5xl block h-screen w-screen'>LOADING...</h1>
   }
   return (
-    <ToolContext.Provider value={{dispatch: dispatch}}>
-      <div className='w-full md:flex flex-row md:container md:mx-auto mt-10 border rounded p-5'>
+    <>
+      <div className='w-full container mx-auto flex flex-row justify-end mt-5'>
+        <Link to='/tool/submit' className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'>
+          Submit my experiment
+        </Link>
+      </div>
+      <div className='w-full md:flex flex-row md:container md:mx-auto mt-5 border rounded p-5'>
         <div className='md:w-1/2 px-10'>
           <h2 className='text-center text-4xl font-bold mr-2 md:mb-4'>Filters</h2>
           <div className='w-full border rounded p-5'>
@@ -110,7 +115,7 @@ const Tool = () => {
               {showEnvironmentalConditions || <hr/>}
               {showEnvironmentalConditions &&
               <EnvironmentalConditions
-                environmentalConditions={state.environmentalConditions}
+                environmentalConditions={g.state.environmentalConditions}
               />}
             </section>
 
@@ -127,7 +132,7 @@ const Tool = () => {
               {showFurnaces || <hr/>}
               {showFurnaces &&
               <Furnaces
-                furnaces={state.furnaces}
+                furnaces={g.state.furnaces}
               />}
             </section>
 
@@ -144,7 +149,7 @@ const Tool = () => {
               {showSubstrates || <hr/>}
               {showSubstrates &&
               <Substrates
-                substrates={state.substrates}
+                substrates={g.state.substrates}
               />}
             </section>
 
@@ -162,7 +167,7 @@ const Tool = () => {
               {showRecipes || <hr/>}
               {showRecipes &&
               <Recipes
-                recipes={state.recipes}
+                recipes={g.state.recipes}
               />}
             </section>
 
@@ -179,7 +184,7 @@ const Tool = () => {
               {showProperties || <hr/>}
               {showProperties &&
               <Properties
-                properties={state.properties}
+                properties={g.state.properties}
               />}
             </section>
 
@@ -196,38 +201,38 @@ const Tool = () => {
               {showAuthors || <hr/>}
               {showAuthors &&
               <Authors
-                authors={state.authors}
+                authors={g.state.authors}
               />}
             </section>
           </div>
         </div>
 
-        <div className='w-1/2 px-10'>
+        <div className='md:w-1/2 px-10'>
           <div className='md:w-full flex flex-col'>
             <h2 className='text-center text-4xl font-bold mr-2 md:mb-4'>Current Filters</h2>
             <div className='h-screen-3/4 overflow-y-scroll border p-3'>
               <EnvironmentalConditions
-                environmentalConditions={state.environmentalConditionFilters}
+                environmentalConditions={g.state.environmentalConditionFilters}
                 isFilter
               />
               <Furnaces
-                furnaces={state.furnaceFilters}
+                furnaces={g.state.furnaceFilters}
                 isFilter
               />
               <Substrates
-                substrates={state.substrateFilters}
+                substrates={g.state.substrateFilters}
                 isFilter
               />
               <Recipes
-                recipes={state.recipeFilters}
+                recipes={g.state.recipeFilters}
                 isFilter
               />
               <Properties
-                properties={state.propertyFilters}
+                properties={g.state.propertyFilters}
                 isFilter
               />
               <Authors
-                authors={state.authorFilters}
+                authors={g.state.authorFilters}
                 isFilter
               />
             </div>
@@ -258,7 +263,7 @@ const Tool = () => {
           )}
         </div>
       </div>
-    </ToolContext.Provider>
+    </>
   )
 }
 

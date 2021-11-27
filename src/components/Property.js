@@ -1,5 +1,5 @@
 import React, {useContext} from "react";
-import {ToolContext} from "../pages/Tool";
+import {GlobalContext} from "../pages/App";
 
 const Property = ({
                     idx,
@@ -13,7 +13,7 @@ const Property = ({
                     isAddedToFilter,
                     isFilter
                   }) => {
-  const {dispatch} = useContext(ToolContext)
+  const {dispatch} = useContext(GlobalContext)
 
   const displayAvgThicknessOfGrowth =
     <span className='md:w-1/2'>{avgThicknessOfGrowth} nm</span>

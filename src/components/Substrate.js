@@ -1,8 +1,8 @@
 import React, {useContext} from 'react'
-import {ToolContext} from '../pages/Tool'
+import {GlobalContext} from "../pages/App";
 
 const Substrate = ({idx, id, catalyst, thickness, diameter, length, surfaceArea, isAddedToFilter, isFilter}) => {
-  const {dispatch} = useContext(ToolContext)
+  const {dispatch} = useContext(GlobalContext)
 
   const displayCatalyst =
     catalyst

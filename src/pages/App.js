@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useReducer} from "react";
 import {
   BrowserRouter as Router, Switch, Route, Link
 } from "react-router-dom";
@@ -11,10 +11,12 @@ import Home from "./Home";
 import Navbar from "../components/Navbar";
 import Tool from "./Tool";
 import ExperimentView from "./ExperimentView";
+import toolReducer, {defaultState} from "../reducers/toolReducer";
 
 export const GlobalContext = React.createContext();
 
 const App = () => {
+  const [state, dispatch] = useReducer(toolReducer, defaultState)
   const [signedIn, setSignedIn] = useState(false);
   const [successMsg, setSuccessMsg] = useState(null)
   const [errorMsg, setErrorMsg] = useState(null)

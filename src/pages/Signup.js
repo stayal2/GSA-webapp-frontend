@@ -1,15 +1,17 @@
 import axios from 'axios'
-import React, { useState } from 'react'
-import { Redirect } from 'react-router'
-import { host } from '../settings'
+import React, {useContext, useState} from 'react'
+import {Redirect} from 'react-router'
+import {host} from '../settings'
+import {GlobalContext} from "./App";
 
-const Signin = () => {
+const Signup = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [firstname, setFirstname] = useState('')
   const [lastname, setLastname] = useState('')
   const [institution, setInstitution] = useState('')
   const [signedUp, setSignedUp] = useState(false)
+  const g = useContext(GlobalContext)
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -20,15 +22,15 @@ const Signin = () => {
       last_name: lastname,
       institution
     }
-    axios.post(host + '/auth/signup', data)
-      .then(res => {
-        if (res.status >= 200 && res.status < 300) {
-          setSignedUp(true)
-        }
-      })
-      .catch(e => {
-        console.log(e)
-      })
+    try {
+      const response = axios.post(host + '/auth/signup', data)
+      if (response.status === 200) {
+        setSignedUp(true)
+        g.flashSuccess('The account has been created.')
+      }
+    } catch (e) {
+      g.flashError('Ooops. Something went wrong.')
+    }
   }
   const handleEmailChange = (e) => {
     setEmail(e.target.value)
@@ -47,11 +49,11 @@ const Signin = () => {
   }
 
   if (signedUp) {
-    return <Redirect to='/' />
+    return <Redirect to='/'/>
   }
 
   return (
-    <div className='w-full max-w-xs'>
+    <div className='w-full max-w-xs container mx-auto mt-5'>
       <form className='bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4' onSubmit={(e) => handleSubmit(e)}>
         <div className='mb-4'>
           <label className='block text-gray-700 text-sm font-bold mb-2' htmlFor='email'>
@@ -100,16 +102,16 @@ const Signin = () => {
         </div>
 
         <div className='flex items-center justify-between'>
-          <button className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline' type='submit'>
+          <button
+            className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline'
+            type='submit'>
             Sign Up
           </button>
         </div>
       </form>
-      <p className='text-center text-gray-500 text-xs'>
-        &copy;2020 Acme Corp. All rights reserved.
-      </p>
+
     </div>
   )
 }
 
-export default Signin
+export default Signup
