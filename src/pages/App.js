@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useReducer} from "react";
 import {
-  BrowserRouter as Router, Switch, Route, Link
+  BrowserRouter as Router, Switch, Route
 } from "react-router-dom";
 import './App.css';
 
@@ -11,13 +11,14 @@ import Home from "./Home";
 import Navbar from "../components/Navbar";
 import Tool from "./Tool";
 import ExperimentView from "./ExperimentView";
-import toolReducer, {defaultState} from "../reducers/toolReducer";
+import toolReducer, {toolDefaultState} from "../reducers/toolReducer";
+import userReducer, {userDefaultState} from "../reducers/userReducer";
 
 export const GlobalContext = React.createContext();
 
 const App = () => {
-  const [state, dispatch] = useReducer(toolReducer, defaultState)
-  const [signedIn, setSignedIn] = useState(false);
+  const [toolState, toolDispatch] = useReducer(toolReducer, toolDefaultState)
+  const [userState, userDispatch] = useReducer(userReducer, userDefaultState)
   const [successMsg, setSuccessMsg] = useState(null)
   const [errorMsg, setErrorMsg] = useState(null)
 
@@ -47,15 +48,26 @@ const App = () => {
     const trySignIn = async () => {
       const token = window.localStorage.getItem('token');
       if (token) {
-        const signInResult = await signInWithToken(token);
-        setSignedIn(signInResult);
+        const response = await signInWithToken(token);
+        if (response) {
+          window.localStorage.setItem('token', response.token)
+          const payload = {
+            email: response.email,
+            authorId: response.author_id
+          }
+          userDispatch({type: 'SIGN_IN', payload})
+        } else {
+          userDispatch({type: 'SIGN_OUT'})
+        }
       }
     }
     trySignIn();
   }, [])
 
   return (
-    <GlobalContext.Provider value={{signedIn, setSignedIn, flashSuccess, flashError}}>
+    <GlobalContext.Provider
+      value={{userState, userDispatch, flashSuccess, flashError, toolState, toolDispatch}}
+    >
       <Router>
         <Navbar/>
         {successMsg}

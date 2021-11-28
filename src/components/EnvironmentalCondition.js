@@ -2,7 +2,7 @@ import React, {useContext} from 'react'
 import {GlobalContext} from "../pages/App";
 
 const EnvironmentalCondition = ({idx, id, ambientTemperature, dewPoint, isAddedToFilter, isFilter}) => {
-  const {dispatch} = useContext(GlobalContext)
+  const {toolDispatch} = useContext(GlobalContext)
 
   const displayAmbientTemperature =
     ambientTemperature
@@ -21,7 +21,7 @@ const EnvironmentalCondition = ({idx, id, ambientTemperature, dewPoint, isAddedT
         className='w-9 h-9 text-center bg-red-500 hover:bg-red-700 text-white text-3xl font-bold rounded focus:outline-none focus:shadow-outline'
         type='button'
         onClick={() => {
-          dispatch({type: 'DEL_ENVIRONMENTAL_CONDITION_FILTER', payload: {idx: idx}})
+          toolDispatch({type: 'DEL_ENVIRONMENTAL_CONDITION_FILTER', payload: {idx: idx}})
         }}
       >
         -
@@ -42,7 +42,7 @@ const EnvironmentalCondition = ({idx, id, ambientTemperature, dewPoint, isAddedT
         className='w-9 h-9 text-center bg-green-500 hover:bg-green-700 text-white text-3xl font-bold rounded focus:outline-none focus:shadow-outline'
         type='button'
         onClick={() => {
-          dispatch({type: 'ADD_ENVIRONMENTAL_CONDITION_FILTER', payload: {idx: idx}})
+          toolDispatch({type: 'ADD_ENVIRONMENTAL_CONDITION_FILTER', payload: {idx: idx}})
         }}
       >
         +

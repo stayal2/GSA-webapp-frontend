@@ -1,5 +1,4 @@
-export const defaultState = {
-  filters: [],
+export const toolDefaultState = {
   environmentalConditions: [],
   environmentalConditionFilters: [],
   furnaces: [],

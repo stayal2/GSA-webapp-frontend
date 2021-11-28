@@ -1,4 +1,4 @@
-export const defaultState = {
+export const experimentDefaultState = {
   experiment: null,
   recipeGraphData: null,
 }

@@ -6,11 +6,11 @@ import {ExperimentContext} from "../pages/ExperimentView";
 import PreparationSteps from "../containers/PreparationSteps";
 
 const Recipe = () => {
-  const {experiment, recipeGraphData, dispatch} = useContext(ExperimentContext)
+  const {experiment, recipeGraphData, experimentDispatch} = useContext(ExperimentContext)
 
   useEffect(() => {
-    dispatch({type: 'INIT_GRAPH_DATA'})
-  }, [])
+    experimentDispatch({type: 'INIT_GRAPH_DATA'})
+  }, [experimentDispatch])
 
   const recipe = experiment.recipe
   if (!recipe) {

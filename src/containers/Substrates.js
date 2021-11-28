@@ -36,7 +36,7 @@ const Substrates = ({substrates, isFilter}) => {
   let scrollbarClass = 'w-full'
   let searchBar
   if (!isFilter) {
-    scrollbarClass += ' border p-3 h-screen-3/4  overflow-y-scroll'
+    scrollbarClass += ' border p-3 h-screen-3/4 overflow-y-scroll'
     searchBar =
       <div className='flex flex-col border rounded mb-2 p-2'>
         <h6 className='block tracking-wide text-gray-700 font-bold align-middle mx-auto'> Catalyst</h6>
@@ -66,8 +66,9 @@ const Substrates = ({substrates, isFilter}) => {
           </div>
         </div>
         <hr/>
-        <h6 className='block tracking-wide text-gray-700 font-bold align-middle mx-auto'> Thickness Range
-          (um&sup2;)</h6>
+        <h6 className='block tracking-wide text-gray-700 font-bold align-middle mx-auto'>
+          Thickness Range (um&sup2;)
+        </h6>
         <div className='flex flex-row justify-center my-2'>
           <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
             <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
@@ -93,7 +94,9 @@ const Substrates = ({substrates, isFilter}) => {
           </div>
         </div>
         <hr/>
-        <h6 className='block tracking-wide text-gray-700 font-bold align-middle mx-auto my-2'> Diameter Range ()</h6>
+        <h6 className='block tracking-wide text-gray-700 font-bold align-middle mx-auto my-2'>
+          Diameter Range (mm)
+        </h6>
         <div className='flex flex-row justify-center my-2'>
           <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
             <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
@@ -119,7 +122,9 @@ const Substrates = ({substrates, isFilter}) => {
           </div>
         </div>
         <hr/>
-        <h6 className='block tracking-wide text-gray-700 font-bold align-middle mx-auto my-2'> Length Range ()</h6>
+        <h6 className='block tracking-wide text-gray-700 font-bold align-middle mx-auto my-2'>
+          Length Range (mm)
+        </h6>
         <div className='flex flex-row justify-center my-2'>
           <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
             <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="length-min">
@@ -143,8 +148,9 @@ const Substrates = ({substrates, isFilter}) => {
           </div>
         </div>
         <hr/>
-        <h6 className='block tracking-wide text-gray-700 font-bold align-middle mx-auto my-2'> Surface Area Range
-          ()</h6>
+        <h6 className='block tracking-wide text-gray-700 font-bold align-middle mx-auto my-2'>
+          Surface Area Range (mm&sup2;)
+        </h6>
         <div className='flex flex-row justify-center my-2'>
           <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
             <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"

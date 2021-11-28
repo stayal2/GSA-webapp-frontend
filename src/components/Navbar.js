@@ -3,10 +3,10 @@ import {Link} from 'react-router-dom'
 import {GlobalContext} from "../pages/App";
 
 const Navbar = () => {
-  const {signedIn, setSignedIn} = useContext(GlobalContext)
+  const {userState, userDispatch} = useContext(GlobalContext)
 
   const signOut = () => {
-    setSignedIn(false)
+    userDispatch({type: 'SIGN_OUT'})
     window.localStorage.removeItem('token')
   }
   const signInUp =
@@ -56,8 +56,8 @@ const Navbar = () => {
             </div>
           </div>
           <div>
-            {signedIn && profileSignOut}
-            {signedIn || signInUp}
+            {userState.signedIn && profileSignOut}
+            {userState.signedIn || signInUp}
           </div>
         </div>
       </div>

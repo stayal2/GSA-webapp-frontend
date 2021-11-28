@@ -2,7 +2,7 @@ import React, {useContext} from "react";
 import {GlobalContext} from "../pages/App";
 
 const Author = ({idx, id, firstName, lastName, institution, isAddedToFilter, isFilter}) => {
-  const {dispatch} = useContext(GlobalContext)
+  const {toolDispatch} = useContext(GlobalContext)
 
   const displayName =
     <span className='md:w-1/2'>{firstName} {lastName}</span>
@@ -16,7 +16,7 @@ const Author = ({idx, id, firstName, lastName, institution, isAddedToFilter, isF
         className='w-9 h-9 text-center bg-red-500 hover:bg-red-700 text-white text-3xl font-bold rounded focus:outline-none focus:shadow-outline'
         type='button'
         onClick={() => {
-          dispatch({type: 'DEL_AUTHOR_FILTER', payload: {idx: idx}})
+          toolDispatch({type: 'DEL_AUTHOR_FILTER', payload: {idx: idx}})
         }}
       >
         -
@@ -37,7 +37,7 @@ const Author = ({idx, id, firstName, lastName, institution, isAddedToFilter, isF
         className='w-9 h-9 text-center bg-green-500 hover:bg-green-700 text-white text-3xl font-bold rounded focus:outline-none focus:shadow-outline'
         type='button'
         onClick={() => {
-          dispatch({type: 'ADD_AUTHOR_FILTER', payload: {idx: idx}})
+          toolDispatch({type: 'ADD_AUTHOR_FILTER', payload: {idx: idx}})
         }}
       >
         +
@@ -48,7 +48,7 @@ const Author = ({idx, id, firstName, lastName, institution, isAddedToFilter, isF
   return (
     <div className='flex flex-col py-2 px-4 mb-2 border rounded'>
       <div className='flex justify-between'>
-        <h6 className='font-bold ml-3'> Author #{id}</h6>
+        <h6 className='font-bold ml-3'>Author #{id}</h6>
         {btn}
       </div>
       <hr className='my-1'/>
