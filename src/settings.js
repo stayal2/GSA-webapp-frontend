@@ -1,4 +1,4 @@
-export const host = 'http://localhost:5000';
+export const host = 'http://3.131.85.159:5000';
 
 export const catalystOptions = ['Copper', 'Platinum', 'Nickel', 'Palladium', 'Palladium Thin F'].sort()
 export const prepNameOptions = ['Annealing', 'Growing', 'Cooling']
