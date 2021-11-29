@@ -30,7 +30,7 @@ const Tool = () => {
     const init = async () => {
       setLoading(true)
       try {
-        const response = await axios.get(host + '/db/tables/all')
+        const response = await axios.get(host + '/tool/init')
         const data = response.data
         if (response.status === 200) {
           g.toolDispatch({type: 'INIT', payload: data})
