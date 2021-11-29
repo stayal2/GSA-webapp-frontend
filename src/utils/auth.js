@@ -1,5 +1,14 @@
 import axios from "axios";
-import { host } from "../settings";
+import {host} from "../settings";
+
+export const signInWithCredentials = async (email, password) => {
+  try {
+    const response = await axios.post(host + '/auth/signin', {email, password})
+    return response.data
+  } catch (e) {
+    return null
+  }
+}
 
 export const signInWithToken = async (token) => {
   const config = {
@@ -7,12 +16,10 @@ export const signInWithToken = async (token) => {
       'Authorization': token
     }
   }
-  const response = await axios.post(host + '/auth/signin', {}, config);
-  const data = response.data;
-  const newToken = data.token;
-  if (token) {
-    window.sessionStorage.setItem('token', newToken);
-    return true;
+  try {
+    const response = await axios.post(host + '/auth/signin', {}, config);
+    return response.data
+  } catch (e) {
+    return null
   }
-  return false
 }

@@ -1,5 +1,5 @@
 import React, {useContext} from 'react'
-import {ToolContext} from '../pages/Tool'
+import {GlobalContext} from "../pages/App";
 
 const Furnace = ({
                    idx,
@@ -11,7 +11,7 @@ const Furnace = ({
                    isAddedToFilter,
                    isFilter
                  }) => {
-  const {dispatch} = useContext(ToolContext)
+  const {toolDispatch} = useContext(GlobalContext)
 
   const displayTubeDiameter =
     tubeDiameter
@@ -40,7 +40,7 @@ const Furnace = ({
         className='w-9 h-9 text-center bg-red-500 hover:bg-red-700 text-white text-3xl font-bold rounded focus:outline-none focus:shadow-outline'
         type='button'
         onClick={() => {
-          dispatch({type: 'DEL_FURNACE_FILTER', payload: {idx: idx}})
+          toolDispatch({type: 'DEL_FURNACE_FILTER', payload: {idx: idx}})
         }}
       >
         -
@@ -61,7 +61,7 @@ const Furnace = ({
         className='w-9 h-9 text-center bg-green-500 hover:bg-green-700 text-white text-3xl font-bold rounded focus:outline-none focus:shadow-outline'
         type='button'
         onClick={() => {
-          dispatch({type: 'ADD_FURNACE_FILTER', payload: {idx: idx}})
+          toolDispatch({type: 'ADD_FURNACE_FILTER', payload: {idx: idx}})
         }}
       >
         +

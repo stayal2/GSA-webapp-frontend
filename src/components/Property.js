@@ -1,5 +1,5 @@
 import React, {useContext} from "react";
-import {ToolContext} from "../pages/Tool";
+import {GlobalContext} from "../pages/App";
 
 const Property = ({
                     idx,
@@ -13,7 +13,7 @@ const Property = ({
                     isAddedToFilter,
                     isFilter
                   }) => {
-  const {dispatch} = useContext(ToolContext)
+  const {toolDispatch} = useContext(GlobalContext)
 
   const displayAvgThicknessOfGrowth =
     <span className='md:w-1/2'>{avgThicknessOfGrowth} nm</span>
@@ -35,7 +35,7 @@ const Property = ({
         className='w-9 h-9 text-center bg-red-500 hover:bg-red-700 text-white text-3xl font-bold rounded focus:outline-none focus:shadow-outline'
         type='button'
         onClick={() => {
-          dispatch({type: 'DEL_PROPERTY_FILTER', payload: {idx: idx}})
+          toolDispatch({type: 'DEL_PROPERTY_FILTER', payload: {idx: idx}})
         }}
       >
         -
@@ -56,7 +56,7 @@ const Property = ({
         className='w-9 h-9 text-center bg-green-500 hover:bg-green-700 text-white text-3xl font-bold rounded focus:outline-none focus:shadow-outline'
         type='button'
         onClick={() => {
-          dispatch({type: 'ADD_PROPERTY_FILTER', payload: {idx: idx}})
+          toolDispatch({type: 'ADD_PROPERTY_FILTER', payload: {idx: idx}})
         }}
       >
         +

@@ -1,5 +1,5 @@
 import React, {useEffect, useReducer, useState} from "react";
-import experimentReducer, {defaultState} from "../reducers/experimentReducer";
+import experimentReducer, {experimentDefaultState} from "../reducers/experimentReducer";
 import {host} from "../settings";
 import axios from "axios";
 import {Redirect} from "react-router-dom";
@@ -11,15 +11,14 @@ export const ExperimentContext = React.createContext();
 const ExperimentView = () => {
   const [experimentId, setExperimentId] = useState(null)
   const [isError, setIsError] = useState(false)
-  const [state, dispatch] = useReducer(experimentReducer, defaultState)
+  const [experimentState, experimentDispatch] = useReducer(experimentReducer, experimentDefaultState)
 
   const getExperiment = async (experimentId) => {
     const url = host + '/experiments/' + experimentId
     try {
       const response = await axios.get(url)
       const data = response.data
-      console.log(data)
-      dispatch({type: 'SET_EXPERIMENT', payload: data})
+      experimentDispatch({type: 'SET_EXPERIMENT', payload: data})
     } catch (e) {
       console.log(e)
     }
@@ -40,13 +39,13 @@ const ExperimentView = () => {
   if (isError) {
     return < Redirect to='/tool'/>
   }
-  if (!state.experiment) {
+  if (!experimentState.experiment) {
     return <></>
   }
   return (
-    <ExperimentContext.Provider value={{experiment: state.experiment}}>
+    <ExperimentContext.Provider value={{...experimentState, experimentDispatch}}>
       <div className='w-full container mx-auto my-5'>
-        <h2 className='text-center text-4xl font-bold mr-2 mb-4'>Experiment {state.experiment.id}</h2>
+        <h2 className='text-center text-4xl font-bold mr-2 mb-4'>Experiment {experimentState.experiment.id}</h2>
         <ExperimentDetails/>
       </div>
     </ExperimentContext.Provider>
