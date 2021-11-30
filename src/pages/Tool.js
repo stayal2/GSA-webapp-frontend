@@ -1,5 +1,5 @@
 import axios from 'axios'
-import React, {useState, useEffect, useContext} from 'react'
+import React, {useState, useEffect, useContext, useRef} from 'react'
 import {host} from '../settings'
 import EnvironmentalConditions from '../containers/EnvironmentalConditions'
 import Furnaces from '../containers/Furnaces'
@@ -25,6 +25,8 @@ const Tool = () => {
   const [showRecipes, setShowRecipes] = useState(false)
   const [showAuthors, setShowAuthors] = useState(false)
   const [showProperties, setShowProperties] = useState(false)
+
+  const queryResults = useRef(null)
 
   useEffect(() => {
     const init = async () => {
@@ -84,6 +86,7 @@ const Tool = () => {
       setExperimentIds(data)
       g.flashSuccess('Experiments with selected filters were fetched. Scroll down to see the results.')
     } catch (e) {
+      console.log(e)
       g.flashError('Oops. Something went wrong. Please try again later.')
     } finally {
       setLoading(false)
@@ -235,20 +238,31 @@ const Tool = () => {
                   isFilter
                 />
               </div>
-              <button
-                className='self-center w-1/2 bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-5'
-                type='button' onClick={() => {
-                fetchExperimentIds()
-              }}
-              >
-                Search Associated Experiments
-              </button>
+              <div className='md:w-full md:flex md:flex-row md:justify-evenly'>
+                <button
+                  className='self-center w-1/3 bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-5'
+                  type='button' onClick={() => {
+                  fetchExperimentIds()
+                }}
+                >
+                  Search Experiments
+                </button>
+                {experimentIds.length > 0 &&
+                <button
+                  className='self-center w-1/3 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-5'
+                  type='button' onClick={() => {
+                  queryResults.current.scrollIntoView({behavior: "smooth"})
+                }}
+                >
+                  See Results
+                </button>}
+              </div>
             </div>
           </div>
         </div>
       </div>
 
-      <div className='w-full md:flex flex-col md:container md:mx-auto mt-10 border rounded p-5'>
+      <div ref={queryResults} className='w-full md:flex flex-col md:container md:mx-auto mt-10 border rounded p-5'>
         <h2 className='text-center text-4xl font-bold mb-4'>Query Results</h2>
         <hr className='mb-5'/>
         {
