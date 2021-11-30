@@ -1,34 +1,47 @@
-import {carbonSourceOptions, catalystOptions} from "../settings";
+import {carbonSourceOptions, catalystOptions, prepNameOptions, shapeOptions, materialNameOptions} from "../settings";
 
 export const submissionDefaultState = {
+  materialName: materialNameOptions[0],
   useCustomEnvironmentalConditions: false,
-  useCustomFurnace: false,
-  useCustomSubstrate: false,
-  useCustomRecipe: false,
-  useCustomProperties: false,
   environmentalConditionsNumber: 1,
   ambientTemperature: 0,
   dewPoint: 0,
+  useCustomFurnace: false,
   furnaceNumber: 1,
   tubeDiameter: 0,
   crossSectionalArea: 0,
   tubeLength: 0,
   lengthOfHeatedRegion: 0,
+  useCustomSubstrate: false,
   substrateNumber: 1,
   catalyst: catalystOptions[0],
   thickness: 0,
   diameter: 0,
   length: 0,
   surfaceArea: 0,
+  useCustomRecipe: false,
   recipeNumber: 1,
   carbonSource: carbonSourceOptions[0],
   basePressure: 0,
+  preparationSteps: [],
+  name: prepNameOptions[0],
+  duration: 0,
+  furnaceTemperature: 0,
+  furnacePressure: 0,
+  sampleLocation: 0,
+  heliumFlowRate: 0,
+  hydrogenFlowRate: 0,
+  carbonSourceFlowRate: 0,
+  argonFlowRate: 0,
+  coolingRate: 0,
+  useCustomProperties: false,
   propertiesNumber: 1,
   avgThicknessOfGrowth: 0,
   stdDevOfGrowth: 0,
   numberOfLayers: 0,
   growthCoverage: 0,
   domainSize: 0,
+  shape: shapeOptions[0],
   authors: [],
 }
 
@@ -43,6 +56,12 @@ const submissionReducer = (state, action) => {
       return {
         ...state,
         authors: [...state.authors, action.payload.author]
+      }
+    }
+    case 'MATERIAL_NAME_CHANGE': {
+      return {
+        ...state,
+        materialName: action.payload
       }
     }
     case 'SET_CUSTOM_ENVIRONMENTAL_CONDITIONS': {
@@ -165,6 +184,66 @@ const submissionReducer = (state, action) => {
         basePressure: action.payload
       }
     }
+    case 'NAME_CHANGE': {
+      return {
+        ...state,
+        name: action.payload
+      }
+    }
+    case 'DURATION_CHANGE': {
+      return {
+        ...state,
+        duration: action.payload
+      }
+    }
+    case 'FURNACE_TEMPERATURE_CHANGE': {
+      return {
+        ...state,
+        furnaceTemperature: action.payload
+      }
+    }
+    case 'FURNACE_PRESSURE_CHANGE': {
+      return {
+        ...state,
+        furnacePressure: action.payload
+      }
+    }
+    case 'SAMPLE_LOCATION_CHANGE': {
+      return {
+        ...state,
+        sampleLocation: action.payload
+      }
+    }
+    case 'HELIUM_FLOW_RATE_CHANGE': {
+      return {
+        ...state,
+        heliumFlowRate: action.payload
+      }
+    }
+    case 'HYDROGEN_FLOW_RATE_CHANGE': {
+      return {
+        ...state,
+        hydrogenFlowRate: action.payload
+      }
+    }
+    case 'CARBON_SOURCE_FLOW_RATE_CHANGE': {
+      return {
+        ...state,
+        carbonSourceFlowRate: action.payload
+      }
+    }
+    case 'ARGON_FLOW_RATE_CHANGE': {
+      return {
+        ...state,
+        argonFlowRate: action.payload
+      }
+    }
+    case 'COOLING_RATE_CHANGE': {
+      return {
+        ...state,
+        coolingRate: action.payload
+      }
+    }
     case 'SET_CUSTOM_PROPERTIES': {
       return {
         ...state,
@@ -207,10 +286,43 @@ const submissionReducer = (state, action) => {
         domainSize: action.payload
       }
     }
+    case 'SHAPE_CHANGE': {
+      return {
+        ...state,
+        shape: action.payload
+      }
+    }
     case 'ADD_AUTHOR' : {
       return {
         ...state,
         authors: [...state.authors, action.payload]
+      }
+    }
+    case 'ADD_PREPARATION_STEP' : {
+      const newPrepStep = {
+        name: state.name,
+        duration: state.duration,
+        furnaceTemperature: state.furnaceTemperature,
+        furnacePressure: state.furnacePressure,
+        sampleLocation: state.sampleLocation,
+        heliumFlowRate: state.heliumFlowRate,
+        hydrogenFlowRate: state.hydrogenFlowRate,
+        carbonSourceFlowRate: state.carbonSourceFlowRate,
+        argonFlowRate: state.argonFlowRate,
+        coolingRate: state.coolingRate,
+      }
+      return {
+        ...state,
+        preparationSteps: [...state.preparationSteps, newPrepStep]
+      }
+    }
+    case 'DEL_PREPARATION_STEP' : {
+      const newPrepSteps = state.preparationSteps.filter((p, i) => {
+        return i !== action.payload
+      })
+      return {
+        ...state,
+        preparationSteps: newPrepSteps
       }
     }
     case 'DEL_AUTHOR' : {
