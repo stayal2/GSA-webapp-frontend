@@ -1,16 +1,9 @@
-import React, {useContext, useEffect} from 'react'
-import {Line} from "react-chartjs-2";
-import {Chart} from "chart.js/auto"; // Required for graph
-
+import React, {useContext} from 'react'
 import {ExperimentContext} from "../pages/ExperimentView";
 import PreparationSteps from "../containers/PreparationSteps";
 
 const Recipe = () => {
-  const {experiment, recipeGraphData, experimentDispatch} = useContext(ExperimentContext)
-
-  useEffect(() => {
-    experimentDispatch({type: 'INIT_GRAPH_DATA'})
-  }, [experimentDispatch])
+  const {experiment} = useContext(ExperimentContext)
 
   const recipe = experiment.recipe
   if (!recipe) {
@@ -49,26 +42,6 @@ const Recipe = () => {
       </div>
       <hr className='my-1'/>
       {prepStepDetails}
-      {
-        recipeGraphData &&
-        <div className='w-full'>
-          <h4 className='text-center text-3xl font-bold my-3'>Recipe Graph</h4>
-          <p className='text-center my-3'>x axis: time (min), y axis: value (unit described in the ledger)</p>
-          <Line
-            data={recipeGraphData.data}
-            options={{
-              scales: {
-                x: {
-                  type: 'linear',
-                }
-              }
-            }}
-          />
-          <p className='text-center my-3 mb-2 h-10'>Annealing: 0 - {recipeGraphData.annealingEndTime},
-            Growing: {recipeGraphData.annealingEndTime} - {recipeGraphData.growingEndTime},
-            Cooling: {recipeGraphData.growingEndTime} - {recipeGraphData.coolingEndTime}</p>
-        </div>
-      }
     </div>
   )
 }

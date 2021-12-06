@@ -8,15 +8,14 @@ import DetailAuthors from "../components/DetailAuthors";
 
 const ExperimentDetails = () => {
   return (
-    <div className='border rounded p-5'>
-      <h3 className='text-center text-3xl font-bold mr-2 mb-4'>Details</h3>
+    <>
       <DetailAuthors/>
       <DetailEnvironmentalCondition/>
       <DetailFurnace/>
       <DetailSubstrate/>
       <DetailProperties/>
       <DetailRecipe/>
-    </div>
+    </>
   )
 }
 

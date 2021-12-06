@@ -1,7 +1,6 @@
 import React, {useState, useContext} from 'react'
 import {Redirect} from 'react-router'
 import {GlobalContext} from './App'
-import {Link} from "react-router-dom";
 import {signInWithCredentials} from "../utils/auth";
 
 const Signin = () => {
@@ -9,63 +8,72 @@ const Signin = () => {
   const [password, setPassword] = useState('')
   const g = useContext(GlobalContext)
 
-  const handleSubmit = async (e) => {
+  const onClickSignInBtn = async (e) => {
     e.preventDefault()
-    const response = await signInWithCredentials(email, password)
-    if (response) {
-      window.localStorage.setItem('token', response.token)
+    try {
+      const data = await signInWithCredentials(email, password)
+      window.localStorage.setItem('token', data.token)
       const payload = {
-        email: response.email,
-        authorId: response.author_id
+        email: data.email,
+        authorId: data.author_id
       }
       g.userDispatch({type: 'SIGN_IN', payload})
-    } else {
-      g.userDispatch({type: 'SIGN_OUT'})
+    } catch (err) {
+      if (err.response.status === 403) {
+        g.flashError("Incorrect email or password.")
+      }
     }
   }
 
-  const handleEmailChange = (e) => {
-    setEmail(e.target.value)
-  }
-  const handlePasswordChange = (e) => {
-    setPassword(e.target.value)
-  }
   if (g.userState.signedIn) {
     return <Redirect to='/'/>
   }
   return (
-    <div className='w-full max-w-xs container mx-auto mt-5'>
-      <form className='bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4' onSubmit={e => handleSubmit(e)}>
-        <div className='mb-4'>
-          <label className='block text-gray-700 text-sm font-bold mb-2' htmlFor='email'>
+    <form className='md:w-1/2 flex flex-col md:items-center mx-auto border rounded my-6 py-6'
+          onSubmit={onClickSignInBtn}>
+      <h2 className='text-center text-3xl font-bold mb-6'>Sign In</h2>
+      <div className="md:w-full md:flex md:items-center mb-6">
+        <div className="md:w-1/3">
+          <label className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4"
+                 htmlFor="email">
             Email
           </label>
+        </div>
+        <div className="md:w-1/3">
           <input
-            className='shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
-            id='email' type='text' placeholder='Email' onChange={(e) => handleEmailChange(e)}
+            className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
+            id="email" type="email" placeholder="Email"
+            value={email}
+            onChange={e => {
+              setEmail(e.target.value)
+            }}
           />
         </div>
-        <div className='mb-6'>
-          <label className='block text-gray-700 text-sm font-bold mb-2' htmlFor='password'>
-            Password
+      </div>
+      <div className="md:w-full md:flex md:items-center mb-6">
+        <div className="md:w-1/3">
+          <label className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4"
+                 htmlFor="password">
+            password
           </label>
+        </div>
+        <div className="md:w-1/3">
           <input
-            className='shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline'
-            id='password' type='password' placeholder='********' onChange={(e) => handlePasswordChange(e)}
+            className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
+            id="password" type="password" placeholder="********"
+            value={password}
+            onChange={e => {
+              setPassword(e.target.value)
+            }}
           />
         </div>
-        <div className='flex items-center justify-between'>
-          <button
-            className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline'
-            type='submit'>
-            Sign In
-          </button>
-          <Link to='#' className='inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800'>
-            Forgot Password?
-          </Link>
-        </div>
-      </form>
-    </div>
+      </div>
+      <button
+        className='self-center w-1/4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-5'
+        type='submit'>
+        Sign In
+      </button>
+    </form>
   )
 }
 

@@ -937,8 +937,8 @@ const ToolSubmit = () => {
 
 
   return (
-    <div className='w-full md:flex flex-col md:container md:mx-auto mt-10 border rounded p-5'>
-      <h2 className='text-center text-4xl font-bold mb-4'>Submission</h2>
+    <>
+      <h2 className='text-center text-4xl font-bold mb-4'>Submit</h2>
       <hr className='mb-5'/>
       <div className='md:w-3/4 md:flex md:mx-auto md:justify-center items-center mb-5'>
         <label className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" htmlFor="form-material-name">
@@ -1045,7 +1045,7 @@ const ToolSubmit = () => {
               onClick={onSubmitExperiment}>
         Submit
       </button>
-    </div>
+    </>
   )
 }
 
