@@ -89,7 +89,6 @@ const Recipes = ({recipes, isFilter}) => {
         {filteredRecipes.map((recipe, i) =>
           <Recipe
             key={i}
-            idx={i}
             id={recipe.id}
             carbonSource={recipe.carbon_source.value}
             basePressure={recipe.base_pressure.value}

@@ -31,8 +31,10 @@ const toolReducer = (state, action) => {
       }
     }
     case 'ADD_ENVIRONMENTAL_CONDITION_FILTER': {
-      const idx = action.payload.idx
-      const newFilter = state.environmentalConditions[idx]
+      const id = action.payload.id
+      const newFilter =
+        state.environmentalConditions
+          .find((environmentalCondition) => environmentalCondition.id === id)
       newFilter.isAddedToFilter = true
       return {
         ...state,
@@ -41,17 +43,22 @@ const toolReducer = (state, action) => {
     }
     case 'DEL_ENVIRONMENTAL_CONDITION_FILTER': {
       const newFilters = [...state.environmentalConditionFilters]
-      const idx = action.payload.idx
-      state.environmentalConditionFilters[idx].isAddedToFilter = false
-      newFilters.splice(idx, 1)
+      const id = action.payload.id
+      const idxToPop =
+        state.environmentalConditionFilters
+          .findIndex((environmentalCondition) => environmentalCondition.id === id)
+      state.environmentalConditionFilters[idxToPop].isAddedToFilter = false
+      newFilters.splice(idxToPop, 1)
       return {
         ...state,
         environmentalConditionFilters: newFilters
       }
     }
     case 'ADD_FURNACE_FILTER': {
-      const idx = action.payload.idx
-      const newFilter = state.furnaces[idx]
+      const id = action.payload.id
+      const newFilter =
+        state.furnaces
+          .find((furnace) => furnace.id === id)
       newFilter.isAddedToFilter = true
       return {
         ...state,
@@ -60,17 +67,22 @@ const toolReducer = (state, action) => {
     }
     case 'DEL_FURNACE_FILTER': {
       const newFilters = [...state.furnaceFilters]
-      const idx = action.payload.idx
-      state.furnaceFilters[idx].isAddedToFilter = false
-      newFilters.splice(idx, 1)
+      const id = action.payload.id
+      const idxToPop =
+        state.furnaceFilters
+          .findIndex((furnace) => furnace.id === id)
+      state.furnaceFilters[idxToPop].isAddedToFilter = false
+      newFilters.splice(idxToPop, 1)
       return {
         ...state,
         furnaceFilters: newFilters
       }
     }
     case 'ADD_SUBSTRATE_FILTER': {
-      const idx = action.payload.idx
-      const newFilter = state.substrates[idx]
+      const id = action.payload.id
+      const newFilter =
+        state.substrates
+          .find((substrate) => substrate.id === id)
       newFilter.isAddedToFilter = true
       return {
         ...state,
@@ -79,17 +91,22 @@ const toolReducer = (state, action) => {
     }
     case 'DEL_SUBSTRATE_FILTER': {
       const newFilters = [...state.substrateFilters]
-      const idx = action.payload.idx
-      state.substrateFilters[idx].isAddedToFilter = false
-      newFilters.splice(idx, 1)
+      const id = action.payload.id
+      const idxToPop =
+        state.substrateFilters
+          .findIndex((substrate) => substrate.id === id)
+      state.substrateFilters[idxToPop].isAddedToFilter = false
+      newFilters.splice(idxToPop, 1)
       return {
         ...state,
         substrateFilters: newFilters
       }
     }
     case 'ADD_RECIPE_FILTER': {
-      const idx = action.payload.idx
-      const newFilter = state.recipes[idx]
+      const id = action.payload.id
+      const newFilter =
+        state.recipes
+          .find((recipe) => recipe.id === id)
       newFilter.isAddedToFilter = true
       return {
         ...state,
@@ -98,17 +115,22 @@ const toolReducer = (state, action) => {
     }
     case 'DEL_RECIPE_FILTER': {
       const newFilters = [...state.recipeFilters]
-      const idx = action.payload.idx
-      state.recipeFilters[idx].isAddedToFilter = false
-      newFilters.splice(idx, 1)
+      const id = action.payload.id
+      const idxToPop =
+        state.recipeFilters
+          .findIndex((recipe) => recipe.id === id)
+      state.recipeFilters[idxToPop].isAddedToFilter = false
+      newFilters.splice(idxToPop, 1)
       return {
         ...state,
         recipeFilters: newFilters
       }
     }
     case 'ADD_PROPERTY_FILTER': {
-      const idx = action.payload.idx
-      const newFilter = state.properties[idx]
+      const id = action.payload.id
+      const newFilter =
+        state.properties
+          .find((property) => property.id === id)
       newFilter.isAddedToFilter = true
       return {
         ...state,
@@ -117,17 +139,22 @@ const toolReducer = (state, action) => {
     }
     case 'DEL_PROPERTY_FILTER': {
       const newFilters = [...state.propertyFilters]
-      const idx = action.payload.idx
-      state.propertyFilters[idx].isAddedToFilter = false
-      newFilters.splice(idx, 1)
+      const id = action.payload.id
+      const idxToPop =
+        state.propertyFilters
+          .findIndex((recipe) => recipe.id === id)
+      state.propertyFilters[idxToPop].isAddedToFilter = false
+      newFilters.splice(idxToPop, 1)
       return {
         ...state,
         propertyFilters: newFilters
       }
     }
     case 'ADD_AUTHOR_FILTER': {
-      const idx = action.payload.idx
-      const newFilter = state.authors[idx]
+      const id = action.payload.id
+      const newFilter =
+        state.authors
+          .find((author) => author.id === id)
       newFilter.isAddedToFilter = true
       return {
         ...state,
@@ -136,9 +163,12 @@ const toolReducer = (state, action) => {
     }
     case 'DEL_AUTHOR_FILTER': {
       const newFilters = [...state.authorFilters]
-      const idx = action.payload.idx
-      state.authorFilters[idx].isAddedToFilter = false
-      newFilters.splice(idx, 1)
+      const id = action.payload.id
+      const idxToPop =
+        state.authorFilters
+          .findIndex((recipe) => recipe.id === id)
+      state.authorFilters[idxToPop].isAddedToFilter = false
+      newFilters.splice(idxToPop, 1)
       return {
         ...state,
         authorFilters: newFilters

@@ -1,7 +1,7 @@
 import React, {useContext} from 'react'
 import {GlobalContext} from "../pages/App";
 
-const Substrate = ({idx, id, catalyst, thickness, diameter, length, surfaceArea, isAddedToFilter, isFilter}) => {
+const Substrate = ({id, catalyst, thickness, diameter, length, surfaceArea, isAddedToFilter, isFilter}) => {
   const {toolDispatch} = useContext(GlobalContext)
 
   const displayCatalyst =
@@ -36,7 +36,7 @@ const Substrate = ({idx, id, catalyst, thickness, diameter, length, surfaceArea,
         className='w-9 h-9 text-center bg-red-500 hover:bg-red-700 text-white text-3xl font-bold rounded focus:outline-none focus:shadow-outline'
         type='button'
         onClick={() => {
-          toolDispatch({type: 'DEL_SUBSTRATE_FILTER', payload: {idx: idx}})
+          toolDispatch({type: 'DEL_SUBSTRATE_FILTER', payload: {id: id}})
         }}
       >
         -
@@ -57,7 +57,7 @@ const Substrate = ({idx, id, catalyst, thickness, diameter, length, surfaceArea,
         className='w-9 h-9 text-center bg-green-500 hover:bg-green-700 text-white text-3xl font-bold rounded focus:outline-none focus:shadow-outline'
         type='button'
         onClick={() => {
-          toolDispatch({type: 'ADD_SUBSTRATE_FILTER', payload: {idx: idx}})
+          toolDispatch({type: 'ADD_SUBSTRATE_FILTER', payload: {id: id}})
         }}
       >
         +

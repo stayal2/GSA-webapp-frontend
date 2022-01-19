@@ -2,7 +2,6 @@ import React, {useContext} from "react";
 import {GlobalContext} from "../pages/App";
 
 const Property = ({
-                    idx,
                     id,
                     avgThicknessOfGrowth,
                     stdDevOfGrowth,
@@ -35,7 +34,7 @@ const Property = ({
         className='w-9 h-9 text-center bg-red-500 hover:bg-red-700 text-white text-3xl font-bold rounded focus:outline-none focus:shadow-outline'
         type='button'
         onClick={() => {
-          toolDispatch({type: 'DEL_PROPERTY_FILTER', payload: {idx: idx}})
+          toolDispatch({type: 'DEL_PROPERTY_FILTER', payload: {id: id}})
         }}
       >
         -
@@ -56,7 +55,7 @@ const Property = ({
         className='w-9 h-9 text-center bg-green-500 hover:bg-green-700 text-white text-3xl font-bold rounded focus:outline-none focus:shadow-outline'
         type='button'
         onClick={() => {
-          toolDispatch({type: 'ADD_PROPERTY_FILTER', payload: {idx: idx}})
+          toolDispatch({type: 'ADD_PROPERTY_FILTER', payload: {id: id}})
         }}
       >
         +
@@ -76,15 +75,18 @@ const Property = ({
         {displayAvgThicknessOfGrowth}
       </div>
       <div className='w-full md:flex md:items-center mb-1'>
-        <span className='md:w-1/2 block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4'>Std. Dev. of Growth :</span>
+        <span
+          className='md:w-1/2 block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4'>Std. Dev. of Growth :</span>
         {displayStdDevOfGrowth}
       </div>
       <div className='w-full md:flex md:items-center mb-1'>
-        <span className='md:w-1/2 block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4'>Number of Layers :</span>
+        <span
+          className='md:w-1/2 block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4'>Number of Layers :</span>
         {displayNumLayers}
       </div>
       <div className='w-full md:flex md:items-center mb-1'>
-        <span className='md:w-1/2 block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4'>Growth Coverage :</span>
+        <span
+          className='md:w-1/2 block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4'>Growth Coverage :</span>
         {displayGrowthCoverage}
       </div>
       <div className='w-full md:flex md:items-center mb-1'>

@@ -88,7 +88,6 @@ const EnvironmentalConditions = ({environmentalConditions, isFilter}) => {
         {filteredEnvCons.map((envCon, i) =>
           <EnvironmentalCondition
             key={i}
-            idx={i}
             id={envCon.id}
             ambientTemperature={envCon.ambient_temperature.value}
             dewPoint={envCon.dew_point.value}
