@@ -85,6 +85,7 @@ const Tool = () => {
       authorFilters: g.toolState.authorFilters,
     }
     try {
+      console.log(body)
       const response = await axios.post(host + '/experiments/filter', body)
       const data = response.data
       setExperimentIds(data)
@@ -106,7 +107,7 @@ const Tool = () => {
   return (
     <>
       <Sidebar
-        texts={['Query', 'Result', 'Submit']}
+        texts={['Query', 'Result', 'Submission']}
         refs={[queryRef,resultRef,submitRef]}
       />
       <div className='w-full md:flex flex-col md:container md:mx-auto mt-5 border rounded p-5'

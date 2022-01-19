@@ -62,7 +62,7 @@ const Signup = () => {
     }
     try {
       const response = await axios.post(host + '/auth/signup', data)
-      if (response.status === 200) {
+      if (response.status === 201) {
         setSignedUp(true)
         g.flashSuccess('The account has been created.')
       }
@@ -103,7 +103,7 @@ const Signup = () => {
         <div className="md:w-1/3">
           <label className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4"
                  htmlFor="email2">
-            Reenter email
+            Confirm email
           </label>
         </div>
         <div className="md:w-1/3">
@@ -139,7 +139,7 @@ const Signup = () => {
         <div className="md:w-1/3">
           <label className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4"
                  htmlFor="password2">
-            Reenter password
+            Confirm password
           </label>
         </div>
         <div className="md:w-1/3">
