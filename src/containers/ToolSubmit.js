@@ -48,6 +48,9 @@ const ToolSubmit = () => {
     submissionDispatch({type: 'ADD_PREPARATION_STEP'})
   }
   const onSubmitExperiment = () => {
+    if (!userState.signedIn) {
+      alert("Please log in before making a new submission.")
+    }
     // let formData = new FormData()
     // for (const property in submissionState) {
     //   if (property === 'semFiles') {
@@ -1025,7 +1028,7 @@ const ToolSubmit = () => {
 
   return (
     <>
-      <h2 className='text-center text-4xl font-bold mb-4'>Submit</h2>
+      <h2 className='text-center text-4xl font-bold mb-4'>Submit New Experiment Data</h2>
       <hr className='mb-5'/>
       <div className='md:w-3/4 md:flex md:mx-auto md:justify-center items-center mb-5'>
         <label className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4"
