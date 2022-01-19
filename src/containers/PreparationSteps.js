@@ -9,7 +9,6 @@ const PreparationSteps = ({preparationSteps}) => {
     preparationSteps.map((preparationStep, i) =>
       <PreparationStep
         key={preparationStep.id}
-        idx={i}
         id={preparationStep.id}
         step={preparationStep.step.value}
         name={preparationStep.name.value}

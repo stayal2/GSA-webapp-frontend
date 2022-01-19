@@ -223,7 +223,6 @@ const Properties = ({properties, isFilter}) => {
         {filteredProperties.map((property, i) =>
           <Property
             key={i}
-            idx={i}
             id={property.id}
             avgThicknessOfGrowth={property.average_thickness_of_growth.value}
             stdDevOfGrowth={property.standard_deviation_of_growth.value}

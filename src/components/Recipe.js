@@ -2,7 +2,7 @@ import React, {useContext} from 'react'
 import PreparationSteps from '../containers/PreparationSteps'
 import {GlobalContext} from "../pages/App";
 
-const Recipe = ({idx, id, carbonSource, basePressure, preparationSteps, isAddedToFilter, isFilter}) => {
+const Recipe = ({id, carbonSource, basePressure, preparationSteps, isAddedToFilter, isFilter}) => {
   const {toolDispatch} = useContext(GlobalContext)
 
   const displayCarbonSource =
@@ -22,7 +22,7 @@ const Recipe = ({idx, id, carbonSource, basePressure, preparationSteps, isAddedT
         className='w-9 h-9 text-center bg-red-500 hover:bg-red-700 text-white text-3xl font-bold rounded focus:outline-none focus:shadow-outline'
         type='button'
         onClick={() => {
-          toolDispatch({type: 'DEL_RECIPE_FILTER', payload: {idx: idx}})
+          toolDispatch({type: 'DEL_RECIPE_FILTER', payload: {id: id}})
         }}
       >
         -
@@ -43,7 +43,7 @@ const Recipe = ({idx, id, carbonSource, basePressure, preparationSteps, isAddedT
         className='w-9 h-9 text-center bg-green-500 hover:bg-green-700 text-white text-3xl font-bold rounded focus:outline-none focus:shadow-outline'
         type='button'
         onClick={() => {
-          toolDispatch({type: 'ADD_RECIPE_FILTER', payload: {idx: idx}})
+          toolDispatch({type: 'ADD_RECIPE_FILTER', payload: {id: id}})
         }}
       >
         +

@@ -143,7 +143,6 @@ const Furnaces = ({furnaces, isFilter}) => {
         {filteredFurnaces.map((furnace, i) =>
           <Furnace
             key={furnace.id}
-            idx={i}
             id={furnace.id}
             tubeDiameter={furnace.tube_diameter.value}
             crossSectionalArea={furnace.cross_sectional_area.value}

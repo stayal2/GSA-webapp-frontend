@@ -59,7 +59,6 @@ const Authors = ({authors, isFilter}) => {
         {filteredAuthors.map((author, i) =>
           <Author
             key={i}
-            idx={i}
             id={author.id}
             firstName={author.first_name}
             lastName={author.last_name}

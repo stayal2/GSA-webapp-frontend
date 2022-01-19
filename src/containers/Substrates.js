@@ -185,7 +185,6 @@ const Substrates = ({substrates, isFilter}) => {
         {filteredSubstrates.map((substrate, i) =>
           <Substrate
             key={substrate.id}
-            idx={i}
             id={substrate.id}
             catalyst={substrate.catalyst.value}
             thickness={substrate.thickness.value}
