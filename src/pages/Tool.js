@@ -1,5 +1,6 @@
 import axios from 'axios'
 import React, {useState, useEffect, useContext, useRef} from 'react'
+import {Redirect} from "react-router-dom";
 import {host} from '../settings'
 import EnvironmentalConditions from '../containers/EnvironmentalConditions'
 import Furnaces from '../containers/Furnaces'
@@ -10,7 +11,8 @@ import Properties from "../containers/Properties";
 import ExperimentLink from "../components/ExperimentLink";
 import {GlobalContext} from "./App";
 import ToolSubmit from "../containers/ToolSubmit";
-import {Redirect} from "react-router-dom";
+import Sidebar from "../components/Sidebar";
+import LoadingPage from "../components/LoadingPage";
 
 const Tool = () => {
   const g = useContext(GlobalContext)
@@ -26,13 +28,15 @@ const Tool = () => {
   const [showAuthors, setShowAuthors] = useState(false)
   const [showProperties, setShowProperties] = useState(false)
 
-  const queryResults = useRef(null)
+  const queryRef = useRef(null)
+  const resultRef = useRef(null)
+  const submitRef = useRef(null)
 
   useEffect(() => {
     const init = async () => {
       setLoading(true)
       try {
-        const response = await axios.get(host + '/tool/init')
+        const response = await axios.get(host + '/experiments/init')
         const data = response.data
         if (response.status === 200) {
           g.toolDispatch({type: 'INIT', payload: data})
@@ -94,14 +98,19 @@ const Tool = () => {
   }
 
   if (loading) {
-    return <h1 className='text-5xl block h-screen w-screen'>LOADING...</h1>
+    return <LoadingPage/>
   }
   if (error) {
     return <Redirect to='/tool'/>
   }
   return (
     <>
-      <div className='w-full md:flex flex-col md:container md:mx-auto mt-5 border rounded p-5'>
+      <Sidebar
+        texts={['Query', 'Result', 'Submit']}
+        refs={[queryRef,resultRef,submitRef]}
+      />
+      <div className='w-full md:flex flex-col md:container md:mx-auto mt-5 border rounded p-5'
+           ref={queryRef}>
         <h2 className='text-center text-4xl font-bold mr-2 md:mb-4'>Query</h2>
         <hr/>
         <div className='w-full md:flex flex-row mt-5'>
@@ -251,7 +260,7 @@ const Tool = () => {
                 <button
                   className='self-center w-1/3 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-5'
                   type='button' onClick={() => {
-                  queryResults.current.scrollIntoView({behavior: "smooth"})
+                  resultRef.current.scrollIntoView({behavior: "smooth"})
                 }}
                 >
                   See Results
@@ -262,8 +271,8 @@ const Tool = () => {
         </div>
       </div>
 
-      <div ref={queryResults} className='w-full md:flex flex-col md:container md:mx-auto mt-10 border rounded p-5'>
-        <h2 className='text-center text-4xl font-bold mb-4'>Query Results</h2>
+      <div ref={resultRef} className='w-full md:flex flex-col md:container md:mx-auto mt-10 border rounded p-5'>
+        <h2 className='text-center text-4xl font-bold mb-4'>Query Result</h2>
         <hr className='mb-5'/>
         {
           experimentIds.length === 0 &&
@@ -278,7 +287,10 @@ const Tool = () => {
           )}
         </div>
       </div>
-      <ToolSubmit/>
+      <div className='w-full md:flex flex-col md:container md:mx-auto mt-10 border rounded p-5'
+           ref={submitRef}>
+        <ToolSubmit/>
+      </div>
     </>
   )
 }

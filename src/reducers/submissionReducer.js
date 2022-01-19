@@ -43,6 +43,8 @@ export const submissionDefaultState = {
   domainSize: 0,
   shape: shapeOptions[0],
   authors: [],
+  // semFiles: [],
+  // ramanFiles: [],
 }
 
 const submissionReducer = (state, action) => {
@@ -334,6 +336,18 @@ const submissionReducer = (state, action) => {
         authors: filteredAuthors
       }
     }
+    // case 'UPLOAD_SEM_FILES': {
+    //   return {
+    //     ...state,
+    //     semFiles: action.payload
+    //   }
+    // }
+    // case 'UPLOAD_RAMAN_FILES': {
+    //   return {
+    //     ...state,
+    //     ramanFiles: action.payload
+    //   }
+    // }
     default: {
       throw new Error('No matching action type.')
     }

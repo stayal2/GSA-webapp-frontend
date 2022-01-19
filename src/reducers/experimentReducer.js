@@ -1,6 +1,8 @@
 export const experimentDefaultState = {
   experiment: null,
   recipeGraphData: null,
+  ramanFiles: null,
+  semFileUrls: []
 }
 
 const experimentReducer = (state, action) => {
@@ -8,7 +10,9 @@ const experimentReducer = (state, action) => {
     case 'SET_EXPERIMENT': {
       return {
         ...state,
-        experiment: action.payload
+        experiment: action.payload.experiment,
+        ramanFiles: action.payload.raman_files,
+        semFileUrls: action.payload.sem_file_urls,
       }
     }
     case 'INIT_GRAPH_DATA': {
@@ -43,11 +47,11 @@ const experimentReducer = (state, action) => {
         const heliumFlowRate = prepStep.helium_flow_rate.value ? prepStep.helium_flow_rate.value : 0
         const hydrogenFlowRate = prepStep.hydrogen_flow_rate.value ? prepStep.hydrogen_flow_rate.value : 0
         const sampleLocation = prepStep.sample_location.value ? prepStep.sample_location.value : 0
-        if (currStep !== prepStep.name.value){
+        if (currStep !== prepStep.name.value) {
           if (currStep === 'Annealing') {
             annealingEndTime = elapsedTime
             currStep = 'Growing'
-          } else if (currStep === 'Growing'){
+          } else if (currStep === 'Growing') {
             growingEndTime = elapsedTime
           }
         }
