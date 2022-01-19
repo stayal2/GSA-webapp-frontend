@@ -48,7 +48,21 @@ const ToolSubmit = () => {
     submissionDispatch({type: 'ADD_PREPARATION_STEP'})
   }
   const onSubmitExperiment = () => {
-    console.log(submissionState)
+    // let formData = new FormData()
+    // for (const property in submissionState) {
+    //   if (property === 'semFiles') {
+    //     for (const file of submissionState[property]) {
+    //       formData.append(`sem_${file.name}`, file)
+    //     }
+    //   } else if (property === 'ramanFiles') {
+    //     for (const file of submissionState[property]) {
+    //       formData.append(`raman_${file.name}`, file)
+    //     }
+    //   } else {
+    //     formData.append(property, submissionState[property])
+    //   }
+    // }
+    // axios.post(host + '/experiments/submit', formData)
     axios.post(host + '/experiments/submit', submissionState)
   }
   const environmentalConditionsForm =
@@ -86,7 +100,10 @@ const ToolSubmit = () => {
             <input
               className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
               id="form-dew-point" type="number" step={defaultPrecision} value={submissionState.dewPoint}
-              onChange={e => submissionDispatch({type: 'DEW_POINT_CHANGE', payload: parseFloat(e.target.value)})}
+              onChange={e => submissionDispatch({
+                type: 'DEW_POINT_CHANGE',
+                payload: parseFloat(e.target.value)
+              })}
             />
           </div>
           <span className='block text-gray-500 font-bold md:text-left mb-1 md:mb-0 pl-2'>&deg;C</span>
@@ -95,7 +112,8 @@ const ToolSubmit = () => {
       :
       <>
         <div>
-          <label className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" htmlFor="env-con-submit">
+          <label className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4"
+                 htmlFor="env-con-submit">
             Environmental Conditions Number
           </label>
         </div>
@@ -112,7 +130,8 @@ const ToolSubmit = () => {
               return <option key={envCon.id}>{envCon.id}</option>
             })}
           </select>
-          <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+          <div
+            className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
             <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
               <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/>
             </svg>
@@ -134,8 +153,12 @@ const ToolSubmit = () => {
           <div className="md:w-1/3">
             <input
               className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
-              id="form-tube-diameter" type="number" step={defaultPrecision} value={submissionState.tubeDiameter}
-              onChange={e => submissionDispatch({type: 'TUBE_DIAMETER_CHANGE', payload: parseFloat(e.target.value)})}
+              id="form-tube-diameter" type="number" step={defaultPrecision}
+              value={submissionState.tubeDiameter}
+              onChange={e => submissionDispatch({
+                type: 'TUBE_DIAMETER_CHANGE',
+                payload: parseFloat(e.target.value)
+              })}
             />
           </div>
           <span className='block text-gray-500 font-bold md:text-left mb-1 md:mb-0 pl-2'>mm</span>
@@ -170,8 +193,12 @@ const ToolSubmit = () => {
           <div className="md:w-1/3">
             <input
               className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
-              id="form-tube-length" type="number" step={defaultPrecision} value={submissionState.tubeLength}
-              onChange={e => submissionDispatch({type: 'TUBE_LENGTH_CHANGE', payload: parseFloat(e.target.value)})}
+              id="form-tube-length" type="number" step={defaultPrecision}
+              value={submissionState.tubeLength}
+              onChange={e => submissionDispatch({
+                type: 'TUBE_LENGTH_CHANGE',
+                payload: parseFloat(e.target.value)
+              })}
             />
           </div>
           <span className='block text-gray-500 font-bold md:text-left mb-1 md:mb-0 pl-2'>mm</span>
@@ -186,7 +213,8 @@ const ToolSubmit = () => {
           <div className="md:w-1/3">
             <input
               className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
-              id="form-lohr" type="number" step={defaultPrecision} value={submissionState.lengthOfHeatedRegion}
+              id="form-lohr" type="number" step={defaultPrecision}
+              value={submissionState.lengthOfHeatedRegion}
               onChange={e => submissionDispatch({
                 type: 'LENGTH_OF_HEATED_REGION_CHANGE',
                 payload: parseFloat(e.target.value)
@@ -199,7 +227,8 @@ const ToolSubmit = () => {
       :
       <>
         <div>
-          <label className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" htmlFor="furnace-submit">
+          <label className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4"
+                 htmlFor="furnace-submit">
             Furnace Number
           </label>
         </div>
@@ -207,14 +236,18 @@ const ToolSubmit = () => {
           <select
             className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
             id="furnace-submit"
-            onChange={e => submissionDispatch({type: 'FURNACE_NUMBER_CHANGE', payload: parseInt(e.target.value)})}
+            onChange={e => submissionDispatch({
+              type: 'FURNACE_NUMBER_CHANGE',
+              payload: parseInt(e.target.value)
+            })}
             value={submissionState.furnaceNumber}
           >
             {toolState.furnaces.map((furnace) => {
               return <option key={furnace.id}>{furnace.id}</option>
             })}
           </select>
-          <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+          <div
+            className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
             <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
               <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/>
             </svg>
@@ -257,7 +290,10 @@ const ToolSubmit = () => {
             <input
               className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
               id="form-thickness" type="number" step={defaultPrecision} value={submissionState.thickness}
-              onChange={e => submissionDispatch({type: 'THICKNESS_CHANGE', payload: parseFloat(e.target.value)})}
+              onChange={e => submissionDispatch({
+                type: 'THICKNESS_CHANGE',
+                payload: parseFloat(e.target.value)
+              })}
             />
           </div>
           <span className='block text-gray-500 font-bold md:text-left mb-1 md:mb-0 pl-2'>mm</span>
@@ -273,10 +309,14 @@ const ToolSubmit = () => {
             <input
               className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
               id="form-diameter" type="number" step={defaultPrecision} value={submissionState.diameter}
-              onChange={e => submissionDispatch({type: 'DIAMETER_CHANGE', payload: parseFloat(e.target.value)})}
+              onChange={e => submissionDispatch({
+                type: 'DIAMETER_CHANGE',
+                payload: parseFloat(e.target.value)
+              })}
             />
           </div>
-          <span className='md:w-1/6 block text-gray-500 font-bold md:text-left mb-1 md:mb-0 pl-2'>mm&sup2;</span>
+          <span
+            className='md:w-1/6 block text-gray-500 font-bold md:text-left mb-1 md:mb-0 pl-2'>mm&sup2;</span>
         </div>
         <div className="md:w-3/4 md:flex md:items-center mb-6">
           <div className="md:w-1/2">
@@ -289,7 +329,10 @@ const ToolSubmit = () => {
             <input
               className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
               id="form-length" type="number" step={defaultPrecision} value={submissionState.length}
-              onChange={e => submissionDispatch({type: 'LENGTH_CHANGE', payload: parseFloat(e.target.value)})}
+              onChange={e => submissionDispatch({
+                type: 'LENGTH_CHANGE',
+                payload: parseFloat(e.target.value)
+              })}
             />
           </div>
           <span className='md:w-1/6 block text-gray-500 font-bold md:text-left mb-1 md:mb-0 pl-2'>mm</span>
@@ -304,8 +347,12 @@ const ToolSubmit = () => {
           <div className="md:w-2/6">
             <input
               className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
-              id="form-surface-area" type="number" step={defaultPrecision} value={submissionState.surfaceArea}
-              onChange={e => submissionDispatch({type: 'SURFACE_AREA_CHANGE', payload: parseFloat(e.target.value)})}
+              id="form-surface-area" type="number" step={defaultPrecision}
+              value={submissionState.surfaceArea}
+              onChange={e => submissionDispatch({
+                type: 'SURFACE_AREA_CHANGE',
+                payload: parseFloat(e.target.value)
+              })}
             />
           </div>
           <span className='md:w-1/6 block text-gray-500 font-bold md:text-left mb-1 md:mb-0 pl-2'>mm</span>
@@ -314,7 +361,8 @@ const ToolSubmit = () => {
       :
       <>
         <div>
-          <label className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" htmlFor="substrate-submit">
+          <label className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4"
+                 htmlFor="substrate-submit">
             Substrate Number
           </label>
         </div>
@@ -322,14 +370,18 @@ const ToolSubmit = () => {
           <select
             className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
             id="substrate-submit"
-            onChange={e => submissionDispatch({type: 'SUBSTRATE_NUMBER_CHANGE', payload: parseInt(e.target.value)})}
+            onChange={e => submissionDispatch({
+              type: 'SUBSTRATE_NUMBER_CHANGE',
+              payload: parseInt(e.target.value)
+            })}
             value={submissionState.substrateNumber}
           >
             {toolState.substrates.map((substrate) => {
               return <option key={substrate.id}>{substrate.id}</option>
             })}
           </select>
-          <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+          <div
+            className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
             <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
               <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/>
             </svg>
@@ -450,7 +502,8 @@ const ToolSubmit = () => {
       <div className='md:w-3/4 md:flex md:flex-col items-center justify-center mx-auto'>
         <div className="md:w-full md:flex md:items-center mb-6">
           <div className='md:w-1/2'>
-            <label className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" htmlFor="form-name">
+            <label className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4"
+                   htmlFor="form-name">
               Name
             </label>
           </div>
@@ -465,8 +518,10 @@ const ToolSubmit = () => {
                 return <option key={prepName}>{prepName}</option>
               })}
             </select>
-            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-              <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+            <div
+              className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+              <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg"
+                   viewBox="0 0 20 20">
                 <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/>
               </svg>
             </div>
@@ -525,7 +580,8 @@ const ToolSubmit = () => {
           <div className="md:w-2/6">
             <input
               className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
-              id="form-furnace-pressure" type="number" step={defaultPrecision} value={submissionState.furnacePressure}
+              id="form-furnace-pressure" type="number" step={defaultPrecision}
+              value={submissionState.furnacePressure}
               onChange={e => submissionDispatch({
                 type: 'FURNACE_PRESSURE_CHANGE',
                 payload: parseFloat(e.target.value)
@@ -546,7 +602,8 @@ const ToolSubmit = () => {
           <div className="md:w-2/6">
             <input
               className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
-              id="form-sample-location" type="number" step={defaultPrecision} value={submissionState.sampleLocation}
+              id="form-sample-location" type="number" step={defaultPrecision}
+              value={submissionState.sampleLocation}
               onChange={e => submissionDispatch({
                 type: 'SAMPLE_LOCATION_CHANGE',
                 payload: parseFloat(e.target.value)
@@ -567,7 +624,8 @@ const ToolSubmit = () => {
           <div className="md:w-2/6">
             <input
               className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
-              id="form-helium-flow-rate" type="number" step={defaultPrecision} value={submissionState.heliumFlowRate}
+              id="form-helium-flow-rate" type="number" step={defaultPrecision}
+              value={submissionState.heliumFlowRate}
               onChange={e => submissionDispatch({
                 type: 'HELIUM_FLOW_RATE_CHANGE',
                 payload: parseFloat(e.target.value)
@@ -632,7 +690,8 @@ const ToolSubmit = () => {
           <div className="md:w-2/6">
             <input
               className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
-              id="form-argon-flow-rate" type="number" step={defaultPrecision} value={submissionState.argonFlowRate}
+              id="form-argon-flow-rate" type="number" step={defaultPrecision}
+              value={submissionState.argonFlowRate}
               onChange={e => submissionDispatch({
                 type: 'ARGON_FLOW_RATE_CHANGE',
                 payload: parseFloat(e.target.value)
@@ -653,7 +712,8 @@ const ToolSubmit = () => {
           <div className="md:w-1/3">
             <input
               className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
-              id="form-cooling-rate" type="number" step={defaultPrecision} value={submissionState.coolingRate}
+              id="form-cooling-rate" type="number" step={defaultPrecision}
+              value={submissionState.coolingRate}
               onChange={e => submissionDispatch({
                 type: 'COOLING_RATE_CHANGE',
                 payload: parseFloat(e.target.value)
@@ -705,8 +765,12 @@ const ToolSubmit = () => {
           <div className="md:w-2/6">
             <input
               className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
-              id="form-base-pressure" type="number" step={defaultPrecision} value={submissionState.basePressure}
-              onChange={e => submissionDispatch({type: 'BASE_PRESSURE_CHANGE', payload: parseFloat(e.target.value)})}
+              id="form-base-pressure" type="number" step={defaultPrecision}
+              value={submissionState.basePressure}
+              onChange={e => submissionDispatch({
+                type: 'BASE_PRESSURE_CHANGE',
+                payload: parseFloat(e.target.value)
+              })}
             />
           </div>
           <span className='block text-gray-500 font-bold md:text-left mb-1 md:mb-0 pl-2'>Torr</span>
@@ -717,7 +781,8 @@ const ToolSubmit = () => {
       :
       <>
         <div>
-          <label className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" htmlFor="recipe-submit">
+          <label className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4"
+                 htmlFor="recipe-submit">
             Recipe Number
           </label>
         </div>
@@ -725,14 +790,18 @@ const ToolSubmit = () => {
           <select
             className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
             id="recipe-submit"
-            onChange={e => submissionDispatch({type: 'RECIPE_NUMBER_CHANGE', payload: parseInt(e.target.value)})}
+            onChange={e => submissionDispatch({
+              type: 'RECIPE_NUMBER_CHANGE',
+              payload: parseInt(e.target.value)
+            })}
             value={submissionState.recipeNumber}
           >
             {toolState.recipes.map((recipe) => {
               return <option key={recipe.id}>{recipe.id}</option>
             })}
           </select>
-          <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+          <div
+            className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
             <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
               <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/>
             </svg>
@@ -773,7 +842,8 @@ const ToolSubmit = () => {
           <div className="md:w-1/3">
             <input
               className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
-              id="form-std-dev-of-growth" type="number" step={defaultPrecision} value={submissionState.stdDevOfGrowth}
+              id="form-std-dev-of-growth" type="number" step={defaultPrecision}
+              value={submissionState.stdDevOfGrowth}
               onChange={e => submissionDispatch({
                 type: 'STD_DEV_OF_GROWTH_CHANGE',
                 payload: parseFloat(e.target.value)
@@ -793,7 +863,10 @@ const ToolSubmit = () => {
             <input
               className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
               id="form-number-of-layers" type="number" step={1} value={submissionState.numberOfLayers}
-              onChange={e => submissionDispatch({type: 'NUMBER_OF_LAYERS_CHANGE', payload: parseInt(e.target.value)})}
+              onChange={e => submissionDispatch({
+                type: 'NUMBER_OF_LAYERS_CHANGE',
+                payload: parseInt(e.target.value)
+              })}
             />
           </div>
           <span className='block text-gray-500 font-bold md:text-left mb-1 md:mb-0 pl-2'/>
@@ -809,7 +882,10 @@ const ToolSubmit = () => {
             <input
               className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
               id="form-growth-coverage" type="number" step={0.01} value={submissionState.growthCoverage}
-              onChange={e => submissionDispatch({type: 'GROWTH_COVERAGE_CHANGE', payload: parseFloat(e.target.value)})}
+              onChange={e => submissionDispatch({
+                type: 'GROWTH_COVERAGE_CHANGE',
+                payload: parseFloat(e.target.value)
+              })}
             />
           </div>
           <span className='block text-gray-500 font-bold md:text-left mb-1 md:mb-0 pl-2'>%</span>
@@ -824,8 +900,12 @@ const ToolSubmit = () => {
           <div className="md:w-1/3">
             <input
               className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
-              id="form-domain-size" type="number" step={defaultPrecision} value={submissionState.domainSize}
-              onChange={e => submissionDispatch({type: 'DOMAIN_SIZE_CHANGE', payload: parseFloat(e.target.value)})}
+              id="form-domain-size" type="number" step={defaultPrecision}
+              value={submissionState.domainSize}
+              onChange={e => submissionDispatch({
+                type: 'DOMAIN_SIZE_CHANGE',
+                payload: parseFloat(e.target.value)
+              })}
             />
           </div>
           <span className='block text-gray-500 font-bold md:text-left mb-1 md:mb-0 pl-2'>um&sup2;</span>
@@ -854,7 +934,8 @@ const ToolSubmit = () => {
       :
       <>
         <div>
-          <label className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" htmlFor="properties-submit">
+          <label className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4"
+                 htmlFor="properties-submit">
             Properties Number
           </label>
         </div>
@@ -862,14 +943,18 @@ const ToolSubmit = () => {
           <select
             className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
             id="properties-submit"
-            onChange={e => submissionDispatch({type: 'PROPERTIES_NUMBER_CHANGE', payload: parseInt(e.target.value)})}
+            onChange={e => submissionDispatch({
+              type: 'PROPERTIES_NUMBER_CHANGE',
+              payload: parseInt(e.target.value)
+            })}
             value={submissionState.propertiesNumber}
           >
             {toolState.properties.map((property) => {
               return <option key={property.id}>{property.id}</option>
             })}
           </select>
-          <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+          <div
+            className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
             <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
               <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/>
             </svg>
@@ -908,7 +993,8 @@ const ToolSubmit = () => {
         )
       })}
       <div className='flex items-center justify-center'>
-        <label className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" htmlFor="author-submit">
+        <label className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4"
+               htmlFor="author-submit">
           Author Number
         </label>
         <div className='relative mr-4 w-1/4'>
@@ -922,7 +1008,8 @@ const ToolSubmit = () => {
               return <option key={author.id}>{author.id}</option>
             })}
           </select>
-          <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+          <div
+            className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
             <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
               <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/>
             </svg>
@@ -941,7 +1028,8 @@ const ToolSubmit = () => {
       <h2 className='text-center text-4xl font-bold mb-4'>Submit</h2>
       <hr className='mb-5'/>
       <div className='md:w-3/4 md:flex md:mx-auto md:justify-center items-center mb-5'>
-        <label className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" htmlFor="form-material-name">
+        <label className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4"
+               htmlFor="form-material-name">
           Material Name
         </label>
         <div className="md:w-1/4 relative">
@@ -955,7 +1043,8 @@ const ToolSubmit = () => {
               return <option key={materialName}>{materialName}</option>
             })}
           </select>
-          <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+          <div
+            className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
             <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
               <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/>
             </svg>
@@ -998,7 +1087,10 @@ const ToolSubmit = () => {
       <div className="md:flex md:items-center md:justify-center mb-6">
         <label className="block text-gray-500 font-bold">
           <input className="mr-2 leading-tight" type="checkbox"
-                 onChange={e => submissionDispatch({type: 'SET_CUSTOM_SUBSTRATE', payload: e.target.checked})}/>
+                 onChange={e => submissionDispatch({
+                   type: 'SET_CUSTOM_SUBSTRATE',
+                   payload: e.target.checked
+                 })}/>
           <span className="text-sm">
               I will upload a new Substrate
             </span>
@@ -1026,7 +1118,10 @@ const ToolSubmit = () => {
       <div className="md:flex md:items-center md:justify-center mb-6">
         <label className="block text-gray-500 font-bold">
           <input className="mr-2 leading-tight" type="checkbox"
-                 onChange={e => submissionDispatch({type: 'SET_CUSTOM_PROPERTIES', payload: e.target.checked})}/>
+                 onChange={e => submissionDispatch({
+                   type: 'SET_CUSTOM_PROPERTIES',
+                   payload: e.target.checked
+                 })}/>
           <span className="text-sm">
               I will upload new Properties
             </span>
@@ -1041,10 +1136,38 @@ const ToolSubmit = () => {
         {authorsForm}
       </div>
       <hr className='mb-5'/>
-      <button className="w-1/12 self-center bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded"
-              onClick={onSubmitExperiment}>
+      <button
+        className="w-1/12 self-center bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded"
+        onClick={onSubmitExperiment}>
         Submit
       </button>
+
+      {/*<hr className='mb-5'/>*/}
+      {/*<div className="flex justify-center">*/}
+      {/*  <div className="mb-3 w-96">*/}
+      {/*    <label htmlFor="sem-files" className="form-label inline-block mb-2 text-gray-700">Multiple*/}
+      {/*      files input*/}
+      {/*      example</label>*/}
+      {/*    <input className="form-control*/}
+      {/*                      block*/}
+      {/*                      w-full*/}
+      {/*                      px-3*/}
+      {/*                      py-1.5*/}
+      {/*                      text-base*/}
+      {/*                      font-normal*/}
+      {/*                      text-gray-700*/}
+      {/*                      bg-white bg-clip-padding*/}
+      {/*                      border border-solid border-gray-300*/}
+      {/*                      rounded*/}
+      {/*                      transition*/}
+      {/*                      ease-in-out*/}
+      {/*                      m-0*/}
+      {/*                      focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"*/}
+      {/*           type="file" id="sem-files"*/}
+      {/*           onChange={e => submissionDispatch({type: 'UPLOAD_SEM_FILES', payload: e.target.files})}*/}
+      {/*           multiple/>*/}
+      {/*  </div>*/}
+      {/*</div>*/}
     </>
   )
 }
