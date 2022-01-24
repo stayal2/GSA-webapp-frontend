@@ -1,17 +1,17 @@
-import React, {useContext, useRef, useState} from "react"
-import {catalystOptions, defaultPrecision} from "../settings";
+import React, {useContext, useState} from "react";
 import {GlobalContext} from "../pages/App";
+import {carbonSourceOptions, defaultPrecision} from "../settings";
 
-const SearchBySubstrate = () => {
+const SearchByRecipe = () => {
   const [min, setMin] = useState(0)
   const [max, setMax] = useState(9999)
-  const [name, setName] = useState("Catalyst")
-  const [catalyst, setCatalyst] = useState("Copper")
+  const [name, setName] = useState("Carbon Source")
+  const [carbonSource, setCarbonSource] = useState(carbonSourceOptions[0])
   const {toolDispatch} = useContext(GlobalContext)
 
   const onClickAdd = () => {
-    if (name === 'Catalyst') {
-      toolDispatch({type: 'ADD_FILTER', payload: {type: 'KEY_VALUE', name, value: catalyst}})
+    if (name === 'Carbon Source') {
+      toolDispatch({type: 'ADD_FILTER', payload: {type: 'KEY_VALUE', name, value: carbonSource}})
     } else {
       toolDispatch({type: 'ADD_FILTER', payload: {type: 'MIN_MAX', name, min, max}})
     }
@@ -32,8 +32,8 @@ const SearchBySubstrate = () => {
               setName(e.target.value)
             }}
           >
-            <option>Catalyst</option>
-            <option>Thickness (um²)</option>
+            <option>Carbon Source</option>
+            <option>Base Pressure (Torr)</option>
             <option>Diameter (mm)</option>
             <option>Length (mm)</option>
             <option>Surface Area (mm²)</option>
@@ -108,4 +108,4 @@ const SearchBySubstrate = () => {
   )
 }
 
-export default SearchBySubstrate
+export default SearchByRecipe

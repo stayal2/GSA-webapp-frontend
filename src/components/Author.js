@@ -1,49 +1,34 @@
 import React, {useContext} from "react";
 import {GlobalContext} from "../pages/App";
 
-const Author = ({id, firstName, lastName, institution, isAddedToFilter, isFilter}) => {
-  const {toolDispatch} = useContext(GlobalContext)
+const Author = ({idx, id, firstName, lastName, institution, isCurrentFilter, isFilter}) => {
+  const {toolState, toolDispatch} = useContext(GlobalContext)
 
   const displayName =
     <span className='md:w-1/2'>{firstName} {lastName}</span>
   const displayInstitution =
     <span className='md:w-1/2'>{institution}</span>
 
-  let btn
-  if (isFilter) {
-    btn = (
-      <button
-        className='w-9 h-9 text-center bg-red-500 hover:bg-red-700 text-white text-3xl font-bold rounded focus:outline-none focus:shadow-outline'
-        type='button'
-        onClick={() => {
-          toolDispatch({type: 'DEL_AUTHOR_FILTER', payload: {id: id}})
-        }}
-      >
-        -
-      </button>
-    )
-  } else if (isAddedToFilter) {
-    btn = (
-      <button
-        disabled
-        className='cursor-default px-2 h-9 text-center bg-purple-500 text-white text-xl font-bold rounded focus:outline-none focus:shadow-outline'
-      >
-        Added
-      </button>
-    )
-  } else {
-    btn = (
-      <button
-        className='w-9 h-9 text-center bg-green-500 hover:bg-green-700 text-white text-3xl font-bold rounded focus:outline-none focus:shadow-outline'
-        type='button'
-        onClick={() => {
-          toolDispatch({type: 'ADD_AUTHOR_FILTER', payload: {id: id}})
-        }}
-      >
-        +
-      </button>
-    )
+  const onClickAdd = () => {
+    for (const filter of toolState.filters) {
+      if (filter.type === 'AUTHOR' && filter.id === id) {
+        alert("The author is already added to the filters.")
+        return
+      }
+    }
+
+    toolDispatch({type: 'ADD_FILTER', payload: {type: 'AUTHOR', id, firstName, lastName, institution}})
   }
+  let btn = (
+    <button
+      className='w-6 h-6 text-center bg-green-500 hover:bg-green-700 text-white text-md font-bold rounded focus:outline-none focus:shadow-outline'
+      type='button'
+      onClick={onClickAdd}
+    >
+      +
+    </button>
+  )
+
 
   return (
     <div className='flex flex-col py-2 px-4 mb-2 border rounded'>

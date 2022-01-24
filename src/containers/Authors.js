@@ -63,7 +63,7 @@ const Authors = ({authors, isFilter}) => {
             firstName={author.first_name}
             lastName={author.last_name}
             institution={author.institution}
-            isAddedToFilter={author.isAddedToFilter}
+            isCurrentFilter={author.isAddedToFilter}
             isFilter={isFilter}
           />
         )}

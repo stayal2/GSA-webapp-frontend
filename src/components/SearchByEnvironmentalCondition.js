@@ -9,7 +9,7 @@ const SearchByEnvironmentalCondition = () => {
   const {toolDispatch} = useContext(GlobalContext)
 
   const onClickAdd = () => {
-    toolDispatch({type: 'ADD_FILTER', payload: {name, min, max}})
+    toolDispatch({type: 'ADD_FILTER', payload: {type:'MIN_MAX',name, min, max}})
   }
 
   return (

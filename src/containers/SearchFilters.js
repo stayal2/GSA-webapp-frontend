@@ -7,10 +7,14 @@ const SearchFilters = (filters) => {
     filters.filters.map((filter, i) => {
         return <SearchFilter key={i}
                              idx={i}
+                             type={filter.type}
                              name={filter.name}
                              min={filter.min}
                              max={filter.max}
                              value={filter.value}
+                             firstName={filter.firstName}
+                             lastName={filter.lastName}
+                             institution={filter.institution}
         />
       }
     )

@@ -46,11 +46,11 @@ const Signup = () => {
   const onClickSignUpBtn = async (e) => {
     e.preventDefault()
     if (email !== email2) {
-      g.flashError('Emails do not match.')
+      alert('Emails do not match.')
       return
     }
     if (password !== password2) {
-      g.flashError('Passwords do not match.')
+      alert('Passwords do not match.')
       return
     }
     const data = {
@@ -183,9 +183,7 @@ const Signup = () => {
             className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
             id="lastname" type="text" placeholder="Last Name"
             value={lastname}
-            onChange={e => {
-              setLastname(e.target.value)
-            }}
+            onChange={e => setLastname(e.target.value)}
           />
         </div>
       </div>
@@ -200,9 +198,7 @@ const Signup = () => {
           <select
             className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
             value={institutionCountry}
-            onChange={e => {
-              setInstitutionCountry(e.target.value)
-            }}
+            onChange={e => setInstitutionCountry(e.target.value)}
           >
             {countryOptions.map((country) => {
               return <option key={country}>{country}</option>

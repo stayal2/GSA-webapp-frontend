@@ -2,12 +2,8 @@ import axios from 'axios'
 import React, {useState, useEffect, useContext, useRef} from 'react'
 import {Redirect} from "react-router-dom";
 import {host} from '../settings'
-import EnvironmentalConditions from '../containers/EnvironmentalConditions'
-import Furnaces from '../containers/Furnaces'
-import Substrates from '../containers/Substrates'
 import Recipes from '../containers/Recipes'
 import Authors from "../containers/Authors";
-import Properties from "../containers/Properties";
 import ExperimentLink from "../components/ExperimentLink";
 import {GlobalContext} from "./App";
 import ToolSubmit from "../containers/ToolSubmit";
@@ -17,6 +13,8 @@ import SearchByEnvironmentalCondition from "../components/SearchByEnvironmentalC
 import SearchFilters from "../containers/SearchFilters";
 import SearchByFurnace from "../components/SearchByFurnace";
 import SearchBySubstrate from "../components/SearchBySubstrate";
+import SearchByCharacterization from "../components/SearchByCharacterization";
+import SearchByAuthor from "../components/SearchByAuthor";
 
 const Tool = () => {
   const {toolState, toolDispatch, flashError, flashSuccess} = useContext(GlobalContext)
@@ -179,7 +177,7 @@ const Tool = () => {
               </section>
               <section className='w-full flex flex-col mb-5'>
                 <div className='flex justify-center align-middle mb-4'>
-                  <h2 className='text-center text-3xl font-bold mr-2'>Properties</h2>
+                  <h2 className='text-center text-3xl font-bold mr-2'>Characterization</h2>
                   <button
                     className='w-9 h-9 self-center text-center bg-gray-400 hover:bg-blue-700 text-white text-3xl font-bold rounded focus:outline-none focus:shadow-outline'
                     type='button' id='property-btn' onClick={() => setShowProperties(!showProperties)}
@@ -188,10 +186,7 @@ const Tool = () => {
                   </button>
                 </div>
                 {showProperties || <hr/>}
-                {showProperties &&
-                  <Properties
-                    properties={toolState.properties}
-                  />}
+                {showProperties && <SearchByCharacterization/>}
               </section>
               <section className='w-full flex flex-col mb-5'>
                 <div className='flex justify-center align-middle mb-4'>
@@ -205,9 +200,8 @@ const Tool = () => {
                 </div>
                 {showAuthors || <hr/>}
                 {showAuthors &&
-                  <Authors
-                    authors={toolState.authors}
-                  />}
+                  <SearchByAuthor/>
+                }
               </section>
             </div>
           </div>
