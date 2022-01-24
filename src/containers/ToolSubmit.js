@@ -50,23 +50,24 @@ const ToolSubmit = () => {
   const onSubmitExperiment = () => {
     if (!userState.signedIn) {
       alert("Please log in before making a new submission.")
+      return
     }
-    // let formData = new FormData()
-    // for (const property in submissionState) {
-    //   if (property === 'semFiles') {
-    //     for (const file of submissionState[property]) {
-    //       formData.append(`sem_${file.name}`, file)
-    //     }
-    //   } else if (property === 'ramanFiles') {
-    //     for (const file of submissionState[property]) {
-    //       formData.append(`raman_${file.name}`, file)
-    //     }
-    //   } else {
-    //     formData.append(property, submissionState[property])
-    //   }
-    // }
-    // axios.post(host + '/experiments/submit', formData)
-    axios.post(host + '/experiments/submit', submissionState)
+
+    let formData = new FormData()
+    for (const file of submissionState.semFiles) {
+      formData.append(`sem_${file.name}`, file)
+    }
+    for (const file of submissionState.ramanFiles) {
+      formData.append(`raman_${file.name}`, file)
+    }
+
+    let experimentData = {...submissionState}
+    delete experimentData.semFiles
+    delete experimentData.ramanFiles
+
+    const stringifiedExperimentData = JSON.stringify(experimentData)
+    formData.append('experimentData', stringifiedExperimentData)
+    axios.post(host + '/experiments/submit', formData)
   }
   const environmentalConditionsForm =
     submissionState.useCustomEnvironmentalConditions
@@ -1145,32 +1146,32 @@ const ToolSubmit = () => {
         Submit
       </button>
 
-      {/*<hr className='mb-5'/>*/}
-      {/*<div className="flex justify-center">*/}
-      {/*  <div className="mb-3 w-96">*/}
-      {/*    <label htmlFor="sem-files" className="form-label inline-block mb-2 text-gray-700">Multiple*/}
-      {/*      files input*/}
-      {/*      example</label>*/}
-      {/*    <input className="form-control*/}
-      {/*                      block*/}
-      {/*                      w-full*/}
-      {/*                      px-3*/}
-      {/*                      py-1.5*/}
-      {/*                      text-base*/}
-      {/*                      font-normal*/}
-      {/*                      text-gray-700*/}
-      {/*                      bg-white bg-clip-padding*/}
-      {/*                      border border-solid border-gray-300*/}
-      {/*                      rounded*/}
-      {/*                      transition*/}
-      {/*                      ease-in-out*/}
-      {/*                      m-0*/}
-      {/*                      focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"*/}
-      {/*           type="file" id="sem-files"*/}
-      {/*           onChange={e => submissionDispatch({type: 'UPLOAD_SEM_FILES', payload: e.target.files})}*/}
-      {/*           multiple/>*/}
-      {/*  </div>*/}
-      {/*</div>*/}
+      <hr className='mb-5'/>
+      <div className="flex justify-center">
+        <div className="mb-3 w-96">
+          <label htmlFor="sem-files" className="form-label inline-block mb-2 text-gray-700">Multiple
+            files input
+            example</label>
+          <input className="form-control
+                            block
+                            w-full
+                            px-3
+                            py-1.5
+                            text-base
+                            font-normal
+                            text-gray-700
+                            bg-white bg-clip-padding
+                            border border-solid border-gray-300
+                            rounded
+                            transition
+                            ease-in-out
+                            m-0
+                            focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                 type="file" id="sem-files"
+                 onChange={e => submissionDispatch({type: 'UPLOAD_SEM_FILES', payload: e.target.files})}
+                 multiple/>
+        </div>
+      </div>
     </>
   )
 }

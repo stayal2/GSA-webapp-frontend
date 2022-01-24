@@ -13,9 +13,13 @@ import {GlobalContext} from "./App";
 import ToolSubmit from "../containers/ToolSubmit";
 import Sidebar from "../components/Sidebar";
 import LoadingPage from "../components/LoadingPage";
+import SearchByEnvironmentalCondition from "../components/SearchByEnvironmentalCondition";
+import SearchFilters from "../containers/SearchFilters";
+import SearchByFurnace from "../components/SearchByFurnace";
+import SearchBySubstrate from "../components/SearchBySubstrate";
 
 const Tool = () => {
-  const g = useContext(GlobalContext)
+  const {toolState, toolDispatch, flashError, flashSuccess} = useContext(GlobalContext)
   const [experimentIds, setExperimentIds] = useState([])
 
   const [loading, setLoading] = useState(false)
@@ -39,10 +43,10 @@ const Tool = () => {
         const response = await axios.get(host + '/experiments/init')
         const data = response.data
         if (response.status === 200) {
-          g.toolDispatch({type: 'INIT', payload: data})
+          toolDispatch({type: 'INIT', payload: data})
         }
       } catch (e) {
-        g.flashError('Oops. Something went wrong. Retrying...')
+        flashError('Oops. Something went wrong. Retrying...')
         setError(true)
       }
       setLoading(false)
@@ -77,22 +81,20 @@ const Tool = () => {
   const fetchExperimentIds = async (e) => {
     setLoading(true)
     const body = {
-      environmentalConditionFilters: g.toolState.environmentalConditionFilters,
-      furnaceFilters: g.toolState.furnaceFilters,
-      substrateFilters: g.toolState.substrateFilters,
-      recipeFilters: g.toolState.recipeFilters,
-      propertyFilters: g.toolState.propertyFilters,
-      authorFilters: g.toolState.authorFilters,
+      environmentalConditionFilters: toolState.environmentalConditionFilters,
+      furnaceFilters: toolState.furnaceFilters,
+      substrateFilters: toolState.substrateFilters,
+      recipeFilters: toolState.recipeFilters,
+      propertyFilters: toolState.propertyFilters,
+      authorFilters: toolState.authorFilters,
     }
     try {
-      console.log(body)
       const response = await axios.post(host + '/experiments/filter', body)
       const data = response.data
       setExperimentIds(data)
-      g.flashSuccess('Experiments with selected filters were fetched. Scroll down to see the results.')
+      flashSuccess('Experiments with selected filters were fetched. Scroll down to see the results.')
     } catch (e) {
-      console.log(e)
-      g.flashError('Oops. Something went wrong. Please try again later.')
+      flashError('Oops. Something went wrong. Please try again later.')
     } finally {
       setLoading(false)
     }
@@ -108,16 +110,16 @@ const Tool = () => {
     <>
       <Sidebar
         texts={['Query', 'Result', 'Submission']}
-        refs={[queryRef,resultRef,submitRef]}
+        refs={[queryRef, resultRef, submitRef]}
       />
       <div className='w-full md:flex flex-col md:container md:mx-auto mt-5 border rounded p-5'
            ref={queryRef}>
         <h2 className='text-center text-4xl font-bold mr-2 md:mb-4'>Query</h2>
         <hr/>
-        <div className='w-full md:flex flex-row mt-5'>
+        <div className='w-full md:flex flex-row mt-5 '>
           <div className='md:w-1/2 px-10'>
-            <h2 className='text-center text-4xl font-bold mr-2 md:mb-4'>Filters</h2>
-            <div className='w-full border rounded p-5'>
+            <h2 className='text-center text-4xl font-bold mr-2 md:mb-4'>Search By</h2>
+            <div className='h-screen-3/4 overflow-y-scroll border p-3'>
               <section className='w-full flex flex-col mb-5'>
                 <div className='flex justify-center align-middle mb-4'>
                   <h2 className='text-center text-3xl font-bold mr-2'>Environmental Conditions</h2>
@@ -130,10 +132,7 @@ const Tool = () => {
                   </button>
                 </div>
                 {showEnvironmentalConditions || <hr/>}
-                {showEnvironmentalConditions &&
-                <EnvironmentalConditions
-                  environmentalConditions={g.toolState.environmentalConditions}
-                />}
+                {showEnvironmentalConditions && <SearchByEnvironmentalCondition/>}
               </section>
               <section className='w-full flex flex-col mb-5'>
                 <div className='flex justify-center align-middle mb-4'>
@@ -146,10 +145,7 @@ const Tool = () => {
                   </button>
                 </div>
                 {showFurnaces || <hr/>}
-                {showFurnaces &&
-                <Furnaces
-                  furnaces={g.toolState.furnaces}
-                />}
+                {showFurnaces && <SearchByFurnace/>}
               </section>
               <section className='w-full flex flex-col mb-5'>
                 <div className='flex justify-center align-middle mb-4'>
@@ -162,10 +158,7 @@ const Tool = () => {
                   </button>
                 </div>
                 {showSubstrates || <hr/>}
-                {showSubstrates &&
-                <Substrates
-                  substrates={g.toolState.substrates}
-                />}
+                {showSubstrates && <SearchBySubstrate/>}
               </section>
               <section className='w-full flex flex-col mb-5'>
                 <div className='flex justify-center align-middle mb-4'>
@@ -180,9 +173,9 @@ const Tool = () => {
                 </div>
                 {showRecipes || <hr/>}
                 {showRecipes &&
-                <Recipes
-                  recipes={g.toolState.recipes}
-                />}
+                  <Recipes
+                    recipes={toolState.recipes}
+                  />}
               </section>
               <section className='w-full flex flex-col mb-5'>
                 <div className='flex justify-center align-middle mb-4'>
@@ -196,9 +189,9 @@ const Tool = () => {
                 </div>
                 {showProperties || <hr/>}
                 {showProperties &&
-                <Properties
-                  properties={g.toolState.properties}
-                />}
+                  <Properties
+                    properties={toolState.properties}
+                  />}
               </section>
               <section className='w-full flex flex-col mb-5'>
                 <div className='flex justify-center align-middle mb-4'>
@@ -212,41 +205,18 @@ const Tool = () => {
                 </div>
                 {showAuthors || <hr/>}
                 {showAuthors &&
-                <Authors
-                  authors={g.toolState.authors}
-                />}
+                  <Authors
+                    authors={toolState.authors}
+                  />}
               </section>
             </div>
           </div>
 
           <div className='md:w-1/2 px-10'>
             <div className='md:w-full flex flex-col'>
-              <h2 className='text-center text-4xl font-bold mr-2 md:mb-4'>Current Filters</h2>
+              <h2 className='text-center text-4xl font-bold mr-2 md:mb-4'>Current Search Filters</h2>
               <div className='h-screen-3/4 overflow-y-scroll border p-3'>
-                <EnvironmentalConditions
-                  environmentalConditions={g.toolState.environmentalConditionFilters}
-                  isFilter
-                />
-                <Furnaces
-                  furnaces={g.toolState.furnaceFilters}
-                  isFilter
-                />
-                <Substrates
-                  substrates={g.toolState.substrateFilters}
-                  isFilter
-                />
-                <Recipes
-                  recipes={g.toolState.recipeFilters}
-                  isFilter
-                />
-                <Properties
-                  properties={g.toolState.propertyFilters}
-                  isFilter
-                />
-                <Authors
-                  authors={g.toolState.authorFilters}
-                  isFilter
-                />
+                <SearchFilters filters={toolState.filters}/>
               </div>
               <div className='md:w-full md:flex md:flex-row md:justify-evenly'>
                 <button
@@ -258,14 +228,14 @@ const Tool = () => {
                   Search Experiments
                 </button>
                 {experimentIds.length > 0 &&
-                <button
-                  className='self-center w-1/3 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-5'
-                  type='button' onClick={() => {
-                  resultRef.current.scrollIntoView({behavior: "smooth"})
-                }}
-                >
-                  See Results
-                </button>}
+                  <button
+                    className='self-center w-1/3 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-5'
+                    type='button' onClick={() => {
+                    resultRef.current.scrollIntoView({behavior: "smooth"})
+                  }}
+                  >
+                    See Results
+                  </button>}
               </div>
             </div>
           </div>

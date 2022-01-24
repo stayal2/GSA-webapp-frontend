@@ -13,6 +13,7 @@ export const toolDefaultState = {
   substrateFilters: [],
   authors: [],
   authorFilters: [],
+  filters: [],
 }
 
 const toolReducer = (state, action) => {
@@ -28,6 +29,23 @@ const toolReducer = (state, action) => {
         recipes: data.recipes,
         substrates: data.substrates,
         authors: data.authors,
+      }
+    }
+    case 'ADD_FILTER' : {
+      const newFilter = {...action.payload}
+
+      return {
+        ...state,
+        filters: [...state.filters, newFilter]
+      }
+    }
+    case 'REMOVE_FILTER' : {
+      const delIdx = action.payload
+      const newFilters = [...state.filters]
+      newFilters.splice(delIdx, 1)
+      return {
+        ...state,
+        filters: newFilters
       }
     }
     case 'ADD_ENVIRONMENTAL_CONDITION_FILTER': {

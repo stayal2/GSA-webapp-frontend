@@ -37,34 +37,37 @@ const experimentReducer = (state, action) => {
       let coolingEndTime = 0
       const times = []
       let currStep = 'Annealing'
-      for (const prepStep of recipe.preparation_steps) {
-        const argonFlowRate = prepStep.argon_flow_rate.value ? prepStep.argon_flow_rate.value : 0
-        const carbonSourceFlowRate = prepStep.carbon_source_flow_rate.value ? prepStep.carbon_source_flow_rate.value : 0
-        const coolingRate = prepStep.cooling_rate.value ? prepStep.cooling_rate.value : 0
-        const duration = prepStep.duration.value ? prepStep.duration.value : 0
-        const furnacePressure = prepStep.furnace_pressure.value ? prepStep.furnace_pressure.value : 0
-        const furnaceTemperature = prepStep.furnace_temperature.value ? prepStep.furnace_temperature.value : 0
-        const heliumFlowRate = prepStep.helium_flow_rate.value ? prepStep.helium_flow_rate.value : 0
-        const hydrogenFlowRate = prepStep.hydrogen_flow_rate.value ? prepStep.hydrogen_flow_rate.value : 0
-        const sampleLocation = prepStep.sample_location.value ? prepStep.sample_location.value : 0
-        if (currStep !== prepStep.name.value) {
-          if (currStep === 'Annealing') {
-            annealingEndTime = elapsedTime
-            currStep = 'Growing'
-          } else if (currStep === 'Growing') {
-            growingEndTime = elapsedTime
+
+      if (recipe.preparation_steps) {
+        for (const prepStep of recipe.preparation_steps) {
+          const argonFlowRate = prepStep.argon_flow_rate.value ? prepStep.argon_flow_rate.value : 0
+          const carbonSourceFlowRate = prepStep.carbon_source_flow_rate.value ? prepStep.carbon_source_flow_rate.value : 0
+          const coolingRate = prepStep.cooling_rate.value ? prepStep.cooling_rate.value : 0
+          const duration = prepStep.duration.value ? prepStep.duration.value : 0
+          const furnacePressure = prepStep.furnace_pressure.value ? prepStep.furnace_pressure.value : 0
+          const furnaceTemperature = prepStep.furnace_temperature.value ? prepStep.furnace_temperature.value : 0
+          const heliumFlowRate = prepStep.helium_flow_rate.value ? prepStep.helium_flow_rate.value : 0
+          const hydrogenFlowRate = prepStep.hydrogen_flow_rate.value ? prepStep.hydrogen_flow_rate.value : 0
+          const sampleLocation = prepStep.sample_location.value ? prepStep.sample_location.value : 0
+          if (currStep !== prepStep.name.value) {
+            if (currStep === 'Annealing') {
+              annealingEndTime = elapsedTime
+              currStep = 'Growing'
+            } else if (currStep === 'Growing') {
+              growingEndTime = elapsedTime
+            }
           }
+          elapsedTime += duration
+          times.push(elapsedTime)
+          graphData.argonFlowRates.push(argonFlowRate)
+          graphData.carbonSourceFlowRates.push(carbonSourceFlowRate)
+          graphData.coolingRates.push(coolingRate)
+          graphData.furnacePressures.push(furnacePressure)
+          graphData.furnaceTemperatures.push(furnaceTemperature)
+          graphData.heliumFlowRates.push(heliumFlowRate)
+          graphData.hydrogenFlowRates.push(hydrogenFlowRate)
+          graphData.sampleLocations.push(sampleLocation)
         }
-        elapsedTime += duration
-        times.push(elapsedTime)
-        graphData.argonFlowRates.push(argonFlowRate)
-        graphData.carbonSourceFlowRates.push(carbonSourceFlowRate)
-        graphData.coolingRates.push(coolingRate)
-        graphData.furnacePressures.push(furnacePressure)
-        graphData.furnaceTemperatures.push(furnaceTemperature)
-        graphData.heliumFlowRates.push(heliumFlowRate)
-        graphData.hydrogenFlowRates.push(hydrogenFlowRate)
-        graphData.sampleLocations.push(sampleLocation)
       }
       coolingEndTime = elapsedTime
       return {
