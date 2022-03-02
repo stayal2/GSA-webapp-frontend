@@ -209,8 +209,7 @@ const Tool = () => {
                 <hr/>
                 <button
                   className='w-9 h-9 self-center text-center bg-gray-400 hover:bg-blue-700 text-white text-3xl font-bold rounded focus:outline-none focus:shadow-outline'
-                  disabled
-                  type='button' id='recipe-btn' onClick={() => setShowRecipes(!showRecipes)}
+                  type='button' id='recipe-btn' onClick={() => alert('temporarily disabled (under maintenance)')/*setShowRecipes(!showRecipes)*/}
                 >
                   +
                 </button>
