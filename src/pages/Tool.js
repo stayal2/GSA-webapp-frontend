@@ -35,6 +35,21 @@ const Tool = () => {
   const [mouseOverProperties, setMouseOverProperties] = useState(false)
   const [mouseOverAuthors, setMouseOverAuthors] = useState(false)
 
+  // const [dewPointAddedToCurrentFilter, setDewPointAddedToCurrentFilter] = useState(false)
+  // const [ambientTemperatureAddedToCurrentFilter, setAmbientTemperatureAddedToCurrentFilter] = useState(false)
+  // const [tubeDiameterAddedToCurrentFilter, setTubeDiameterAddedToCurrentFilter] = useState(false)
+  // const [crossSectionalAreaAddedToCurrentFilter, crossSectionalAreaToCurrentFilter] = useState(false)
+  // const [dewPointAddedToCurrentFilter, setDewPointAddedToCurrentFilter] = useState(false)
+  // const [dewPointAddedToCurrentFilter, setDewPointAddedToCurrentFilter] = useState(false)
+  // const [dewPointAddedToCurrentFilter, setDewPointAddedToCurrentFilter] = useState(false)
+  // const [dewPointAddedToCurrentFilter, setDewPointAddedToCurrentFilter] = useState(false)
+  // const [dewPointAddedToCurrentFilter, setDewPointAddedToCurrentFilter] = useState(false)
+  // const [dewPointAddedToCurrentFilter, setDewPointAddedToCurrentFilter] = useState(false)
+  // const [dewPointAddedToCurrentFilter, setDewPointAddedToCurrentFilter] = useState(false)
+  // const [dewPointAddedToCurrentFilter, setDewPointAddedToCurrentFilter] = useState(false)
+  // const [dewPointAddedToCurrentFilter, setDewPointAddedToCurrentFilter] = useState(false)
+  // const [dewPointAddedToCurrentFilter, setDewPointAddedToCurrentFilter] = useState(false)
+
   const queryRef = useRef(null)
   const resultRef = useRef(null)
   const submitRef = useRef(null)
@@ -84,7 +99,6 @@ const Tool = () => {
     try {
       const response = await axios.post(host + '/experiments/query', toolState.filters)
       const data = response.data
-      console.log(data)
       toolDispatch({type: 'SET_QUERY_RESULT', payload: data})
       toolDispatch({type: 'SAVE_FILTERS'})
     } catch (e) {

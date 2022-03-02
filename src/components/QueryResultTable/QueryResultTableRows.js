@@ -1,6 +1,6 @@
 import React, {useContext} from "react";
 import {GlobalContext} from "../../pages/App";
-import {isDefault} from "./QueryResultTableAdditionalHeaders";
+import {isDefault} from "./utils";
 import {Link} from "react-router-dom";
 
 const QueryResultTableRows = () => {
@@ -13,7 +13,7 @@ const QueryResultTableRows = () => {
         const substrateId = experiment.substrate ? experiment.substrate.id : 'N/A'
         const numLayers = experiment.properties ? experiment.properties.number_of_layers.value : 'N/A'
         const coverage = experiment.properties ? experiment.properties.growth_coverage.value : 'N/A'
-        const author = experiment.authors.length > 0 ? experiment.authors[0].first_name + '' + experiment.authors[0].last_name : 'N/A'
+        const author = experiment.authors.length > 0 ? experiment.authors[0].first_name + ' ' + experiment.authors[0].last_name : 'N/A'
         const carbonSource = experiment.recipe ? experiment.recipe.carbon_source.value : 'N/A'
         return (
           <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
@@ -46,7 +46,11 @@ const QueryResultTableRows = () => {
             {/* COLUMNS FOR ADDITIONAL FILTERS */}
             {toolState.savedFilters
               .filter(filter => !isDefault(filter))
-              .map(filter => {
+              .map((filter, i) => {
+                console.log(filter)
+                  if (!filter || !filter.name) {
+                    return null
+                  }
                   const filterName = filter.name.toLowerCase()
                   let value = null
                   if (filterName.includes('dew point'))

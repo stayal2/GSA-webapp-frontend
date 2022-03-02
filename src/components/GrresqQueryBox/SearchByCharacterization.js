@@ -1,6 +1,7 @@
 import React, {useContext, useState} from "react"
 import {GlobalContext} from "../../pages/App";
 import {defaultPrecision, shapeOptions} from "../../settings";
+import {isAddedToCurrentFilters} from "./utils";
 
 const SearchByCharacterization = () => {
   const [min, setMin] = useState(0)
@@ -8,9 +9,13 @@ const SearchByCharacterization = () => {
   const [name, setName] = useState("Shape")
   const [shape, setShape] = useState(shapeOptions[0])
   const [numLayers, setNumLayers] = useState(1)
-  const {toolDispatch} = useContext(GlobalContext)
+  const {toolState, toolDispatch} = useContext(GlobalContext)
 
   const onClickAdd = () => {
+    if (isAddedToCurrentFilters(name, toolState.filters)) {
+      alert(name + ' is already added.')
+      return
+    }
     if (name === 'Shape') {
       toolDispatch({
         type: 'ADD_FILTER',

@@ -1,16 +1,6 @@
 import React, {useContext} from "react";
 import {GlobalContext} from "../../pages/App";
-
-export const isDefault = (filter) => {
-  if (!filter.name) return false
-  const name = filter.name.toLowerCase()
-  return (
-    name.includes('number of layers')
-    || name.includes('growth coverage')
-    || name.includes('carbon source')
-    || name.includes('author')
-  )
-}
+import  {isDefault} from "./utils";
 
 const QueryResultTableAdditionalHeaders = () => {
   const {toolState} = useContext(GlobalContext)

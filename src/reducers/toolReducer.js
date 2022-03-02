@@ -1,12 +1,12 @@
 export const toolDefaultState = {
   environmentConditions: [],
   furnaces: [],
-  preparationStep: [],
+  preparationSteps: [],
   properties: [],
   recipes: [],
-  recipeFilters: [],
   substrates: [],
   authors: [],
+
   filters: [],
   savedFilters: [],
   queryResults: [],
@@ -51,10 +51,10 @@ const toolReducer = (state, action) => {
         queryResults: [...action.payload]
       }
     }
-    case'SAVE_FILTERS':{
+    case'SAVE_FILTERS': {
       return {
         ...state,
-        savedFilters : [...state.filters]
+        savedFilters: [...state.filters]
       }
     }
 

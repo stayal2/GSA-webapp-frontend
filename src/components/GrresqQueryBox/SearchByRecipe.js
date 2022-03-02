@@ -1,15 +1,20 @@
 import React, {useContext, useState} from "react";
 import {GlobalContext} from "../../pages/App";
 import {carbonSourceOptions, defaultPrecision} from "../../settings";
+import {isAddedToCurrentFilters} from "./utils";
 
 const SearchByRecipe = () => {
   const [min, setMin] = useState(0)
   const [max, setMax] = useState(9999)
   const [name, setName] = useState("Carbon Source")
   const [carbonSource, setCarbonSource] = useState(carbonSourceOptions[0])
-  const {toolDispatch} = useContext(GlobalContext)
+  const {toolState, toolDispatch} = useContext(GlobalContext)
 
   const onClickAdd = () => {
+    if (isAddedToCurrentFilters(name, toolState.filters)) {
+      alert(name + ' is already added.')
+      return
+    }
     if (name === 'Carbon Source') {
       toolDispatch({
         type: 'ADD_FILTER',

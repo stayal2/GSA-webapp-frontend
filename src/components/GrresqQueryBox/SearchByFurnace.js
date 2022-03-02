@@ -1,14 +1,19 @@
 import React, {useContext, useRef, useState} from "react"
 import {defaultPrecision} from "../../settings";
 import {GlobalContext} from "../../pages/App";
+import {isAddedToCurrentFilters} from "./utils";
 
 const SearchByFurnace = () => {
   const [min, setMin] = useState(0)
   const [max, setMax] = useState(9999)
   const [name, setName] = useState("Tube Diameter (mm)")
-  const {toolDispatch} = useContext(GlobalContext)
+  const {toolState, toolDispatch} = useContext(GlobalContext)
 
   const onClickAdd = () => {
+    if (isAddedToCurrentFilters(name, toolState.filters)) {
+      alert(name + ' is already added.')
+      return
+    }
     toolDispatch({
       type: 'ADD_FILTER',
       payload: {
