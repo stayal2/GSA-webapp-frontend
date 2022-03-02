@@ -2,8 +2,8 @@ import {carbonSourceOptions, catalystOptions, prepNameOptions, shapeOptions, mat
 
 export const submissionDefaultState = {
   materialName: materialNameOptions[0],
-  useCustomEnvironmentalConditions: false,
-  environmentalConditionsNumber: 1,
+  useCustomEnvironmentConditions: false,
+  environmentConditionsNumber: 1,
   ambientTemperature: 0,
   dewPoint: 0,
   useCustomFurnace: false,
@@ -43,8 +43,8 @@ export const submissionDefaultState = {
   domainSize: 0,
   shape: shapeOptions[0],
   authors: [],
-  // semFiles: [],
-  // ramanFiles: [],
+  semFiles: [],
+  ramanFiles: [],
 }
 
 const submissionReducer = (state, action) => {
@@ -66,16 +66,16 @@ const submissionReducer = (state, action) => {
         materialName: action.payload
       }
     }
-    case 'SET_CUSTOM_ENVIRONMENTAL_CONDITIONS': {
+    case 'SET_CUSTOM_ENVIRONMENT_CONDITIONS': {
       return {
         ...state,
-        useCustomEnvironmentalConditions: action.payload
+        useCustomEnvironmentConditions: action.payload
       }
     }
-    case 'ENVIRONMENTAL_CONDITIONS_NUMBER_CHANGE': {
+    case 'ENVIRONMENT_CONDITIONS_NUMBER_CHANGE': {
       return {
         ...state,
-        environmentalConditionsNumber: action.payload
+        environmentConditionsNumber: action.payload
       }
     }
     case 'AMBIENT_TEMPERATURE_CHANGE': {
@@ -336,18 +336,18 @@ const submissionReducer = (state, action) => {
         authors: filteredAuthors
       }
     }
-    // case 'UPLOAD_SEM_FILES': {
-    //   return {
-    //     ...state,
-    //     semFiles: action.payload
-    //   }
-    // }
-    // case 'UPLOAD_RAMAN_FILES': {
-    //   return {
-    //     ...state,
-    //     ramanFiles: action.payload
-    //   }
-    // }
+    case 'UPLOAD_SEM_FILES': {
+      return {
+        ...state,
+        semFiles: action.payload
+      }
+    }
+    case 'UPLOAD_RAMAN_FILES': {
+      return {
+        ...state,
+        ramanFiles: action.payload
+      }
+    }
     default: {
       throw new Error('No matching action type.')
     }

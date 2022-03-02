@@ -50,26 +50,27 @@ const ToolSubmit = () => {
   const onSubmitExperiment = () => {
     if (!userState.signedIn) {
       alert("Please log in before making a new submission.")
+      return
     }
-    // let formData = new FormData()
-    // for (const property in submissionState) {
-    //   if (property === 'semFiles') {
-    //     for (const file of submissionState[property]) {
-    //       formData.append(`sem_${file.name}`, file)
-    //     }
-    //   } else if (property === 'ramanFiles') {
-    //     for (const file of submissionState[property]) {
-    //       formData.append(`raman_${file.name}`, file)
-    //     }
-    //   } else {
-    //     formData.append(property, submissionState[property])
-    //   }
-    // }
-    // axios.post(host + '/experiments/submit', formData)
-    axios.post(host + '/experiments/submit', submissionState)
+
+    let formData = new FormData()
+    for (const file of submissionState.semFiles) {
+      formData.append(`sem_${file.name}`, file)
+    }
+    for (const file of submissionState.ramanFiles) {
+      formData.append(`raman_${file.name}`, file)
+    }
+
+    let experimentData = {...submissionState}
+    delete experimentData.semFiles
+    delete experimentData.ramanFiles
+
+    const stringifiedExperimentData = JSON.stringify(experimentData)
+    formData.append('experimentData', stringifiedExperimentData)
+    axios.post(host + '/experiments/submit', formData)
   }
-  const environmentalConditionsForm =
-    submissionState.useCustomEnvironmentalConditions
+  const environmentConditionsForm =
+    submissionState.useCustomEnvironmentConditions
       ?
       <div className='md:w-3/4 flex flex-col md:items-center'>
         <div className="md:w-3/4 md:flex md:items-center mb-6">
@@ -117,7 +118,7 @@ const ToolSubmit = () => {
         <div>
           <label className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4"
                  htmlFor="env-con-submit">
-            Environmental Conditions Number
+            Environment Conditions Number
           </label>
         </div>
         <div className="md:w-1/4 relative">
@@ -125,11 +126,11 @@ const ToolSubmit = () => {
             className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
             id="env-con-submit"
             onChange={e => submissionDispatch({
-              type: 'ENVIRONMENTAL_CONDITIONS_NUMBER_CHANGE', payload: parseInt(e.target.value)
+              type: 'ENVIRONMENT_CONDITIONS_NUMBER_CHANGE', payload: parseInt(e.target.value)
             })}
-            value={submissionState.environmentalConditionsNumber}
+            value={submissionState.environmentConditionsNumber}
           >
-            {toolState.environmentalConditions.map((envCon) => {
+            {toolState.environmentConditions.map((envCon) => {
               return <option key={envCon.id}>{envCon.id}</option>
             })}
           </select>
@@ -1055,21 +1056,21 @@ const ToolSubmit = () => {
         </div>
       </div>
       <hr className='mb-5'/>
-      <h4 className='text-center text-3xl font-bold mb-4'>Environmental Conditions</h4>
+      <h4 className='text-center text-3xl font-bold mb-4'>Environment Conditions</h4>
       <div className="md:flex md:items-center md:justify-center mb-6">
         <label className="block text-gray-500 font-bold">
           <input className="mr-2 leading-tight" type="checkbox"
                  onChange={e => submissionDispatch({
-                   type: 'SET_CUSTOM_ENVIRONMENTAL_CONDITIONS',
+                   type: 'SET_CUSTOM_ENVIRONMENT_CONDITIONS',
                    payload: e.target.checked
                  })}/>
           <span className="text-sm">
-              I will upload new Environmental Conditions
+              I will upload new Environment Conditions
             </span>
         </label>
       </div>
       <div className="md:w-3/4 md:flex md:items-center md:justify-center mb-6 mx-auto">
-        {environmentalConditionsForm}
+        {environmentConditionsForm}
       </div>
       <hr className='mb-5'/>
       <h4 className='text-center text-3xl font-bold mb-4'>Furnace</h4>
@@ -1145,32 +1146,32 @@ const ToolSubmit = () => {
         Submit
       </button>
 
-      {/*<hr className='mb-5'/>*/}
-      {/*<div className="flex justify-center">*/}
-      {/*  <div className="mb-3 w-96">*/}
-      {/*    <label htmlFor="sem-files" className="form-label inline-block mb-2 text-gray-700">Multiple*/}
-      {/*      files input*/}
-      {/*      example</label>*/}
-      {/*    <input className="form-control*/}
-      {/*                      block*/}
-      {/*                      w-full*/}
-      {/*                      px-3*/}
-      {/*                      py-1.5*/}
-      {/*                      text-base*/}
-      {/*                      font-normal*/}
-      {/*                      text-gray-700*/}
-      {/*                      bg-white bg-clip-padding*/}
-      {/*                      border border-solid border-gray-300*/}
-      {/*                      rounded*/}
-      {/*                      transition*/}
-      {/*                      ease-in-out*/}
-      {/*                      m-0*/}
-      {/*                      focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"*/}
-      {/*           type="file" id="sem-files"*/}
-      {/*           onChange={e => submissionDispatch({type: 'UPLOAD_SEM_FILES', payload: e.target.files})}*/}
-      {/*           multiple/>*/}
-      {/*  </div>*/}
-      {/*</div>*/}
+      <hr className='mb-5'/>
+      <div className="flex justify-center">
+        <div className="mb-3 w-96">
+          <label htmlFor="sem-files" className="form-label inline-block mb-2 text-gray-700">Multiple
+            files input
+            example</label>
+          <input className="form-control
+                            block
+                            w-full
+                            px-3
+                            py-1.5
+                            text-base
+                            font-normal
+                            text-gray-700
+                            bg-white bg-clip-padding
+                            border border-solid border-gray-300
+                            rounded
+                            transition
+                            ease-in-out
+                            m-0
+                            focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                 type="file" id="sem-files"
+                 onChange={e => submissionDispatch({type: 'UPLOAD_SEM_FILES', payload: e.target.files})}
+                 multiple/>
+        </div>
+      </div>
     </>
   )
 }

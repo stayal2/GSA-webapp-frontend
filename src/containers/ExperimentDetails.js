@@ -1,16 +1,16 @@
 import React from "react";
-import DetailEnvironmentalCondition from "../components/DetailEnvironmentalCondition";
-import DetailFurnace from "../components/DetailFurnace";
-import DetailSubstrate from "../components/DetailSubstrate";
-import DetailRecipe from "../components/DetailRecipe";
-import DetailProperties from "../components/DetailProperties";
-import DetailAuthors from "../components/DetailAuthors";
+import DetailEnvironmentCondition from "../components/ExperimentDetail/DetailEnvironmentCondition";
+import DetailFurnace from "../components/ExperimentDetail/DetailFurnace";
+import DetailSubstrate from "../components/ExperimentDetail/DetailSubstrate";
+import DetailRecipe from "../components/ExperimentDetail/DetailRecipe";
+import DetailProperties from "../components/ExperimentDetail/DetailProperties";
+import DetailAuthors from "../components/ExperimentDetail/DetailAuthors";
 
 const ExperimentDetails = () => {
   return (
     <>
       <DetailAuthors/>
-      <DetailEnvironmentalCondition/>
+      <DetailEnvironmentCondition/>
       <DetailFurnace/>
       <DetailSubstrate/>
       <DetailProperties/>
