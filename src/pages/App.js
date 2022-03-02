@@ -45,24 +45,29 @@ const App = () => {
     }, 5000)
   }
   useEffect(() => {
-    const trySignIn = async () => {
-      const token = window.localStorage.getItem('token');
-      if (token) {
-        const response = await signInWithToken(token);
-        if (response) {
-          window.localStorage.setItem('token', response.token)
-          const payload = {
-            email: response.email,
-            authorId: response.author_id
+      const trySignIn = async () => {
+        const token = window.localStorage.getItem('token');
+        if (token) {
+          try {
+            const response = await signInWithToken(token);
+            window.localStorage.setItem('token', response.token)
+            const payload = {
+              email: response.email,
+              authorId: response.author_id
+            }
+            userDispatch({type: 'SIGN_IN', payload})
+          } catch (e) {
+            if (e.response && e.response.status === 401)
+              alert('Email or password is incorrect.')
+            window.localStorage.removeItem('token')
           }
-          userDispatch({type: 'SIGN_IN', payload})
         } else {
           userDispatch({type: 'SIGN_OUT'})
         }
       }
-    }
-    trySignIn();
-  }, [])
+      trySignIn();
+    }, []
+  )
 
   return (
     <GlobalContext.Provider

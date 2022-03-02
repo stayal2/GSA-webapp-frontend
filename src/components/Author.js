@@ -17,7 +17,12 @@ const Author = ({idx, id, firstName, lastName, institution, isCurrentFilter, isF
       }
     }
 
-    toolDispatch({type: 'ADD_FILTER', payload: {type: 'AUTHOR', id, firstName, lastName, institution}})
+    toolDispatch({
+      type: 'ADD_FILTER',
+      payload: {
+        type: 'AUTHOR', category: 'author', id, firstName, lastName, institution
+      }
+    })
   }
   let btn = (
     <button

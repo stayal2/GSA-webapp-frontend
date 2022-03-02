@@ -1,5 +1,5 @@
 import React, {useContext} from "react"
-import {GlobalContext} from "../pages/App";
+import {GlobalContext} from "../../pages/App";
 
 const SearchFilter = ({idx, type, name, min, max, value, firstName, lastName, institution}) => {
   const {toolDispatch} = useContext(GlobalContext)

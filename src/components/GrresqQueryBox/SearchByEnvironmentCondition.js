@@ -1,15 +1,20 @@
-import React, {useContext, useRef, useState} from "react"
-import {defaultPrecision} from "../settings";
-import {GlobalContext} from "../pages/App";
+import React, {useContext, useState} from "react"
+import {defaultPrecision} from "../../settings";
+import {GlobalContext} from "../../pages/App";
 
-const SearchByEnvironmentalCondition = () => {
+const SearchByEnvironmentCondition = () => {
   const [min, setMin] = useState(0)
   const [max, setMax] = useState(9999)
   const [name, setName] = useState("Dew Point (°C)")
   const {toolDispatch} = useContext(GlobalContext)
 
   const onClickAdd = () => {
-    toolDispatch({type: 'ADD_FILTER', payload: {type:'MIN_MAX',name, min, max}})
+    toolDispatch({
+      type: 'ADD_FILTER',
+      payload: {
+        type: 'MIN_MAX', category: 'environmentCondition', name, min, max
+      }
+    })
   }
 
   return (
@@ -23,9 +28,7 @@ const SearchByEnvironmentalCondition = () => {
           <select
             className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
             id="env-con-option"
-            onChange={(e) => {
-              setName(e.target.value)
-            }}
+            onChange={e => setName(e.target.value)}
           >
             <option>Dew Point (°C)</option>
             <option>Ambient Temperature (°C)</option>
@@ -45,7 +48,7 @@ const SearchByEnvironmentalCondition = () => {
           <input
             className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
             id="env-con-min" type="number" step={defaultPrecision} value={min}
-            onChange={(e) => setMin(e.target.value)}
+            onChange={e => setMin(parseFloat(e.target.value))}
           />
         </div>
         <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
@@ -55,7 +58,7 @@ const SearchByEnvironmentalCondition = () => {
           <input
             className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
             id="env-con-max" type="number" step={defaultPrecision} value={max}
-            onChange={(e) => setMax(e.target.value)}
+            onChange={e => setMax(parseFloat(e.target.value))}
           />
         </div>
       </div>
@@ -68,4 +71,4 @@ const SearchByEnvironmentalCondition = () => {
   )
 }
 
-export default SearchByEnvironmentalCondition
+export default SearchByEnvironmentCondition

@@ -1,25 +1,25 @@
 import React, {useEffect, useState} from 'react'
 import {defaultPrecision} from "../settings";
-import EnvironmentalCondition from '../components/EnvironmentalCondition'
+import EnvironmentCondition from '../components/EnvironmentCondition'
 
-const EnvironmentalConditions = ({environmentalConditions, isFilter}) => {
+const EnvironmentConditions = ({environmentConditions, isFilter}) => {
   const [envConMin, setEnvConMin] = useState(0)
   const [envConMax, setEnvConMax] = useState(9999)
   const [dewPointMin, setDewPointMin] = useState(0)
   const [dewPointMax, setDewPointMax] = useState(9999)
-  const [filteredEnvCons, setFilteredEnvCons] = useState(environmentalConditions)
+  const [filteredEnvCons, setFilteredEnvCons] = useState(environmentConditions)
 
   useEffect(() => {
-    const filtered = environmentalConditions.filter((envCon) => {
+    const filtered = environmentConditions.filter((envCon) => {
       const ambientTemperature = envCon.ambient_temperature.value
       const dewPoint = envCon.dew_point.value
       return (ambientTemperature === null || (envConMin <= ambientTemperature && ambientTemperature <= envConMax))
         && (dewPoint === null || (dewPointMin <= dewPoint && dewPoint <= dewPointMax))
     })
     setFilteredEnvCons(filtered)
-  }, [environmentalConditions, envConMin, envConMax, dewPointMin, dewPointMax])
+  }, [environmentConditions, envConMin, envConMax, dewPointMin, dewPointMax])
 
-  if (!environmentalConditions) {
+  if (!environmentConditions) {
     return null
   }
   let scrollbarClass = 'w-full'
@@ -86,7 +86,7 @@ const EnvironmentalConditions = ({environmentalConditions, isFilter}) => {
       {searchBar}
       <div className={scrollbarClass}>
         {filteredEnvCons.map((envCon, i) =>
-          <EnvironmentalCondition
+          <EnvironmentCondition
             key={i}
             id={envCon.id}
             ambientTemperature={envCon.ambient_temperature.value}
@@ -99,4 +99,4 @@ const EnvironmentalConditions = ({environmentalConditions, isFilter}) => {
   )
 }
 
-export default EnvironmentalConditions
+export default EnvironmentConditions

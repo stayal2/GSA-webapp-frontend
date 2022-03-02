@@ -1,30 +1,29 @@
 import React, {useContext, useState} from "react"
-import {GlobalContext} from "../pages/App";
-import {defaultPrecision, shapeOptions} from "../settings";
+import {catalystOptions, defaultPrecision} from "../../settings";
+import {GlobalContext} from "../../pages/App";
 
-const SearchByCharacterization = () => {
+const SearchBySubstrate = () => {
   const [min, setMin] = useState(0)
   const [max, setMax] = useState(9999)
-  const [name, setName] = useState("Shape")
-  const [shape, setShape] = useState(shapeOptions[0])
-  const [numLayers, setNumLayers] = useState(1)
+  const [name, setName] = useState("Catalyst")
+  const [catalyst, setCatalyst] = useState("Copper")
   const {toolDispatch} = useContext(GlobalContext)
 
   const onClickAdd = () => {
-    if (name === 'Shape') {
-      toolDispatch({type: 'ADD_FILTER', payload: {type: 'KEY_VALUE', name, value: shape}})
-    } else if (name === 'Number of Layers') {
-      if (numLayers < 0) {
-        alert('Number of Layers cannot be a negative number.')
-        return
-      }
-      if (!Number.isInteger(numLayers)) {
-        alert('Number of Layers cannot be a floating point number.')
-        return
-      }
-      toolDispatch({type: 'ADD_FILTER', payload: {type: 'KEY_VALUE', name, value: numLayers}})
+    if (name === 'Catalyst') {
+      toolDispatch({
+        type: 'ADD_FILTER',
+        payload: {
+          type: 'KEY_VALUE', category: 'substrate', name, value: catalyst
+        }
+      })
     } else {
-      toolDispatch({type: 'ADD_FILTER', payload: {type: 'MIN_MAX', name, min, max}})
+      toolDispatch({
+        type: 'ADD_FILTER',
+        payload: {
+          type: 'MIN_MAX', category: 'substrate', name, min, max
+        }
+      })
     }
   }
 
@@ -32,23 +31,20 @@ const SearchByCharacterization = () => {
     <div className="w-full border rounded flex flex-col items-center py-5">
       <div className="w-full md:w-2/3 px-3 mb-6 md:mb-0">
         <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-               htmlFor="characterization-option">
+               htmlFor="substrate-option">
           Option
         </label>
         <div className="relative">
           <select
             className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-            id="characterization-option"
-            onChange={(e) => {
-              setName(e.target.value)
-            }}
+            id="substrate-option"
+            onChange={e => setName(e.target.value)}
           >
-            <option>Shape</option>
-            <option>Average Thickness of Growth (um²)</option>
-            <option>Std. Dev. of Growth (mm)</option>
-            <option>Number of Layers</option>
-            <option>Growth Coverage (mm²)</option>
-            <option>Domain Size (mm²)</option>
+            <option>Catalyst</option>
+            <option>Thickness (um²)</option>
+            <option>Diameter (mm)</option>
+            <option>Length (mm)</option>
+            <option>Surface Area (mm²)</option>
           </select>
           <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
             <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
@@ -58,21 +54,20 @@ const SearchByCharacterization = () => {
         </div>
       </div>
       <div className='flex flex-row md:w-2/3 justify-center my-2'>
-        {name === 'Shape' &&
+        {
+          name === 'Catalyst' &&
           <div className="w-full px-3 mb-6 md:mb-0">
             <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                   htmlFor="shape-option">
+                   htmlFor="substrate-option">
               Catalyst
             </label>
             <div className="relative">
               <select
                 className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                id="shape-option"
-                onChange={e => {
-                  setShape(e.target.value)
-                }}
+                id="catalyst-option"
+                onChange={e => setCatalyst(e.target.value)}
               >
-                {shapeOptions.map(cat => <option key={cat}>{cat}</option>)}
+                {catalystOptions.map(cat => <option key={cat}>{cat}</option>)}
               </select>
               <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
                 <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
@@ -82,41 +77,29 @@ const SearchByCharacterization = () => {
             </div>
           </div>
         }
-        {name === 'Number of Layers' &&
-          <div className="w-full px-3 mb-6 md:mb-0">
-            <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                   htmlFor="characterization-num-layers">
-              count
-            </label>
-            <input
-              className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-              id="characterization-num-layers" type="number" value={numLayers}
-              onChange={e => setNumLayers(e.target.value)}
-            />
-          </div>
-        }
-        {name !== 'Shape' && name !== 'Number of Layers' &&
+        {
+          name !== 'Catalyst' &&
           <>
             <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
               <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                     htmlFor="characterization-min">
+                     htmlFor="substrate-min">
                 min
               </label>
               <input
                 className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                id="characterization-min" type="number" step={defaultPrecision} value={min}
-                onChange={e => setMin(e.target.value)}
+                id="substrate-min" type="number" step={defaultPrecision} value={min}
+                onChange={e => setMin(parseFloat(e.target.value))}
               />
             </div>
             <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
               <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                     htmlFor="characterization-max">
+                     htmlFor="substrate-max">
                 max
               </label>
               <input
                 className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                id="characterization-max" type="number" step={defaultPrecision} value={max}
-                onChange={e => setMax(e.target.value)}
+                id="substrate-max" type="number" step={defaultPrecision} value={max}
+                onChange={e => setMax(parseFloat(e.target.value))}
               />
             </div>
           </>
@@ -131,4 +114,4 @@ const SearchByCharacterization = () => {
   )
 }
 
-export default SearchByCharacterization
+export default SearchBySubstrate

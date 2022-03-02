@@ -1,5 +1,5 @@
 import React from "react"
-import SearchFilter from "../components/SearchFilter";
+import SearchFilter from "../components/GrresqQueryBox/SearchFilter";
 
 
 const SearchFilters = (filters) => {

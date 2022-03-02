@@ -1,19 +1,29 @@
-import React, {useContext, useRef, useState} from "react"
-import {catalystOptions, defaultPrecision} from "../settings";
-import {GlobalContext} from "../pages/App";
+import React, {useContext, useState} from "react";
+import {GlobalContext} from "../../pages/App";
+import {carbonSourceOptions, defaultPrecision} from "../../settings";
 
-const SearchBySubstrate = () => {
+const SearchByRecipe = () => {
   const [min, setMin] = useState(0)
   const [max, setMax] = useState(9999)
-  const [name, setName] = useState("Catalyst")
-  const [catalyst, setCatalyst] = useState("Copper")
+  const [name, setName] = useState("Carbon Source")
+  const [carbonSource, setCarbonSource] = useState(carbonSourceOptions[0])
   const {toolDispatch} = useContext(GlobalContext)
 
   const onClickAdd = () => {
-    if (name === 'Catalyst') {
-      toolDispatch({type: 'ADD_FILTER', payload: {type: 'KEY_VALUE', name, value: catalyst}})
+    if (name === 'Carbon Source') {
+      toolDispatch({
+        type: 'ADD_FILTER',
+        payload: {
+          type: 'KEY_VALUE', category: 'recipe', name, value: carbonSource
+        }
+      })
     } else {
-      toolDispatch({type: 'ADD_FILTER', payload: {type: 'MIN_MAX', name, min, max}})
+      toolDispatch({
+        type: 'ADD_FILTER',
+        payload: {
+          type: 'MIN_MAX', category: 'recipe', name, min, max
+        }
+      })
     }
   }
 
@@ -21,19 +31,17 @@ const SearchBySubstrate = () => {
     <div className="w-full border rounded flex flex-col items-center py-5">
       <div className="w-full md:w-2/3 px-3 mb-6 md:mb-0">
         <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-               htmlFor="substrate-option">
+               htmlFor="recipe-option">
           Option
         </label>
         <div className="relative">
           <select
             className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-            id="substrate-option"
-            onChange={(e) => {
-              setName(e.target.value)
-            }}
+            id="recipe-option"
+            onChange={e => setName(e.target.value)}
           >
-            <option>Catalyst</option>
-            <option>Thickness (um²)</option>
+            <option>Carbon Source</option>
+            <option>Base Pressure (Torr)</option>
             <option>Diameter (mm)</option>
             <option>Length (mm)</option>
             <option>Surface Area (mm²)</option>
@@ -46,22 +54,19 @@ const SearchBySubstrate = () => {
         </div>
       </div>
       <div className='flex flex-row md:w-2/3 justify-center my-2'>
-        {
-          name === 'Catalyst' &&
+        {name === 'Carbon Source' &&
           <div className="w-full px-3 mb-6 md:mb-0">
             <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                   htmlFor="substrate-option">
+                   htmlFor="carbon-source-option">
               Catalyst
             </label>
             <div className="relative">
               <select
                 className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                id="catalyst-option"
-                onChange={(e) => {
-                  setCatalyst(e.target.value)
-                }}
+                id="carbon-source-option"
+                onChange={e => setCarbonSource(e.target.value)}
               >
-                {catalystOptions.map(cat => <option key={cat}>{cat}</option>)}
+                {carbonSourceOptions.map(cat => <option key={cat}>{cat}</option>)}
               </select>
               <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
                 <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
@@ -71,29 +76,28 @@ const SearchBySubstrate = () => {
             </div>
           </div>
         }
-        {
-          name !== 'Catalyst' &&
+        {name !== 'Carbon Source' &&
           <>
             <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
               <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                     htmlFor="env-con-min">
+                     htmlFor="recipe-min">
                 min
               </label>
               <input
                 className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                id="substrate-min" type="number" step={defaultPrecision} value={min}
-                onChange={(e) => setMin(e.target.value)}
+                id="recipe-min" type="number" step={defaultPrecision} value={min}
+                onChange={(e) => setMin(parseFloat(e.target.value))}
               />
             </div>
             <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
               <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                     htmlFor="env-con-max">
+                     htmlFor="recipe-max">
                 max
               </label>
               <input
                 className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                id="substrate-max" type="number" step={defaultPrecision} value={max}
-                onChange={(e) => setMax(e.target.value)}
+                id="recipe-max" type="number" step={defaultPrecision} value={max}
+                onChange={(e) => setMax(parseFloat(e.target.value))}
               />
             </div>
           </>
@@ -108,4 +112,4 @@ const SearchBySubstrate = () => {
   )
 }
 
-export default SearchBySubstrate
+export default SearchByRecipe

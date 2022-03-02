@@ -1,7 +1,7 @@
 import React, {useContext} from 'react'
 import {GlobalContext} from "../pages/App";
 
-const EnvironmentalCondition = ({id, ambientTemperature, dewPoint, isAddedToFilter, isFilter}) => {
+const EnvironmentCondition = ({id, ambientTemperature, dewPoint, isAddedToFilter, isFilter}) => {
   const {toolDispatch} = useContext(GlobalContext)
 
   const displayAmbientTemperature =
@@ -69,4 +69,4 @@ const EnvironmentalCondition = ({id, ambientTemperature, dewPoint, isAddedToFilt
   )
 }
 
-export default EnvironmentalCondition
+export default EnvironmentCondition

@@ -13,7 +13,6 @@ import {getRandomInt} from "../utils/math";
 
 const Raman = () => {
   const {ramanFiles} = useContext(ExperimentContext)
-  console.log(ramanFiles)
   if (!ramanFiles || ramanFiles.length === 0) {
     return <p className='text-center'>No result</p>
   }

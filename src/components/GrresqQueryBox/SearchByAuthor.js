@@ -1,6 +1,6 @@
 import React, {useContext, useEffect, useState} from "react"
-import Author from "./Author";
-import {GlobalContext} from "../pages/App";
+import Author from "../Author";
+import {GlobalContext} from "../../pages/App";
 
 const SearchByAuthor = () => {
   const {toolState} = useContext(GlobalContext)
@@ -34,7 +34,7 @@ const SearchByAuthor = () => {
           <input
             className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
             id="name" type="text" value={name}
-            onChange={(e) => setName(e.target.value)}
+            onChange={e => setName(e.target.value)}
           />
         </div>
       </div>
@@ -47,7 +47,7 @@ const SearchByAuthor = () => {
           <input
             className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
             id="institution" type="text" value={institution}
-            onChange={(e) => setInstitution(e.target.value)}
+            onChange={e => setInstitution(e.target.value)}
           />
         </div>
       </div>

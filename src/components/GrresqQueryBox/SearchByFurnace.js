@@ -1,6 +1,6 @@
 import React, {useContext, useRef, useState} from "react"
-import {defaultPrecision} from "../settings";
-import {GlobalContext} from "../pages/App";
+import {defaultPrecision} from "../../settings";
+import {GlobalContext} from "../../pages/App";
 
 const SearchByFurnace = () => {
   const [min, setMin] = useState(0)
@@ -9,7 +9,12 @@ const SearchByFurnace = () => {
   const {toolDispatch} = useContext(GlobalContext)
 
   const onClickAdd = () => {
-    toolDispatch({type: 'ADD_FILTER', payload: {type:'MIN_MAX',name, min, max}})
+    toolDispatch({
+      type: 'ADD_FILTER',
+      payload: {
+        type: 'MIN_MAX', category: 'furnace', name, min, max
+      }
+    })
   }
 
   return (
@@ -23,9 +28,7 @@ const SearchByFurnace = () => {
           <select
             className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
             id="furnace-option"
-            onChange={(e) => {
-              setName(e.target.value)
-            }}
+            onChange={(e) => setName(e.target.value)}
           >
             <option>Tube Diameter (mm)</option>
             <option>Cross Sectional Area (mm²)</option>
@@ -47,7 +50,7 @@ const SearchByFurnace = () => {
           <input
             className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
             id="furnace-min" type="number" step={defaultPrecision} value={min}
-            onChange={(e) => setMin(e.target.value)}
+            onChange={(e) => setMin(parseFloat(e.target.value))}
           />
         </div>
         <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
@@ -57,7 +60,7 @@ const SearchByFurnace = () => {
           <input
             className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
             id="furnace-max" type="number" step={defaultPrecision} value={max}
-            onChange={(e) => setMax(e.target.value)}
+            onChange={(e) => setMax(parseFloat(e.target.value))}
           />
         </div>
       </div>

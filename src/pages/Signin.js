@@ -14,23 +14,19 @@ const Signin = () => {
       const data = await signInWithCredentials(email, password)
       window.localStorage.setItem('token', data.token)
       const payload = {
-        email: data.email,
-        authorId: data.author_id
+        email: data.email, authorId: data.authorId
       }
       g.userDispatch({type: 'SIGN_IN', payload})
     } catch (err) {
-      if (err.response.status === 403) {
-        g.flashError("Incorrect email or password.")
-      }
+      alert("Incorrect email or password.")
     }
   }
 
   if (g.userState.signedIn) {
     return <Redirect to='/'/>
   }
-  return (
-    <form className='md:w-1/2 flex flex-col md:items-center mx-auto border rounded my-6 py-6'
-          onSubmit={onClickSignInBtn}>
+  return (<form className='md:w-1/2 flex flex-col md:items-center mx-auto border rounded my-6 py-6'
+                onSubmit={onClickSignInBtn}>
       <h2 className='text-center text-3xl font-bold mb-6'>Sign In</h2>
       <div className="md:w-full md:flex md:items-center mb-6">
         <div className="md:w-1/3">
@@ -73,8 +69,7 @@ const Signin = () => {
         type='submit'>
         Sign In
       </button>
-    </form>
-  )
+    </form>)
 }
 
 export default Signin

@@ -69,8 +69,8 @@ const ToolSubmit = () => {
     formData.append('experimentData', stringifiedExperimentData)
     axios.post(host + '/experiments/submit', formData)
   }
-  const environmentalConditionsForm =
-    submissionState.useCustomEnvironmentalConditions
+  const environmentConditionsForm =
+    submissionState.useCustomEnvironmentConditions
       ?
       <div className='md:w-3/4 flex flex-col md:items-center'>
         <div className="md:w-3/4 md:flex md:items-center mb-6">
@@ -118,7 +118,7 @@ const ToolSubmit = () => {
         <div>
           <label className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4"
                  htmlFor="env-con-submit">
-            Environmental Conditions Number
+            Environment Conditions Number
           </label>
         </div>
         <div className="md:w-1/4 relative">
@@ -126,11 +126,11 @@ const ToolSubmit = () => {
             className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
             id="env-con-submit"
             onChange={e => submissionDispatch({
-              type: 'ENVIRONMENTAL_CONDITIONS_NUMBER_CHANGE', payload: parseInt(e.target.value)
+              type: 'ENVIRONMENT_CONDITIONS_NUMBER_CHANGE', payload: parseInt(e.target.value)
             })}
-            value={submissionState.environmentalConditionsNumber}
+            value={submissionState.environmentConditionsNumber}
           >
-            {toolState.environmentalConditions.map((envCon) => {
+            {toolState.environmentConditions.map((envCon) => {
               return <option key={envCon.id}>{envCon.id}</option>
             })}
           </select>
@@ -1056,21 +1056,21 @@ const ToolSubmit = () => {
         </div>
       </div>
       <hr className='mb-5'/>
-      <h4 className='text-center text-3xl font-bold mb-4'>Environmental Conditions</h4>
+      <h4 className='text-center text-3xl font-bold mb-4'>Environment Conditions</h4>
       <div className="md:flex md:items-center md:justify-center mb-6">
         <label className="block text-gray-500 font-bold">
           <input className="mr-2 leading-tight" type="checkbox"
                  onChange={e => submissionDispatch({
-                   type: 'SET_CUSTOM_ENVIRONMENTAL_CONDITIONS',
+                   type: 'SET_CUSTOM_ENVIRONMENT_CONDITIONS',
                    payload: e.target.checked
                  })}/>
           <span className="text-sm">
-              I will upload new Environmental Conditions
+              I will upload new Environment Conditions
             </span>
         </label>
       </div>
       <div className="md:w-3/4 md:flex md:items-center md:justify-center mb-6 mx-auto">
-        {environmentalConditionsForm}
+        {environmentConditionsForm}
       </div>
       <hr className='mb-5'/>
       <h4 className='text-center text-3xl font-bold mb-4'>Furnace</h4>

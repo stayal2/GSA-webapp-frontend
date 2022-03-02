@@ -1,5 +1,5 @@
 export const toolDefaultState = {
-  environmentalConditions: [],
+  environmentConditions: [],
   furnaces: [],
   preparationStep: [],
   properties: [],
@@ -7,8 +7,9 @@ export const toolDefaultState = {
   recipeFilters: [],
   substrates: [],
   authors: [],
-  authorFilters: [],
   filters: [],
+  savedFilters: [],
+  queryResults: [],
 }
 
 const toolReducer = (state, action) => {
@@ -17,7 +18,7 @@ const toolReducer = (state, action) => {
       const data = action.payload
       return {
         ...state,
-        environmentalConditions: data.environmental_conditions,
+        environmentConditions: data.environment_conditions,
         furnaces: data.furnaces,
         preparationSteps: data.preparations_steps,
         properties: data.properties,
@@ -44,30 +45,19 @@ const toolReducer = (state, action) => {
         filters: newFilters
       }
     }
-    case 'ADD_RECIPE_FILTER': {
-      const id = action.payload.id
-      const newFilter =
-        state.recipes
-          .find((recipe) => recipe.id === id)
-      newFilter.isAddedToFilter = true
+    case 'SET_QUERY_RESULT' : {
       return {
         ...state,
-        recipeFilters: [...state.recipeFilters, newFilter]
+        queryResults: [...action.payload]
       }
     }
-    case 'DEL_RECIPE_FILTER': {
-      const newFilters = [...state.recipeFilters]
-      const id = action.payload.id
-      const idxToPop =
-        state.recipeFilters
-          .findIndex((recipe) => recipe.id === id)
-      state.recipeFilters[idxToPop].isAddedToFilter = false
-      newFilters.splice(idxToPop, 1)
+    case'SAVE_FILTERS':{
       return {
         ...state,
-        recipeFilters: newFilters
+        savedFilters : [...state.filters]
       }
     }
+
     default: {
       throw new Error('No matching action type.')
     }

@@ -1,9 +1,9 @@
 import React, {useContext} from 'react'
-import {ExperimentContext} from "../pages/ExperimentView";
+import {ExperimentContext} from "../../pages/ExperimentView";
 
-const DetailEnvironmentalCondition = () => {
+const DetailEnvironmentCondition = () => {
   const {experiment} = useContext(ExperimentContext)
-  const envCon = experiment.environmental_conditions
+  const envCon = experiment.environment_conditions
   if (!envCon){
     return null
   }
@@ -23,7 +23,7 @@ const DetailEnvironmentalCondition = () => {
   return (
     <div className='flex flex-col py-2 px-4 mb-2 border'>
       <div className='flex justify-between'>
-        <h6 className='font-bold ml-3'> Environmental Condition #{envCon.id}</h6>
+        <h6 className='font-bold ml-3'> Environment Condition #{envCon.id}</h6>
       </div>
       <hr className='my-1'/>
       <div className='w-full md:flex md:items-center mb-1'>
@@ -39,4 +39,4 @@ const DetailEnvironmentalCondition = () => {
   )
 }
 
-export default DetailEnvironmentalCondition
+export default DetailEnvironmentCondition
