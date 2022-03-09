@@ -12,8 +12,6 @@ import {
 import submissionReducer, {submissionDefaultState} from "../reducers/submissionReducer";
 import axios from "axios";
 
-const jwt = import("jsonwebtoken")
-
 const ToolSubmit = () => {
   const {userState, toolState} = useContext(GlobalContext)
   const [submissionState, submissionDispatch] = useReducer(submissionReducer, submissionDefaultState)
