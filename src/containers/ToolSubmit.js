@@ -12,23 +12,20 @@ import {
 import submissionReducer, {submissionDefaultState} from "../reducers/submissionReducer";
 import axios from "axios";
 
+const jwt = import("jsonwebtoken")
+
 const ToolSubmit = () => {
   const {userState, toolState} = useContext(GlobalContext)
   const [submissionState, submissionDispatch] = useReducer(submissionReducer, submissionDefaultState)
   const [authorIdToAdd, setAuthorIdToAdd] = useState(1)
 
   useEffect(() => {
-    if (!userState.authorId) {
-      return
+    for (const author of toolState.authors) {
+      if (author.id === userState.authorId) {
+        submissionDispatch({type: 'INIT_SUBMISSION', payload: author})
+        return
+      }
     }
-    let author = toolState.authors.filter((author) => {
-      return author.id === userState.authorId
-    })
-    const payload = {}
-    if (author) {
-      payload.author = author[0]
-    }
-    submissionDispatch({type: 'INIT_SUBMISSION', payload})
   }, [])
 
   const addAuthor = () => {
@@ -1149,9 +1146,9 @@ const ToolSubmit = () => {
       <hr className='mb-5'/>
       <div className="flex justify-center">
         <div className="mb-3 w-96">
-          <label htmlFor="sem-files" className="form-label inline-block mb-2 text-gray-700">Multiple
-            files input
-            example</label>
+          <label htmlFor="sem-files" className="form-label inline-block mb-2 text-gray-700">
+            SEM File(s)
+          </label>
           <input className="form-control
                             block
                             w-full

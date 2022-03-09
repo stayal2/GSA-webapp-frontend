@@ -13,7 +13,6 @@ import Tool from "./Tool";
 import ExperimentView from "./ExperimentView";
 import toolReducer, {toolDefaultState} from "../reducers/toolReducer";
 import userReducer, {userDefaultState} from "../reducers/userReducer";
-
 export const GlobalContext = React.createContext();
 
 const App = () => {
@@ -52,7 +51,6 @@ const App = () => {
             const response = await signInWithToken(token);
             window.localStorage.setItem('token', response.token)
             const payload = {
-              email: response.email,
               authorId: response.author_id
             }
             userDispatch({type: 'SIGN_IN', payload})

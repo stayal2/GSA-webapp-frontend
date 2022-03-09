@@ -7,10 +7,10 @@ export const userDefaultState = {
 const userReducer = (state, action) => {
   switch (action.type) {
     case 'SIGN_IN': {
+      console.log(action.type)
       return {
         ...state,
         signedIn: true,
-        email: action.payload.email,
         authorId: action.payload.authorId,
       }
     }
@@ -18,7 +18,6 @@ const userReducer = (state, action) => {
       return {
         ...state,
         signedIn: false,
-        email: null,
         authorId: null
       }
     }

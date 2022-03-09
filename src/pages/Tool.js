@@ -1,5 +1,5 @@
 import axios from 'axios'
-import React, {useState, useEffect, useContext, useRef} from 'react'
+import React, {useState, useEffect, useContext, useRef, useReducer} from 'react'
 import {Redirect} from "react-router-dom";
 import {host} from '../settings'
 import Recipes from '../containers/Recipes'
@@ -16,8 +16,7 @@ import SearchByAuthor from "../components/GrresqQueryBox/SearchByAuthor";
 import QueryResultTable from "../containers/QueryResultTable";
 
 const Tool = () => {
-  const {toolState, toolDispatch, flashError, flashSuccess} = useContext(GlobalContext)
-
+  const {userState, toolState, toolDispatch, flashError, flashSuccess} = useContext(GlobalContext)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(false)
 
@@ -209,7 +208,8 @@ const Tool = () => {
                 <hr/>
                 <button
                   className='w-9 h-9 self-center text-center bg-gray-400 hover:bg-blue-700 text-white text-3xl font-bold rounded focus:outline-none focus:shadow-outline'
-                  type='button' id='recipe-btn' onClick={() => alert('temporarily disabled (under maintenance)')/*setShowRecipes(!showRecipes)*/}
+                  type='button' id='recipe-btn'
+                  onClick={() => alert('temporarily disabled (under maintenance)')/*setShowRecipes(!showRecipes)*/}
                 >
                   +
                 </button>
@@ -309,7 +309,8 @@ const Tool = () => {
     </div>
     <div className='w-full md:flex flex-col md:container md:mx-auto mt-10 border rounded p-5'
          ref={submitRef}>
-      <ToolSubmit/>
+      {userState.signedIn &&
+        <ToolSubmit/>}
     </div>
   </>)
 }

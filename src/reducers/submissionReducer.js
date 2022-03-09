@@ -50,14 +50,10 @@ export const submissionDefaultState = {
 const submissionReducer = (state, action) => {
   switch (action.type) {
     case 'INIT_SUBMISSION': {
-      for (const author of state.authors) {
-        if (author.id === action.payload.author.id) {
-          return state
-        }
-      }
+      console.log(action.payload)
       return {
         ...state,
-        authors: [...state.authors, action.payload.author]
+        authors: [...state.authors, action.payload]
       }
     }
     case 'MATERIAL_NAME_CHANGE': {
