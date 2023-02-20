@@ -34,42 +34,28 @@ const Tool = () => {
   const [mouseOverProperties, setMouseOverProperties] = useState(false)
   const [mouseOverAuthors, setMouseOverAuthors] = useState(false)
 
-  // const [dewPointAddedToCurrentFilter, setDewPointAddedToCurrentFilter] = useState(false)
-  // const [ambientTemperatureAddedToCurrentFilter, setAmbientTemperatureAddedToCurrentFilter] = useState(false)
-  // const [tubeDiameterAddedToCurrentFilter, setTubeDiameterAddedToCurrentFilter] = useState(false)
-  // const [crossSectionalAreaAddedToCurrentFilter, crossSectionalAreaToCurrentFilter] = useState(false)
-  // const [dewPointAddedToCurrentFilter, setDewPointAddedToCurrentFilter] = useState(false)
-  // const [dewPointAddedToCurrentFilter, setDewPointAddedToCurrentFilter] = useState(false)
-  // const [dewPointAddedToCurrentFilter, setDewPointAddedToCurrentFilter] = useState(false)
-  // const [dewPointAddedToCurrentFilter, setDewPointAddedToCurrentFilter] = useState(false)
-  // const [dewPointAddedToCurrentFilter, setDewPointAddedToCurrentFilter] = useState(false)
-  // const [dewPointAddedToCurrentFilter, setDewPointAddedToCurrentFilter] = useState(false)
-  // const [dewPointAddedToCurrentFilter, setDewPointAddedToCurrentFilter] = useState(false)
-  // const [dewPointAddedToCurrentFilter, setDewPointAddedToCurrentFilter] = useState(false)
-  // const [dewPointAddedToCurrentFilter, setDewPointAddedToCurrentFilter] = useState(false)
-  // const [dewPointAddedToCurrentFilter, setDewPointAddedToCurrentFilter] = useState(false)
 
   const queryRef = useRef(null)
   const resultRef = useRef(null)
   const submitRef = useRef(null)
 
-  useEffect(() => {
-    const init = async () => {
-      setLoading(true)
-      try {
-        const response = await axios.get(host + '/experiments/init')
-        const data = response.data
-        if (response.status === 200) {
-          toolDispatch({type: 'INIT', payload: data})
-        }
-      } catch (e) {
-        flashError('Oops. Something went wrong. Retrying...')
-        setError(true)
-      }
-      setLoading(false)
-    }
-    init()
-  }, [])
+  // useEffect(() => {
+  //   const init = async () => {
+  //     setLoading(true)
+  //     try {
+  //       const response = await axios.get(host + '/experiments/init')
+  //       const data = response.data
+  //       if (response.status === 200) {
+  //         toolDispatch({type: 'INIT', payload: data})
+  //       }
+  //     } catch (e) {
+  //       flashError('Oops. Something went wrong. Retrying...')
+  //       setError(true)
+  //     }
+  //     setLoading(false)
+  //   }
+  //   init()
+  // }, [])
   useEffect(() => {
     document.getElementById('environment-conditions-btn').innerHTML = showEnvironmentConditions ? '&#8211;' : '+'
   }, [showEnvironmentConditions])
